@@ -1,6 +1,7 @@
 import { FutureverseAuthClient } from "@futureverse/auth-react/auth";
 import { createWagmiConfig } from "@futureverse/auth-react/wagmi";
 import { QueryClient } from "@tanstack/react-query";
+import { cookieStorage, createStorage } from "wagmi";
 
 const clientId = process.env.NEXT_PUBLIC_FUTUREVERSE_CLIENT_ID!;
 const redirectUri = process.env.NEXT_PUBLIC_FUTUREVERSE_REDIRECT_URI!;
@@ -28,8 +29,8 @@ export const getWagmiConfig = async () => {
     // Optional chains you wish to support
     // chains: [mainnet, sepolia, polygonAmoy],
     // Optional if supporting SSR
-    // storage: createStorage({
-    //   storage: cookieStorage,
-    // }),
+    storage: createStorage({
+      storage: cookieStorage,
+    }),
   });
 };
