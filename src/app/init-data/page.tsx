@@ -17,7 +17,7 @@ export default function InitDataPage() {
     <Page>
       <List>
         {initDataState?.user && <p>ID: {initDataState?.user.id} - Name: {initDataState?.user.firstName}</p>}
-        {userSession && <p>Futurepass: {JSON.stringify(userSession, null, 2)}</p>}
+        {<p>Futurepass: {userSession ? JSON.stringify(userSession, null, 2) : "Not connected"}</p>}
       </List>
     </Page>
   );
