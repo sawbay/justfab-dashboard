@@ -4,7 +4,7 @@ import { QueryClient } from "@tanstack/react-query";
 
 const clientId = process.env.NEXT_PUBLIC_FUTUREVERSE_CLIENT_ID!;
 const redirectUri = process.env.NEXT_PUBLIC_FUTUREVERSE_REDIRECT_URI!;
-// const walletConnectProjectId = '<your-wallet-connect-project-id>';
+const walletConnectProjectId = '068808367940b9806150ffeb8f1970e2';
 // const xamanAPIKey = '<your-xaman-application->';
 
 export const authClient = new FutureverseAuthClient({
@@ -20,7 +20,7 @@ export const queryClient = new QueryClient();
 
 export const getWagmiConfig = async () => {
   return createWagmiConfig({
-    // walletConnectProjectId,
+    walletConnectProjectId,
     // xamanAPIKey,
     authClient,
     // Optional if supporting SSR
