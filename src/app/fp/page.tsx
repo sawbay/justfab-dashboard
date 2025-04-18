@@ -1,15 +1,20 @@
 "use client";
 
 import { useAuth } from '@futureverse/auth-react';
-import { useAuthUi } from '@futureverse/auth-ui';
+import { useEffect } from 'react';
+import { useRouter } from "next/navigation";
 
-export default function FPLoginPage() {
-  const { userSession } = useAuth();
-  const { openLogin } = useAuthUi();
+export default function FPPage() {
+  const { userSession, signOutPass } = useAuth();
+  const router = useRouter();
 
-  function signOutPass() {
-    throw new Error('Function not implemented.');
-  }
+  useEffect(() => {
+    if (userSession) {
+      console.log('User session:', userSession);
+    } else {
+      router.push("/fp/login");
+    }
+  }, [userSession]);
 
   return <>
     {userSession ? (
@@ -28,7 +33,7 @@ export default function FPLoginPage() {
         </button>
       </>
     ) : (
-      <button onClick={() => openLogin()}>Login</button>
+      <></>
     )}
   </>
 }

@@ -10,7 +10,7 @@ export default function FPLoginCallbackPage() {
     const params = new URLSearchParams(window.location.search);
     const data = Object.fromEntries(params.entries());
     console.log("Params:", data);
-    router.push("/fp-login");
+    router.push("/fp");
   }, [router]);
 
   return <></>;
