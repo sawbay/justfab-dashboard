@@ -10,7 +10,7 @@ import 'normalize.css/normalize.css';
 import './_assets/globals.css';
 import { FutureverseAuthProvider } from '@futureverse/auth-react';
 import { FutureverseAuthClient } from '@futureverse/auth-react/auth';
-import { AuthUiProvider, DefaultTheme, ThemeConfig } from '@futureverse/auth-ui';
+import { AuthUiProvider, DefaultTheme, type ThemeConfig } from '@futureverse/auth-ui';
 
 export const metadata: Metadata = {
   title: 'Your Application Title Goes Here',
@@ -20,7 +20,8 @@ export const metadata: Metadata = {
 const authClient = new FutureverseAuthClient({
   clientId: process.env.NEXT_PUBLIC_FUTUREVERSE_CLIENT_ID!,
   environment: 'development',
-  redirectUri: 'https://fpint.vercel.app',
+  redirectUri: 'http://localhost:3000/fp-login',
+  signInFlow: 'popup',
 });
 
 const customThemeConfig: ThemeConfig = {
