@@ -10,6 +10,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@futureverse/auth-react": "^4.1.0",
+    "@futureverse/auth-ui": "^0.11.0",
+    "@tanstack/react-query": "^5.74.4",
     "@telegram-apps/sdk-react": "^2.0.22",
     "@telegram-apps/telegram-ui": "^2.1.5",
     "@tonconnect/ui-react": "^2.0.5",
@@ -18,7 +21,9 @@
     "next-intl": "^3.17.6",
     "normalize.css": "^8.0.1",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "viem": "^2.27.2",
+    "wagmi": "^2.14.16"
   },
   "devDependencies": {
     "@types/node": "^20",

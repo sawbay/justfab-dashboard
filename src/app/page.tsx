@@ -4,10 +4,7 @@ import { Section, Cell, Image, List } from '@telegram-apps/telegram-ui';
 import { useTranslations } from 'next-intl';
 
 import { Link } from '@/components/Link/Link';
-import { LocaleSwitcher } from '@/components/LocaleSwitcher/LocaleSwitcher';
 import { Page } from '@/components/Page';
-
-import tonSvg from './_assets/ton.svg';
 
 export default function Home() {
   const t = useTranslations('i18n');
@@ -15,7 +12,14 @@ export default function Home() {
   return (
     <Page back={false}>
       <List>
-        <Section
+        <Section>
+          <Link href="/fp-login">
+            <Cell>
+              FP Login
+            </Cell>
+          </Link>
+        </Section>
+        {/* <Section
           header="Features"
           footer="You can use these pages to learn more about features, provided by Telegram Mini Apps and other useful projects"
         >
@@ -32,8 +36,8 @@ export default function Home() {
               TON Connect
             </Cell>
           </Link>
-        </Section>
-        <Section
+        </Section> */}
+        {/* <Section
           header="Application Launch Data"
           footer="These pages help developer to learn more about current launch information"
         >
@@ -52,10 +56,10 @@ export default function Home() {
               Theme Parameters
             </Cell>
           </Link>
-        </Section>
-        <Section header={t('header')} footer={t('footer')}>
+        </Section> */}
+        {/* <Section header={t('header')} footer={t('footer')}>
           <LocaleSwitcher/>
-        </Section>
+        </Section> */}
       </List>
     </Page>
   );
