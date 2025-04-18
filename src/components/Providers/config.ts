@@ -9,7 +9,7 @@ const redirectUri = process.env.NEXT_PUBLIC_FUTUREVERSE_REDIRECT_URI!;
 
 export const authClient = new FutureverseAuthClient({
   clientId,
-  environment: 'development',
+  environment: 'staging',
   redirectUri,
   signInFlow: 'popup',
 });
