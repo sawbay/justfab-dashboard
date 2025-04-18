@@ -4,6 +4,7 @@ import { useAuth } from '@futureverse/auth-react';
 import { CSSProperties, useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 import { useAuthUi } from '@futureverse/auth-ui';
+import { Page } from '@/components/Page';
 
 export default function FPPage() {
   const { authClient, userSession } = useAuth();
@@ -16,11 +17,11 @@ export default function FPPage() {
     }
   }, [authClient, userSession]);
 
-  return <>
+  return <Page>
     {userSession ?
       <>
         <RowComponent showSpinner={true}>
-          {JSON.stringify(userSession)}
+          {JSON.stringify(userSession, null, 2)}
         </RowComponent>
       </>
       :
@@ -37,7 +38,7 @@ export default function FPPage() {
         </RowComponent>
       </>
     }
-  </>
+  </Page>
 }
 
 const RowComponent = ({

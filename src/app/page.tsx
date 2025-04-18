@@ -22,21 +22,6 @@ export default function Home() {
           </Link>
         </Section>
         <Section>
-          <Link href="/ton-connect">
-            <Cell
-              before={
-                <Image
-                  src={tonSvg.src}
-                  style={{ backgroundColor: '#007AFF' }}
-                />
-              }
-              subtitle="Connect your TON wallet"
-            >
-              TON Connect
-            </Cell>
-          </Link>
-        </Section>
-        <Section>
           <Link href="/init-data">
             <Cell subtitle="User data, chat information, technical data">
               User Data
