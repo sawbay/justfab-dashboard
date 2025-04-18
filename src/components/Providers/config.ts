@@ -12,6 +12,8 @@ export const authClient = new FutureverseAuthClient({
   environment: 'staging',
   redirectUri,
   signInFlow: 'redirect',
+  userStore: localStorage,
+  stateStore: localStorage,
 });
 
 export const queryClient = new QueryClient();
