@@ -13,7 +13,7 @@ export default function Home() {
     <Page back={false}>
       <List>
         <Section>
-          <Link href="/fp-login">
+          <Link href="/fp">
             <Cell>
               FP Login
             </Cell>
