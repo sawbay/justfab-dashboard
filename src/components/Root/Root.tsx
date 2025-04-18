@@ -24,7 +24,7 @@ function RootInner({ children }: PropsWithChildren) {
   const isDev = process.env.NODE_ENV === 'development';
 
   // Mock Telegram environment in development mode if needed.
-  if (isDev) {
+  if (true) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useTelegramMock();
   }
@@ -65,7 +65,7 @@ export function Root(props: PropsWithChildren) {
 
   return didMount ? (
     <ErrorBoundary fallback={ErrorPage}>
-      <RootInner {...props}/>
+      <RootInner {...props} />
     </ErrorBoundary>
   ) : <div className="root__loading">Loading</div>;
 }
