@@ -5,27 +5,13 @@ import { useSignal, initData, type User } from '@telegram-apps/sdk-react';
 import { List, Placeholder } from '@telegram-apps/telegram-ui';
 
 import {
-  DisplayData,
   type DisplayDataRow,
 } from '@/components/DisplayData/DisplayData';
 import { Page } from '@/components/Page';
-
-function getUserRows(user: User): DisplayDataRow[] {
-  return [
-    { title: 'id', value: user.id.toString() },
-    { title: 'username', value: user.username },
-    { title: 'photo_url', value: user.photoUrl },
-    { title: 'last_name', value: user.lastName },
-    { title: 'first_name', value: user.firstName },
-    { title: 'is_bot', value: user.isBot },
-    { title: 'is_premium', value: user.isPremium },
-    { title: 'language_code', value: user.languageCode },
-    { title: 'allows_to_write_to_pm', value: user.allowsWriteToPm },
-    { title: 'added_to_attachment_menu', value: user.addedToAttachmentMenu },
-  ];
-}
+import { useAuth } from '@futureverse/auth-react';
 
 export default function InitDataPage() {
+  const { userSession } = useAuth();
   const initDataRaw = useSignal(initData.raw);
   const initDataState = useSignal(initData.state);
 
@@ -59,39 +45,6 @@ export default function InitDataPage() {
     ];
   }, [initDataState, initDataRaw]);
 
-  const userRows = useMemo<DisplayDataRow[] | undefined>(() => {
-    return initDataState && initDataState.user
-      ? getUserRows(initDataState.user)
-      : undefined;
-  }, [initDataState]);
-
-  const receiverRows = useMemo<DisplayDataRow[] | undefined>(() => {
-    return initDataState && initDataState.receiver
-      ? getUserRows(initDataState.receiver)
-      : undefined;
-  }, [initDataState]);
-
-  const chatRows = useMemo<DisplayDataRow[] | undefined>(() => {
-    if (!initDataState?.chat) {
-      return;
-    }
-    const {
-      id,
-      title,
-      type,
-      username,
-      photoUrl,
-    } = initDataState.chat;
-
-    return [
-      { title: 'id', value: id.toString() },
-      { title: 'title', value: title },
-      { title: 'type', value: type },
-      { title: 'username', value: username },
-      { title: 'photo_url', value: photoUrl },
-    ];
-  }, [initData]);
-
   if (!initDataRows) {
     return (
       <Page>
@@ -108,13 +61,12 @@ export default function InitDataPage() {
       </Page>
     );
   }
+
   return (
     <Page>
       <List>
-        <DisplayData header={'Init Data'} rows={initDataRows}/>
-        {userRows && <DisplayData header={'User'} rows={userRows}/>}
-        {receiverRows && <DisplayData header={'Receiver'} rows={receiverRows}/>}
-        {chatRows && <DisplayData header={'Chat'} rows={chatRows}/>}
+        {initDataState?.user && <p>ID: {initDataState?.user.id} - Name: {initDataState?.user.firstName}</p>}
+        {userSession && <p>Futurepass: {JSON.stringify(userSession, null, 2)}</p>}
       </List>
     </Page>
   );
