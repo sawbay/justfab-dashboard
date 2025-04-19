@@ -17,7 +17,7 @@ export default function Home() {
         <Section>
           <Link href="/fp">
             <Cell>
-              FP Login
+              Future Pass
             </Cell>
           </Link>
         </Section>
