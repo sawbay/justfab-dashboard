@@ -1,43 +1,38 @@
 import React from "react";
 
-interface ButtonProps {
-  children: React.ReactNode;
-  variant?: "primary" | "secondary" | "outline";
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: "primary" | "outline";
   size?: "sm" | "md" | "lg";
   className?: string;
-  onClick?: () => void;
-  disabled?: boolean;
+  children: React.ReactNode;
 }
 
 const Button: React.FC<ButtonProps> = ({
-  children,
   variant = "primary",
   size = "md",
   className = "",
-  onClick,
-  disabled = false,
+  children,
+  ...props
 }) => {
-  const baseStyles = "rounded-lg font-medium transition-colors duration-200";
+  const baseStyles = "rounded-lg font-medium transition-colors";
 
-  const variants = {
-    primary: "bg-orange-400 hover:bg-orange-500 text-white",
-    secondary: "bg-gray-200 hover:bg-gray-300 text-gray-800",
-    outline: "border-2 border-orange-400 text-orange-400 hover:bg-orange-50",
+  const sizeStyles = {
+    sm: "px-3 py-1.5 text-sm",
+    md: "px-4 py-2",
+    lg: "px-6 py-3 text-lg",
   };
 
-  const sizes = {
-    sm: "px-3 py-1.5 text-sm",
-    md: "px-4 py-2 text-base",
-    lg: "px-6 py-3 text-lg",
+  const variantStyles = {
+    primary:
+      "bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white",
+    outline:
+      "bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white",
   };
 
   return (
     <button
-      className={`${baseStyles} ${variants[variant]} ${
-        sizes[size]
-      } ${className} ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
-      onClick={onClick}
-      disabled={disabled}
+      className={`${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`}
+      {...props}
     >
       {children}
     </button>

@@ -37,6 +37,56 @@ export default function Earning() {
           <ConnectButtons />
         </div>
 
+        {/* Earnings Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card className="p-6">
+            <h3 className="text-lg font-medium text-secondary-dark mb-2">
+              Total Earnings
+            </h3>
+            <div className="text-2xl font-bold text-primary">
+              {mockStakingInfo.totalEarnings} {mockStakingInfo.currency}
+            </div>
+            <p className="text-secondary text-sm">+$123.45 this week</p>
+          </Card>
+          <Card className="p-6">
+            <h3 className="text-lg font-medium text-secondary-dark mb-2">
+              Available to Claim
+            </h3>
+            <div className="text-2xl font-bold text-primary">$567.89</div>
+            <p className="text-secondary text-sm">Next claim in 2h 30m</p>
+          </Card>
+          <Card className="p-6">
+            <h3 className="text-lg font-medium text-secondary-dark mb-2">
+              Staking Rewards
+            </h3>
+            <div className="text-2xl font-bold text-primary">$345.67</div>
+            <p className="text-secondary text-sm">12% APR</p>
+          </Card>
+        </div>
+
+        {/* Recent Earnings */}
+        <section>
+          <h2 className="text-xl font-semibold text-primary-dark mb-4">
+            Recent Earnings
+          </h2>
+          <Card className="divide-y">
+            {[1, 2, 3].map((item) => (
+              <div key={item} className="p-4 flex justify-between items-center">
+                <div>
+                  <h3 className="font-medium text-secondary-dark">
+                    Daily Mission Reward
+                  </h3>
+                  <p className="text-sm text-secondary">Completed 3 missions</p>
+                </div>
+                <div className="text-right">
+                  <div className="font-medium text-primary">+50 $FAB</div>
+                  <div className="text-sm text-secondary">2 hours ago</div>
+                </div>
+              </div>
+            ))}
+          </Card>
+        </section>
+
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card className="p-6">
@@ -51,13 +101,6 @@ export default function Earning() {
             <h3 className="text-gray-600 mb-2">Next Payout</h3>
             <div className="text-2xl font-bold text-gray-900">
               {mockStakingInfo.nextPayout} Hours
-            </div>
-          </Card>
-
-          <Card className="p-6">
-            <h3 className="text-gray-600 mb-2">Your Total Earnings</h3>
-            <div className="text-2xl font-bold text-gray-900">
-              {mockStakingInfo.totalEarnings} {mockStakingInfo.currency}
             </div>
           </Card>
         </div>

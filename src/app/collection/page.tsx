@@ -23,12 +23,6 @@ export default function Collection() {
   return (
     <MainLayout>
       <div className="space-y-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h1 className="text-2xl font-bold text-gray-900">Collection Vault</h1>
-          <ConnectButtons />
-        </div>
-
         {/* Filters */}
         <div className="flex flex-wrap gap-2">
           <div className="text-gray-600 mr-2 flex items-center">Filter By:</div>

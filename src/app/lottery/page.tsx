@@ -30,46 +30,62 @@ export default function Lottery() {
         </div>
 
         {/* Current Round */}
-        <Card className="p-8">
-          <div className="text-center mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
-              Current Prize Pool
-            </h2>
-            <div className="text-4xl font-bold text-orange-500">
-              {mockLotteryData.currentPrize.toLocaleString()} $ROOT
+        <section>
+          <h2 className="text-xl font-semibold text-primary-dark mb-4">
+            Current Round
+          </h2>
+          <Card className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-lg font-medium text-secondary-dark mb-4">
+                  Prize Pool
+                </h3>
+                <div className="text-3xl font-bold text-primary mb-2">
+                  12,345 $FAB
+                </div>
+                <p className="text-secondary">Ends in 23h 45m 12s</p>
+              </div>
+              <div className="flex flex-col justify-between">
+                <div>
+                  <h3 className="text-lg font-medium text-secondary-dark mb-4">
+                    Your Tickets
+                  </h3>
+                  <div className="text-2xl font-bold text-primary mb-2">
+                    5 Tickets
+                  </div>
+                  <p className="text-secondary">Win chance: 0.05%</p>
+                </div>
+                <Button className="w-full md:w-auto">Buy Tickets</Button>
+              </div>
             </div>
-          </div>
+          </Card>
+        </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="text-center">
-              <div className="text-gray-600 mb-1">Time Left</div>
-              <div className="text-2xl font-semibold text-gray-900">
-                {mockLotteryData.timeLeft}
+        {/* Previous Rounds */}
+        <section>
+          <h2 className="text-xl font-semibold text-primary-dark mb-4">
+            Previous Rounds
+          </h2>
+          <Card className="divide-y">
+            {[1, 2, 3].map((round) => (
+              <div
+                key={round}
+                className="p-4 flex justify-between items-center"
+              >
+                <div>
+                  <h3 className="font-medium text-secondary-dark">
+                    Round #{round}
+                  </h3>
+                  <p className="text-sm text-secondary">Drawn 2 days ago</p>
+                </div>
+                <div className="text-right">
+                  <div className="font-medium text-primary">10,000 $FAB</div>
+                  <div className="text-sm text-secondary">3 Winners</div>
+                </div>
               </div>
-            </div>
-            <div className="text-center">
-              <div className="text-gray-600 mb-1">Your Tickets</div>
-              <div className="text-2xl font-semibold text-gray-900">
-                {mockLotteryData.yourTickets}
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="text-gray-600 mb-1">Total Tickets</div>
-              <div className="text-2xl font-semibold text-gray-900">
-                {mockLotteryData.totalTickets}
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg">
-              Buy 1 Ticket ({mockLotteryData.ticketPrice} $ROOT)
-            </Button>
-            <Button variant="outline" size="lg">
-              Buy Multiple Tickets
-            </Button>
-          </div>
-        </Card>
+            ))}
+          </Card>
+        </section>
 
         {/* Previous Round */}
         <section>

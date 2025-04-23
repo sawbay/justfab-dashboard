@@ -66,11 +66,18 @@ const mockVIPRewards: VIPReward[] = [
     rewards: { game: 50, token: 50 },
     description: "Upgrade your base to level 2",
   },
+  {
+    level: 18,
+    isCompleted: false,
+    isLocked: true,
+    rewards: { game: 50, token: 50 },
+    description: "Upgrade your base to level 2",
+  },
 ];
 
 export default function Home() {
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 4;
+  const itemsPerPage = 6;
   const totalPages = Math.ceil(mockVIPRewards.length / itemsPerPage);
 
   const handlePrevPage = () => {
@@ -89,23 +96,15 @@ export default function Home() {
   return (
     <MainLayout>
       <div className="space-y-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h1 className="text-2xl font-bold text-primary">
-            Welcome to JustFAB
-          </h1>
-          <ConnectButtons />
-        </div>
-
         {/* Stats Grid */}
         <StatsGrid stats={mockStats} />
 
         {/* VIP Rewards */}
         <section>
-          <h2 className="text-xl font-semibold text-primary-dark mb-4">
+          <h2 className="text-xl font-semibold text-primary-dark mb-4 mx-4">
             VIP Rewards
           </h2>
-          <div className="relative">
+          <div className="relative mx-4">
             <button
               onClick={handlePrevPage}
               disabled={currentPage === 0}
@@ -126,7 +125,7 @@ export default function Home() {
               </svg>
             </button>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 overflow-hidden">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1 overflow-hidden">
               {visibleRewards.map((reward) => (
                 <VIPRewardCard key={reward.level} reward={reward} />
               ))}
@@ -156,22 +155,24 @@ export default function Home() {
 
         {/* Welcome Missions */}
         <section>
-          <h2 className="text-xl font-semibold text-primary-dark mb-4">
+          <h2 className="text-xl font-semibold text-primary-dark mb-4 mx-4">
             Welcome Missions
           </h2>
-          <Card className="p-6">
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="text-lg font-medium text-secondary-dark">
-                  Online Game For 3 Days
-                </h3>
-                <p className="text-secondary">Rewards: Welcome Chest</p>
+          <div className="mx-4">
+            <Card className="p-6 bg-[#FFE8C8]">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="text-lg font-medium text-secondary-dark">
+                    Online Game For 3 Days
+                  </h3>
+                  <p className="text-secondary">Rewards: Welcome Chest</p>
+                </div>
+                <Button className="bg-primary hover:bg-primary-light">
+                  Claim
+                </Button>
               </div>
-              <Button className="bg-primary hover:bg-primary-light">
-                Claim
-              </Button>
-            </div>
-          </Card>
+            </Card>
+          </div>
         </section>
       </div>
     </MainLayout>

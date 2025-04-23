@@ -31,15 +31,6 @@ export default function Store() {
   return (
     <MainLayout>
       <div className="space-y-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Game Store</h1>
-            <p className="text-gray-600">Spend your $Root to gear up!</p>
-          </div>
-          <ConnectButtons telegramName="Nguyen Hung" />
-        </div>
-
         {/* Balance Card */}
         <Card className="inline-flex gap-2 items-center px-6">
           <span className="text-gray-700">$ROOT Balance</span>

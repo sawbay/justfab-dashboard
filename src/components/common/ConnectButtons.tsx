@@ -21,11 +21,17 @@ const ConnectButtons: React.FC<ConnectButtonsProps> = ({
   };
 
   return (
-    <div className="flex gap-4">
-      <Button variant="outline" onClick={handleTelegramConnect}>
-        {telegramName || "Connect Telegram"}
+    <div className="flex gap-3">
+      <Button
+        className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
+        onClick={handleTelegramConnect}
+      >
+        {telegramName ? telegramName : "Connect Telegram"}
       </Button>
-      <Button onClick={handleWalletConnect}>
+      <Button
+        className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
+        onClick={handleWalletConnect}
+      >
         {walletAddress ? `Wallet Connect ${walletAddress}` : "Connect Wallet"}
       </Button>
     </div>
