@@ -1,7 +1,20 @@
+import { ReactElement } from "react";
+
 export interface NavItem {
   label: string;
   path: string;
-  icon?: string;
+  icon?: ReactElement;
+}
+
+export interface VIPReward {
+  level: number;
+  isCompleted: boolean;
+  isLocked: boolean;
+  rewards: {
+    game: number;
+    token: number;
+  };
+  description: string;
 }
 
 export interface UserStats {

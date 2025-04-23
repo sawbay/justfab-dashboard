@@ -5,6 +5,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import StoreGrid from "@/components/store/StoreGrid";
 import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
+import ConnectButtons from "@/components/common/ConnectButtons";
 
 const mockItems = Array(12)
   .fill(null)
@@ -36,10 +37,7 @@ export default function Store() {
             <h1 className="text-2xl font-bold text-gray-900">Game Store</h1>
             <p className="text-gray-600">Spend your $Root to gear up!</p>
           </div>
-          <div className="flex gap-4">
-            <Button variant="outline">Nguyen Hung</Button>
-            <Button>Wallet Connect 12..292</Button>
-          </div>
+          <ConnectButtons telegramName="Nguyen Hung" />
         </div>
 
         {/* Balance Card */}

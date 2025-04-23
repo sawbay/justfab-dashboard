@@ -4,6 +4,7 @@ import React from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import Card from "@/components/common/Card";
 import Button from "@/components/common/Button";
+import ConnectButtons from "@/components/common/ConnectButtons";
 
 const mockPredictionData = {
   currentPool: 75000,
@@ -33,10 +34,7 @@ export default function Prediction() {
               Predict price movements to win rewards
             </p>
           </div>
-          <div className="flex gap-4">
-            <Button variant="outline">Nguyen Hung</Button>
-            <Button>Wallet Connect</Button>
-          </div>
+          <ConnectButtons />
         </div>
 
         {/* Current Round */}

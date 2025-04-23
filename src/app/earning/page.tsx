@@ -4,6 +4,7 @@ import React from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import Card from "@/components/common/Card";
 import Button from "@/components/common/Button";
+import ConnectButtons from "@/components/common/ConnectButtons";
 import { StakingInfo } from "@/types";
 
 const mockStakingInfo: StakingInfo = {
@@ -33,10 +34,7 @@ export default function Earning() {
             </h1>
             <p className="text-gray-600">Stake your tokens to earn rewards</p>
           </div>
-          <div className="flex gap-4">
-            <Button variant="outline">Nguyen Hung</Button>
-            <Button>Wallet Connect 12..292</Button>
-          </div>
+          <ConnectButtons />
         </div>
 
         {/* Stats Grid */}

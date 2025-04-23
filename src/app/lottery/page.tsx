@@ -4,6 +4,7 @@ import React from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import Card from "@/components/common/Card";
 import Button from "@/components/common/Button";
+import ConnectButtons from "@/components/common/ConnectButtons";
 
 const mockLotteryData = {
   currentPrize: 125000,
@@ -25,10 +26,7 @@ export default function Lottery() {
             <h1 className="text-2xl font-bold text-gray-900">Lottery</h1>
             <p className="text-gray-600">Try your luck to win big prizes!</p>
           </div>
-          <div className="flex gap-4">
-            <Button variant="outline">Nguyen Hung</Button>
-            <Button>Wallet Connect 12..292</Button>
-          </div>
+          <ConnectButtons />
         </div>
 
         {/* Current Round */}

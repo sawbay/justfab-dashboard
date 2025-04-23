@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import CollectionGrid from "@/components/collection/CollectionGrid";
 import Button from "@/components/common/Button";
+import ConnectButtons from "@/components/common/ConnectButtons";
 
 const mockItems = Array(12)
   .fill(null)
@@ -25,10 +26,7 @@ export default function Collection() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h1 className="text-2xl font-bold text-gray-900">Collection Vault</h1>
-          <div className="flex gap-4">
-            <Button variant="outline">Nguyen Hung</Button>
-            <Button>Wallet Connect 12..292</Button>
-          </div>
+          <ConnectButtons />
         </div>
 
         {/* Filters */}
