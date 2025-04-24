@@ -2,59 +2,106 @@
 
 import React, { useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
-import StoreGrid from "@/components/store/StoreGrid";
+import Image from "next/image";
 import Button from "@/components/common/Button";
-import Card from "@/components/common/Card";
-import ConnectButtons from "@/components/common/ConnectButtons";
 
-const mockItems = Array(12)
-  .fill(null)
-  .map((_, index) => ({
-    id: `store-item-${index}`,
-    name: "Common Chest",
-    owner: 3,
-    description: "A simple wooden chest containing common items and resources",
-    price: 5000,
-  }));
-
+// Mock data for filters
 const filterTypes = [
-  "All",
-  "Treasure Chests",
-  "Aura Keys",
-  "Gold Bags",
-  "Sale Off",
+  { id: 1, name: "All" },
+  { id: 2, name: "Treasure Chests" },
+  { id: 3, name: "Aura Keys" },
+  { id: 4, name: "Gold Bags" },
+  { id: 5, name: "Sale Off" },
 ];
 
+// Mock data for store items
+const storeItems = Array(12).fill({
+  id: Math.random().toString(),
+  type: "Common Chest",
+  description: "A simple wooden chest containing common items and resources",
+  price: "5,000 $Root",
+  image: "/icons/microphone.svg",
+});
+
 export default function Store() {
-  const [filterType, setFilterType] = useState("All");
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [itemCount, setItemCount] = useState(12);
+  const [rootBalance, setRootBalance] = useState("85.72");
+  const [usdBalance, setUsdBalance] = useState("$234.30 USD");
 
   return (
     <MainLayout>
-      <div className="space-y-8">
-        {/* Balance Card */}
-        <Card className="inline-flex gap-2 items-center px-6">
-          <span className="text-gray-700">$ROOT Balance</span>
-          <span className="text-orange-500 font-medium">85.72</span>
-          <span className="text-gray-500">~ $214.30 USD</span>
-        </Card>
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-2xl font-semibold text-primary-dark mb-2">
+              Game Store
+            </h1>
+            <p className="text-gray-600 font-semibold">
+              Spend your $Root to gear up!
+            </p>
+          </div>
+          <div className="bg-[#fff3e8] rounded-lg px-4 py-2 border border-[#ffdcb7] flex items-center gap-3">
+            <span className="text-gray-600 font-semibold text-base">$ROOT Balance</span>
+            <span className="text-[#22c55e] font-bold text-xl">
+              {rootBalance}
+            </span>
+            <span className="text-gray-500 text-xs">~{usdBalance}</span>
+          </div>
+        </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap gap-2">
-          <div className="text-gray-600 mr-2 flex items-center">Filter By:</div>
-          {filterTypes.map((type) => (
-            <Button
-              key={type}
-              variant={filterType === type ? "primary" : "outline"}
-              onClick={() => setFilterType(type)}
-            >
-              {type}
-            </Button>
-          ))}
-          <div className="ml-auto text-gray-600">12 Items</div>
+        <div className="flex items-center gap-4 mb-8">
+          <span className="text-gray-600 font-bold">Filter By:</span>
+          <div className="flex gap-2">
+            {filterTypes.map((filter) => (
+              <Button
+                key={filter.id}
+                onClick={() => setActiveFilter(filter.name)}
+                className={`${
+                  activeFilter === filter.name
+                    ? "bg-[#ffe8c8] text-[#FF9F5A] border border-[#FF9F5A] hover:text-[#FF9F5A]"
+                    : "bg-white border border-gray-200 hover:bg-[#ffe8c8] hover:text-[#FF9F5A]"
+                }`}
+              >
+                {filter.name}
+              </Button>
+            ))}
+          </div>
+          <span className="ml-auto text-gray-600 font-bold">
+            {itemCount} Items
+          </span>
         </div>
 
         {/* Store Grid */}
-        <StoreGrid items={mockItems} filterType={filterType} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {storeItems.map((item, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-xl p-6 flex flex-col items-center border border-gray-100"
+            >
+              <div className="w-24 h-24 bg-[#FF9F5A] rounded-full flex items-center justify-center mb-4">
+                <Image
+                  src={item.image}
+                  alt="Item icon"
+                  width={40}
+                  height={40}
+                  className="text-white"
+                />
+              </div>
+              <h3 className="text-lg font-medium mb-2 text-gray-700">
+                {item.type}
+              </h3>
+              <p className="text-gray-500 mb-2 text-center text-sm">
+                {item.description}
+              </p>
+              <p className="text-[#FF9F5A] font-bold mb-4">{item.price}</p>
+              <Button className="w-full py-2 px-4 rounded-lg border border-[#FF9F5A] text-[#FF9F5A] hover:bg-[#FF9F5A] hover:text-white transition-all">
+                Buy now
+              </Button>
+            </div>
+          ))}
+        </div>
       </div>
     </MainLayout>
   );

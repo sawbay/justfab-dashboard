@@ -15,13 +15,15 @@ const StatItem: React.FC<StatItemProps> = ({
   valueColor = "text-primary",
 }) => (
   <div className="bg-white rounded-t-xl border border-primary border-b-4 p-4 text-center">
-    <div className="text-xs text-primary">{label}</div>
+    <div className="text-sm text-primary font-medium">{label}</div>
     <div
-      className={`text-lg font-bold ${valueColor} drop-shadow-[0_1px_1px_rgba(0,0,0,0.1)]`}
+      className={`text-xl font-bold ${valueColor} drop-shadow-[0_1px_1px_rgba(0,0,0,0.1)]`}
     >
       {value}
     </div>
-    {subValue && <div className="text-xs text-primary/70">{subValue}</div>}
+    {subValue && (
+      <div className="text-sm text-primary/70 font-medium">{subValue}</div>
+    )}
   </div>
 );
 

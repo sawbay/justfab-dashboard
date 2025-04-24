@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -176,15 +178,17 @@ const Sidebar = () => {
                     className={`flex items-center px-4 py-2 rounded-lg transition-all
                       ${
                         pathname === item.path
-                          ? "bg-white text-primary-dark shadow-[2px_2px_8px_rgba(251,147,51,0.3)]"
-                          : "text-primary-dark hover:bg-white/50"
+                          ? "bg-white text-primary-dark shadow-[2px_2px_8px_rgba(251,147,51,0.3)] font-bold"
+                          : "text-gray-500 font-medium hover:bg-white/50"
                       }
                     `}
                   >
                     {item.icon && (
                       <span
                         className={`mr-3 ${
-                          pathname === item.path ? "text-primary-dark" : ""
+                          pathname === item.path
+                            ? "text-primary-dark"
+                            : "text-gray-500"
                         }`}
                       >
                         {item.icon}

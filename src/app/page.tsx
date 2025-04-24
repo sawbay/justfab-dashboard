@@ -101,7 +101,7 @@ export default function Home() {
 
         {/* VIP Rewards */}
         <section>
-          <h2 className="text-xl font-semibold text-primary-dark mb-4 mx-4">
+          <h2 className="text-3xl font-semibold text-primary-dark mb-4 mx-4">
             VIP Rewards
           </h2>
           <div className="relative mx-4">
@@ -111,7 +111,7 @@ export default function Home() {
               className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 p-2 rounded-full bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <svg
-                className="w-6 h-6"
+                className="w-7 h-7"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -125,7 +125,7 @@ export default function Home() {
               </svg>
             </button>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1 overflow-hidden">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-0.5 overflow-hidden">
               {visibleRewards.map((reward) => (
                 <VIPRewardCard key={reward.level} reward={reward} />
               ))}
@@ -137,7 +137,7 @@ export default function Home() {
               className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 p-2 rounded-full bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <svg
-                className="w-6 h-6"
+                className="w-7 h-7"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -155,19 +155,21 @@ export default function Home() {
 
         {/* Welcome Missions */}
         <section>
-          <h2 className="text-xl font-semibold text-primary-dark mb-4 mx-4">
+          <h2 className="text-3xl font-semibold text-primary-dark mb-4 mx-4">
             Welcome Missions
           </h2>
           <div className="mx-4">
-            <Card className="p-6 bg-[#FFE8C8]">
+            <Card className="p-6 bg-[#ffe8c8]">
               <div className="flex justify-between items-center">
                 <div>
-                  <h3 className="text-lg font-medium text-secondary-dark">
+                  <h3 className="text-2xl font-medium text-secondary-dark">
                     Online Game For 3 Days
                   </h3>
-                  <p className="text-secondary">Rewards: Welcome Chest</p>
+                  <p className="text-secondary text-xl">
+                    Rewards: Welcome Chest
+                  </p>
                 </div>
-                <Button className="bg-primary hover:bg-primary-light">
+                <Button className="bg-primary hover:bg-primary-light text-lg px-6 py-2">
                   Claim
                 </Button>
               </div>

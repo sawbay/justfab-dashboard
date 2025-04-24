@@ -22,7 +22,7 @@ const VIPRewardCard: React.FC<VIPRewardCardProps> = ({ reward }) => {
     >
       {/* Level Circle */}
       <div
-        className={`w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-3
+        className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3
         ${
           reward.isCompleted
             ? "bg-secondary/50"
@@ -31,15 +31,15 @@ const VIPRewardCard: React.FC<VIPRewardCardProps> = ({ reward }) => {
             : "bg-primary/50"
         }`}
       >
-        <span className="text-lg font-bold text-white">{reward.level}</span>
+        <span className="text-xl font-bold text-white">{reward.level}</span>
       </div>
 
       {/* Completion Check */}
       {reward.isCompleted && (
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <div className="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center">
+          <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
             <svg
-              className="w-8 h-8 text-white"
+              className="w-10 h-10 text-white"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -57,7 +57,7 @@ const VIPRewardCard: React.FC<VIPRewardCardProps> = ({ reward }) => {
 
       {/* Description */}
       <p
-        className={`text-xs mb-3 ${
+        className={`text-sm mb-3 ${
           reward.isCompleted
             ? "text-secondary/50"
             : isNextTask
@@ -69,7 +69,7 @@ const VIPRewardCard: React.FC<VIPRewardCardProps> = ({ reward }) => {
       </p>
 
       {/* Rewards */}
-      <div className="flex justify-center gap-3 text-xs">
+      <div className="flex justify-center gap-3 text-sm">
         <div
           className={`flex items-center gap-1 ${
             reward.isCompleted
@@ -79,7 +79,7 @@ const VIPRewardCard: React.FC<VIPRewardCardProps> = ({ reward }) => {
               : "text-primary-dark"
           }`}
         >
-          <span>🎮</span>
+          <span className="text-base">🎮</span>
           <span>{reward.rewards.game}</span>
         </div>
         <div
@@ -91,7 +91,7 @@ const VIPRewardCard: React.FC<VIPRewardCardProps> = ({ reward }) => {
               : "text-primary-dark"
           }`}
         >
-          <span>🎮</span>
+          <span className="text-base">🎮</span>
           <span>{reward.rewards.token}</span>
         </div>
       </div>
