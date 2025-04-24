@@ -65,64 +65,71 @@ export default function Prediction() {
           Prediction
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {predictions.map((prediction) => (
             <div
               key={prediction.id}
-              className="rounded-xl p-6 border-2 border-primary"
+              className="rounded-xl p-4 sm:p-6 border-2 border-primary bg-white"
             >
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-[#fff3e8] rounded-full flex items-center justify-center">
-                  <IoMicOutline className="text-2xl text-primary" />
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#fff3e8] rounded-full flex items-center justify-center">
+                  <IoMicOutline className="text-xl sm:text-2xl text-primary" />
                 </div>
               </div>
-              <span className="text-gray-600 font-medium">
+              <span className="text-sm sm:text-base text-gray-600 font-medium">
                 Close in {prediction.timeLeft}
               </span>
 
-              <h3 className="text-2xl font-bold text-gray-800 mb-4 mt-4">
+              <h3 className="text-lg sm:text-2xl font-bold text-gray-800 mb-3 mt-3 line-clamp-2">
                 {prediction.question}
               </h3>
 
-              <div className="text-gray-600 font-medium mb-4">
-                Pool: {prediction.pool} $Root | Yes: {prediction.yesPercentage}%
-                | No: {prediction.noPercentage}%
+              <div className="text-sm sm:text-base text-gray-600 font-medium mb-4">
+                <div className="flex flex-wrap gap-2 justify-between">
+                  <span>Pool: {prediction.pool} $Root</span>
+                  <div className="flex gap-2">
+                    <span>Yes: {prediction.yesPercentage}%</span>
+                    <span>No: {prediction.noPercentage}%</span>
+                  </div>
+                </div>
               </div>
 
               {prediction.id === 1 ? (
                 <>
-                  <div className="flex gap-2 mb-4">
+                  <div className="flex flex-col sm:flex-row gap-2 mb-4">
                     <input
                       type="text"
                       placeholder="Input Number"
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
-                      className="flex-1 p-2 bg-[#fff3e8] text-gray-600 border-2 border-primary rounded-2xl text-center focus:outline-none"
+                      className="w-full p-2 bg-[#fff3e8] text-gray-600 border-2 border-primary rounded-xl text-center focus:outline-none text-sm sm:text-base"
                     />
-                    <button
-                      onClick={() => setSelectedOption("No")}
-                      className={`px-4 py-2 rounded-2xl border-2 ${
-                        selectedOption === "No"
-                          ? "bg-primary text-white"
-                          : "border-primary text-gray-600"
-                      }`}
-                    >
-                      No
-                    </button>
-                    <button
-                      onClick={() => setSelectedOption("Yes")}
-                      className={`px-4 py-2 rounded-2xl border-2 ${
-                        selectedOption === "Yes"
-                          ? "bg-primary text-white"
-                          : "border-primary text-gray-600"
-                      }`}
-                    >
-                      Yes
-                    </button>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => setSelectedOption("No")}
+                        className={`px-3 py-2 rounded-xl border-2 text-sm sm:text-base flex items-center justify-center ${
+                          selectedOption === "No"
+                            ? "bg-primary text-white"
+                            : "border-primary text-gray-600 hover:bg-primary/10"
+                        }`}
+                      >
+                        No
+                      </button>
+                      <button
+                        onClick={() => setSelectedOption("Yes")}
+                        className={`px-3 py-2 rounded-xl border-2 text-sm sm:text-base flex items-center justify-center ${
+                          selectedOption === "Yes"
+                            ? "bg-primary text-white"
+                            : "border-primary text-gray-600 hover:bg-primary/10"
+                        }`}
+                      >
+                        Yes
+                      </button>
+                    </div>
                   </div>
                   <button
                     onClick={() => handlePredict(prediction.id)}
-                    className="w-full py-2 bg-primary text-white rounded-2xl hover:bg-primary/90 transition-colors"
+                    className="w-full py-2 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-sm sm:text-base"
                   >
                     Predict
                   </button>
@@ -130,7 +137,7 @@ export default function Prediction() {
               ) : (
                 <button
                   onClick={() => handlePredict(prediction.id)}
-                  className="w-full py-2 bg-[#fff3e8] text-gray-600 rounded-2xl border-2 border-primary hover:bg-primary hover:text-white transition-colors"
+                  className="w-full py-2 bg-[#fff3e8] text-gray-600 rounded-xl border-2 border-primary hover:bg-primary hover:text-white transition-colors text-sm sm:text-base"
                 >
                   Predict
                 </button>
