@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "./Button";
+import { useAuthUi } from "@futureverse/auth-ui";
 
 interface ConnectButtonsProps {
   telegramName?: string;
@@ -10,6 +11,8 @@ const ConnectButtons: React.FC<ConnectButtonsProps> = ({
   telegramName = "",
   walletAddress = "",
 }) => {
+  const { openLogin } = useAuthUi();
+
   const handleTelegramConnect = () => {
     // TODO: Implement Telegram connection logic
     console.log("Connecting to Telegram...");
@@ -30,7 +33,7 @@ const ConnectButtons: React.FC<ConnectButtonsProps> = ({
       </Button>
       <Button
         className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
-        onClick={handleWalletConnect}
+        onClick={() => openLogin()}
       >
         {walletAddress ? `Wallet Connect ${walletAddress}` : "Connect Wallet"}
       </Button>
