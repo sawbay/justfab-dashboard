@@ -1,4 +1,4 @@
-import { createUserOrUpdate } from "@/lib/prisma";
+import { createUserOrUpdate } from "@/utils/prisma";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 

@@ -12,7 +12,7 @@ const customThemeConfig: ThemeConfig = {
   defaultAuthOption: 'web3',
 };
 
-export default function Providers({ children, initialWagmiState }: { children: React.ReactNode; initialWagmiState?: State }) {
+export default function FPProvider({ children, initialWagmiState }: { children: React.ReactNode; initialWagmiState?: State }) {
   return (
     <QueryClientProvider client={queryClient}>
       <FutureverseWagmiProvider getWagmiConfig={getWagmiConfig} initialState={initialWagmiState}>

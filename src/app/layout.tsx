@@ -3,11 +3,13 @@ import type { Metadata } from 'next';
 import { getLocale } from 'next-intl/server';
 import { I18nProvider } from '@/core/i18n/provider';
 
-import '@telegram-apps/telegram-ui/dist/styles.css';
 import 'normalize.css/normalize.css';
 import './globals.css';
-import Providers from '@/components/providers/Providers';
-import { Root } from '@/components/root/Root';
+import FPProvider from '@/components/providers/FPProvider';
+// import { Root } from '@/components/root/Root';
+import AuthProvider from '@/components/providers/AuthProvider';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export const metadata: Metadata = {
   title: 'JustFAB',
@@ -16,14 +18,17 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: PropsWithChildren) {
   const locale = await getLocale();
+  const session = await getServerSession(authOptions);
 
   return (
     <html lang={locale}>
       <body>
         <I18nProvider>
-          <Root>
-            <Providers>{children}</Providers>
-          </Root>
+          {/* <Root> */}
+            <AuthProvider>
+              <FPProvider>{children}</FPProvider>
+            </AuthProvider>
+          {/* </Root> */}
         </I18nProvider>
       </body>
     </html>
