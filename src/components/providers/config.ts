@@ -13,7 +13,7 @@ export const authClient = new FutureverseAuthClient({
   clientId,
   environment: environment as Environment,
   redirectUri,
-  signInFlow: 'popup',
+  signInFlow: 'redirect',
   userStore: localStorage,
   stateStore: localStorage,
 });

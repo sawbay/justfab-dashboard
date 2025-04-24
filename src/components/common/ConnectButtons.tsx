@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "./Button";
 import { useAuthUi } from "@futureverse/auth-ui";
+import { shortenAddress } from "@/utils/addressUtils";
 
 interface ConnectButtonsProps {
   telegramName?: string;
@@ -19,8 +20,9 @@ const ConnectButtons: React.FC<ConnectButtonsProps> = ({
   };
 
   const handleWalletConnect = () => {
-    // TODO: Implement wallet connection logic
-    console.log("Connecting wallet...");
+    if (!walletAddress) {
+      openLogin();
+    }
   };
 
   return (
@@ -33,9 +35,9 @@ const ConnectButtons: React.FC<ConnectButtonsProps> = ({
       </Button>
       <Button
         className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
-        onClick={() => openLogin()}
+        onClick={() => handleWalletConnect()}
       >
-        {walletAddress ? `Wallet Connect ${walletAddress}` : "Connect Wallet"}
+        {walletAddress ? `${shortenAddress(walletAddress)}` : "Connect Wallet"}
       </Button>
     </div>
   );
