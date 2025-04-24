@@ -159,7 +159,7 @@ export default function Home() {
             Welcome Missions
           </h2>
           <div className="mx-4">
-            <Card className="p-6 bg-[#ffe8c8]">
+            <Card className="p-6 bg-[#FFE8C8]">
               <div className="flex justify-between items-center">
                 <div>
                   <h3 className="text-2xl font-medium text-secondary-dark">

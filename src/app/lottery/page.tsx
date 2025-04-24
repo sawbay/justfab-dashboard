@@ -123,52 +123,58 @@ export default function Lottery() {
           Lottery
         </h1>
 
-        <div className="bg-[#FFF8F1] rounded-xl p-6 relative">
-          <div className="flex justify-between items-start bg-[#FFE8C8] p-4 font-medium rounded-xl">
+        <div className="bg-[#FFF8F1] rounded-xl p-4 sm:p-6 relative">
+          <div className="flex flex-col sm:flex-row justify-between items-start bg-[#FFE8C8] p-4 font-medium rounded-xl">
             <div>
-              <div className="flex items-center gap-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                 <div>
                   <div className="text-primary mb-2">Lottery Prize Pool</div>
-                  <div className="text-4xl font-bold text-gray-800">
+                  <div className="text-2xl sm:text-4xl font-bold text-gray-800">
                     $ {prizePool}
                   </div>
                 </div>
-                <div className="flex gap-4 border-2 border-primary rounded-lg p-4 bg-[#FFF3E8] shadow-[0_0_10px_rgba(205,142,95,0.2)]">
+                <div className="flex flex-wrap gap-2 sm:gap-4 border-2 border-primary rounded-lg p-2 sm:p-4 bg-[#FFF3E8] shadow-[0_0_10px_rgba(205,142,95,0.2)]">
                   <div className="text-center">
-                    <div className="border-2 border-primary rounded-lg p-3 mb-1 text-xl font-semibold min-w-[48px] text-primary bg-[#FFF8F1] shadow-sm">
+                    <div className="border-2 border-primary rounded-lg p-2 sm:p-3 mb-1 text-base sm:text-xl font-semibold min-w-[40px] sm:min-w-[48px] text-primary bg-[#FFF8F1] shadow-sm">
                       {timeLeft.days}
                     </div>
-                    <div className="text-sm text-gray-600">Days</div>
+                    <div className="text-xs sm:text-sm text-gray-600">Days</div>
                   </div>
                   <div className="text-center">
-                    <div className="border-2 border-primary rounded-lg p-3 mb-1 text-xl font-semibold min-w-[48px] text-primary bg-[#FFF8F1] shadow-sm">
+                    <div className="border-2 border-primary rounded-lg p-2 sm:p-3 mb-1 text-base sm:text-xl font-semibold min-w-[40px] sm:min-w-[48px] text-primary bg-[#FFF8F1] shadow-sm">
                       {timeLeft.hours}
                     </div>
-                    <div className="text-sm text-gray-600">Hours</div>
+                    <div className="text-xs sm:text-sm text-gray-600">
+                      Hours
+                    </div>
                   </div>
                   <div className="text-center">
-                    <div className="border-2 border-primary rounded-lg p-3 mb-1 text-xl font-semibold min-w-[48px] text-primary bg-[#FFF8F1] shadow-sm">
+                    <div className="border-2 border-primary rounded-lg p-2 sm:p-3 mb-1 text-base sm:text-xl font-semibold min-w-[40px] sm:min-w-[48px] text-primary bg-[#FFF8F1] shadow-sm">
                       {timeLeft.minutes}
                     </div>
-                    <div className="text-sm text-gray-600">Minutes</div>
+                    <div className="text-xs sm:text-sm text-gray-600">
+                      Minutes
+                    </div>
                   </div>
                   <div className="text-center">
-                    <div className="border-2 border-primary rounded-lg p-3 mb-1 text-xl font-semibold min-w-[48px] text-primary bg-[#FFF8F1] shadow-sm">
+                    <div className="border-2 border-primary rounded-lg p-2 sm:p-3 mb-1 text-base sm:text-xl font-semibold min-w-[40px] sm:min-w-[48px] text-primary bg-[#FFF8F1] shadow-sm">
                       {timeLeft.seconds}
                     </div>
-                    <div className="text-sm text-gray-600">Seconds</div>
+                    <div className="text-xs sm:text-sm text-gray-600">
+                      Seconds
+                    </div>
                   </div>
                 </div>
               </div>
               <button
                 onClick={handlePlayLottery}
-                className="bg-[#CD8E5F] text-white px-6 py-2 rounded-lg hover:bg-[#CD8E5F]/90 transition-colors mt-4"
+                className="bg-[#CD8E5F] text-white px-4 sm:px-6 py-2 rounded-lg hover:bg-[#CD8E5F]/90 transition-colors mt-4 w-full sm:w-auto"
               >
                 Play Lottery
               </button>
             </div>
 
-            <div className="absolute right-6 top-1/2 -translate-y-1/2">
+            <div className="hidden sm:block absolute right-6 top-1/2 -translate-y-1/2">
               <Image
                 src="/images/lottery-bag.png"
                 alt="Lottery Bag"
@@ -179,18 +185,18 @@ export default function Lottery() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
           {/* Left Section - Ticket Selection */}
-          <div className="rounded-xl p-6 bg-[#FFE8C8] font-medium">
+          <div className="rounded-xl p-4 sm:p-6 bg-[#FFE8C8] font-medium">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white">
                 $
               </div>
-              <h2 className="text-xl font-semibold text-gray-800">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
                 Select Ticket Amount
               </h2>
             </div>
-            <p className="text-gray-600 mb-4">
+            <p className="text-sm sm:text-base text-gray-600 mb-4">
               Choose the number of tickets you&apos;d like and select your
               numbers below
             </p>
@@ -204,30 +210,30 @@ export default function Lottery() {
                     value={amount}
                     onChange={handleAmountChange}
                     placeholder="Inter Amount"
-                    className="w-full p-3 pr-16 bg-[#FFF8F1] border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full p-2 sm:p-3 bg-[#FFF8F1] border-2 border-primary rounded-lg pl-12 pr-12 text-center focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <button
                     onClick={handleMaxAmount}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 rounded text-sm text-gray-600"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 px-2 sm:px-3 py-1 rounded text-xs sm:text-sm text-gray-600"
                   >
                     MAX
                   </button>
                 </div>
               </div>
 
-              <div className="flex justify-between text-gray-600">
+              <div className="flex justify-between text-sm sm:text-base text-gray-600">
                 <span>Total Cost</span>
                 <span>${ticketData.totalCost}</span>
               </div>
 
-              <div className="flex justify-between text-gray-600">
+              <div className="flex justify-between text-sm sm:text-base text-gray-600">
                 <span>Your have:</span>
                 <span>{ticketData.yourTickets} Ticket</span>
               </div>
 
               <button
                 onClick={handleBuyTicket}
-                className="w-full bg-[#CD8E5F] text-white py-3 rounded-lg hover:bg-[#CD8E5F]/90 transition-colors"
+                className="w-full bg-[#CD8E5F] text-white py-2 sm:py-3 rounded-lg hover:bg-[#CD8E5F]/90 transition-colors"
               >
                 Buy ticket
               </button>
@@ -235,27 +241,27 @@ export default function Lottery() {
           </div>
 
           {/* Right Section - Number Selection */}
-          <div className="bg-[#FFF8F1] rounded-xl p-6 text-center">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+          <div className="bg-[#FFF8F1] rounded-xl p-4 sm:p-6 text-center">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-2">
               Select Your Numbers
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-sm sm:text-base text-gray-600 mb-6">
               Stay eligible to win every week as long as your tickets remain
               staked
             </p>
 
             <div className="mb-6">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
                 Choose numbers
               </h3>
-              <div className="grid grid-cols-10 gap-2">
+              <div className="grid grid-cols-5 sm:grid-cols-10 gap-1 sm:gap-2">
                 {generateNumbers().map((number) => (
                   <button
                     key={number}
                     onClick={() => handleNumberSelect(number)}
                     disabled={isNumberSold(number)}
                     className={`
-                      w-10 h-10 rounded-lg flex items-center justify-center text-sm border-2 border-primary bg-[#FFF8F1] text-primary
+                      w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-xs sm:text-sm border-2 border-primary bg-[#FFF8F1] text-primary
                       ${
                         isNumberSold(number)
                           ? "bg-gray-200 text-gray-400 cursor-not-allowed"
@@ -271,18 +277,22 @@ export default function Lottery() {
               </div>
             </div>
 
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 bg-gray-200 rounded"></div>
-                <span className="text-gray-600">SOLD</span>
+                <span className="text-sm sm:text-base text-gray-600">SOLD</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 bg-[#FFE4CC] rounded"></div>
-                <span className="text-gray-600">READY</span>
+                <span className="text-sm sm:text-base text-gray-600">
+                  READY
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 bg-[#CD8E5F] rounded"></div>
-                <span className="text-gray-600">YOU CHOOSE</span>
+                <span className="text-sm sm:text-base text-gray-600">
+                  YOU CHOOSE
+                </span>
               </div>
             </div>
           </div>

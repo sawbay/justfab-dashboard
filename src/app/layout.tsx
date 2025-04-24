@@ -11,7 +11,7 @@ import 'normalize.css/normalize.css';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Your Application Title Goes Here',
+  title: 'JustFAB',
   description: 'Your application description goes here',
 };
 
