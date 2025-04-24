@@ -26,7 +26,6 @@ export default function Lottery() {
             <h1 className="text-2xl font-bold text-gray-900">Lottery</h1>
             <p className="text-gray-600">Try your luck to win big prizes!</p>
           </div>
-          <ConnectButtons />
         </div>
 
         {/* Current Round */}
