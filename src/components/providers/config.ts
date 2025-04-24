@@ -1,8 +1,9 @@
-import { FutureverseAuthClient } from "@futureverse/auth-react/auth";
+import { Environment, FutureverseAuthClient } from "@futureverse/auth-react/auth";
 import { createWagmiConfig } from "@futureverse/auth-react/wagmi";
 import { QueryClient } from "@tanstack/react-query";
 import { cookieStorage, createStorage } from "wagmi";
 
+const environment = process.env.NEXT_PUBLIC_FUTUREVERSE_ENVIRONMENT!;
 const clientId = process.env.NEXT_PUBLIC_FUTUREVERSE_CLIENT_ID!;
 const redirectUri = process.env.NEXT_PUBLIC_FUTUREVERSE_REDIRECT_URI!;
 const walletConnectProjectId = '068808367940b9806150ffeb8f1970e2';
@@ -10,7 +11,7 @@ const walletConnectProjectId = '068808367940b9806150ffeb8f1970e2';
 
 export const authClient = new FutureverseAuthClient({
   clientId,
-  environment: 'staging',
+  environment: environment as Environment,
   redirectUri,
   signInFlow: 'popup',
   userStore: localStorage,
