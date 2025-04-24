@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import StatsGrid from "@/components/home/StatsGrid";
 import Card from "@/components/common/Card";
 import Button from "@/components/common/Button";
-import ConnectButtons from "@/components/common/ConnectButtons";
 import VIPRewardCard from "@/components/home/VIPRewardCard";
 import { VIPReward } from "@/types";
+import { useAuth } from "@futureverse/auth-react";
 
 const mockStats = {
   level: 24,
@@ -92,6 +92,14 @@ export default function Home() {
     currentPage * itemsPerPage,
     (currentPage + 1) * itemsPerPage
   );
+
+  const { authClient, userSession } = useAuth();
+
+  useEffect(() => {
+    if (userSession) {
+      console.log(userSession)
+    }
+  }, [authClient, userSession]);
 
   return (
     <MainLayout>
