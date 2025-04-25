@@ -16,6 +16,7 @@ const ConnectButtons: React.FC<ConnectButtonsProps> = ({
   walletAddress = "",
 }) => {
   const { openLogin } = useAuthUi();
+  const { data: session, status } = useSession();
 
   const handleTelegramConnect = () => {
     // TODO: Implement Telegram connection logic
@@ -30,10 +31,10 @@ const ConnectButtons: React.FC<ConnectButtonsProps> = ({
 
   return (
     <div className="flex gap-3">
-      {telegramName ?
+      {session ?
         <Button
           className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
-        >{telegramName}</Button> :
+        >{session.user?.name}</Button> :
         <LoginButton
           botUsername={BOT_USERNAME}
           onAuthCallback={(data: any) => {
