@@ -4,13 +4,21 @@ import { createWagmiConfig } from "@futureverse/auth-react/wagmi";
 import { QueryClient } from "@tanstack/react-query";
 import { cookieStorage, createStorage } from "wagmi";
 
+// Safe access to localStorage that works in both browser and server environments
+const getClientSideStorage = () => {
+  if (typeof window !== 'undefined') {
+    return localStorage;
+  }
+  return undefined;
+};
+
 export const authClient = new FutureverseAuthClient({
   clientId: FUTUREVERSE_CLIENT_ID,
   environment: FUTUREVERSE_ENVIRONMENT as Environment,
   redirectUri: FUTUREVERSE_REDIRECT_URI,
   signInFlow: 'redirect',
-  userStore: localStorage,
-  stateStore: localStorage,
+  userStore: getClientSideStorage(),
+  stateStore: getClientSideStorage(),
 });
 
 export const queryClient = new QueryClient();
