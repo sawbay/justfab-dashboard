@@ -1,4 +1,4 @@
-import { createUserOrUpdate } from "@/utils/prisma";
+// import { createUserOrUpdate } from "@/utils/prisma";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -39,7 +39,8 @@ export const authOptions: NextAuthOptions = {
           };
 
           try {
-            await createUserOrUpdate(user);
+            // await createUserOrUpdate(user);
+            console.log(user);
           } catch {
             console.log(
               "Something went wrong while creating the user."
