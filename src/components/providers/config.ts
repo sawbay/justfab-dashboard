@@ -1,19 +1,14 @@
+import { FUTUREVERSE_CLIENT_ID, FUTUREVERSE_ENVIRONMENT, FUTUREVERSE_REDIRECT_URI, WALLET_CONNECT_PROJECT_ID } from "@/utils/env";
 import { Environment, FutureverseAuthClient } from "@futureverse/auth-react/auth";
 import { createWagmiConfig } from "@futureverse/auth-react/wagmi";
 import { QueryClient } from "@tanstack/react-query";
 import { cookieStorage, createStorage } from "wagmi";
 
-const environment = process.env.NEXT_PUBLIC_FUTUREVERSE_ENVIRONMENT!;
-const clientId = process.env.NEXT_PUBLIC_FUTUREVERSE_CLIENT_ID!;
-const redirectUri = process.env.NEXT_PUBLIC_FUTUREVERSE_REDIRECT_URI!;
-const walletConnectProjectId = '068808367940b9806150ffeb8f1970e2';
-// const xamanAPIKey = '<your-xaman-application->';
-
 export const authClient = new FutureverseAuthClient({
-  clientId,
-  environment: environment as Environment,
-  redirectUri,
-  signInFlow: 'popup',
+  clientId: FUTUREVERSE_CLIENT_ID,
+  environment: FUTUREVERSE_ENVIRONMENT as Environment,
+  redirectUri: FUTUREVERSE_REDIRECT_URI,
+  signInFlow: 'redirect',
   userStore: localStorage,
   stateStore: localStorage,
 });
@@ -22,7 +17,7 @@ export const queryClient = new QueryClient();
 
 export const getWagmiConfig = async () => {
   return createWagmiConfig({
-    walletConnectProjectId,
+    walletConnectProjectId: WALLET_CONNECT_PROJECT_ID,
     // xamanAPIKey,
     authClient,
     // Optional if supporting SSR

@@ -1,6 +1,10 @@
 import React from "react";
 import Button from "./Button";
 import { useAuthUi } from "@futureverse/auth-ui";
+import { shortenAddress } from "@/utils/addressUtils";
+import { useSession, signIn, signOut } from "next-auth/react";
+import { LoginButton } from "@telegram-auth/react";
+import { BOT_USERNAME } from "@/utils/env";
 
 interface ConnectButtonsProps {
   telegramName?: string;
@@ -19,23 +23,29 @@ const ConnectButtons: React.FC<ConnectButtonsProps> = ({
   };
 
   const handleWalletConnect = () => {
-    // TODO: Implement wallet connection logic
-    console.log("Connecting wallet...");
+    if (!walletAddress) {
+      openLogin();
+    }
   };
 
   return (
     <div className="flex gap-3">
+      {telegramName ?
+        <Button
+          className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
+        >{telegramName}</Button> :
+        <LoginButton
+          botUsername={BOT_USERNAME}
+          onAuthCallback={(data: any) => {
+            signIn("telegram-login", { callbackUrl: "/api/auth" }, data as any);
+          }}
+        />
+      }
       <Button
         className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
-        onClick={handleTelegramConnect}
+        onClick={() => handleWalletConnect()}
       >
-        {telegramName ? telegramName : "Connect Telegram"}
-      </Button>
-      <Button
-        className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
-        onClick={() => openLogin()}
-      >
-        {walletAddress ? `Wallet Connect ${walletAddress}` : "Connect Wallet"}
+        {walletAddress ? `${shortenAddress(walletAddress)}` : "Connect Wallet"}
       </Button>
     </div>
   );
