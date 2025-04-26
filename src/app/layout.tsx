@@ -9,7 +9,7 @@ import FPProvider from '@/components/providers/FPProvider';
 // import { Root } from '@/components/root/Root';
 import AuthProvider from '@/components/providers/AuthProvider';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 
 export const metadata: Metadata = {
   title: 'JustFAB',
