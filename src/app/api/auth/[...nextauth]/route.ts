@@ -1,9 +1,9 @@
-// import { createUserOrUpdate } from "@/utils/prisma";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 import { objectToAuthDataMap, AuthDataValidator } from "@telegram-auth/server";
 import { BOT_TOKEN } from "@/utils/env";
+import { createUserOrUpdate } from "@/utils/prisma";
 
 declare module "next-auth" {
   interface Session {
@@ -39,8 +39,7 @@ export const authOptions: NextAuthOptions = {
           };
 
           try {
-            // await createUserOrUpdate(user);
-            console.log(user);
+            await createUserOrUpdate(user);
           } catch {
             console.log(
               "Something went wrong while creating the user."
