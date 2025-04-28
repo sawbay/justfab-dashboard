@@ -11,6 +11,7 @@ datasource db {
 
 model User {
   id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  tgId          Int     @unique
   name          String
   image         String?
 
