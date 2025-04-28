@@ -11,7 +11,6 @@ cmds = ["npm ci"]
 [phases.build]
 cmds = [
   "npx prisma generate",
-  "npx prisma migrate dev --name init",
   "npm run build"
 ]
 
