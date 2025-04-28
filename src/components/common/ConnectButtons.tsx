@@ -38,7 +38,7 @@ const ConnectButtons: React.FC<ConnectButtonsProps> = ({
         <LoginButton
           botUsername={BOT_USERNAME}
           onAuthCallback={(data: any) => {
-            signIn("telegram-login", { callbackUrl: "/" }, data as any);
+            signIn("telegram-login", undefined, data as any);
           }}
         />
       }
