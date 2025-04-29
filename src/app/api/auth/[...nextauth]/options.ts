@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
 
         if (user.id && user.first_name) {
           const returned = {
-            id: user.id.toString(),
+            id: user.id,
             email: user.id.toString(),
             name: [user.first_name, user.last_name || ""].join(" "),
             image: user.photo_url,
@@ -41,9 +41,9 @@ export const authOptions: NextAuthOptions = {
           try {
             await createUserOrUpdate(user);
             console.log(user);
-          } catch {
-            console.log(
-              "Something went wrong while creating the user."
+          } catch (err) {
+            console.error(
+              "Something went wrong while creating the user.", err
             );
           }
 

@@ -12,12 +12,13 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 export default prisma
 
 export async function createUserOrUpdate(user: TelegramUserData) {
+  let tgId = Number(user.id)
   return prisma.user.upsert({
     where: {
-      tgId: user.id,
+      tgId,
     },
     create: {
-      tgId: user.id,
+      tgId,
       name: user.first_name,
       image: user.photo_url,
     },

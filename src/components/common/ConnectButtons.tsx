@@ -34,6 +34,9 @@ const ConnectButtons: React.FC<ConnectButtonsProps> = ({
       {session ?
         <Button
           className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
+          onClick={() => {
+            signOut();
+          }}
         >{session.user?.name}</Button> :
         <LoginButton
           botUsername={BOT_USERNAME}
