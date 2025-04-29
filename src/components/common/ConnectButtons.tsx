@@ -5,18 +5,13 @@ import { shortenAddress } from "@/utils/addressUtils";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { LoginButton } from "@telegram-auth/react";
 import { BOT_USERNAME } from "@/utils/env";
+import { useAuth } from "@futureverse/auth-react";
 
-interface ConnectButtonsProps {
-  telegramName?: string;
-  walletAddress?: string;
-}
-
-const ConnectButtons: React.FC<ConnectButtonsProps> = ({
-  telegramName = "",
-  walletAddress = "",
-}) => {
+const ConnectButtons: React.FC<{}> = ({ }) => {
   const { openLogin } = useAuthUi();
-  const { data: session, status } = useSession();
+  const { userSession: fpSession } = useAuth();
+
+  const { data: tgSession, status } = useSession();
 
   const handleTelegramConnect = () => {
     // TODO: Implement Telegram connection logic
@@ -24,20 +19,20 @@ const ConnectButtons: React.FC<ConnectButtonsProps> = ({
   };
 
   const handleWalletConnect = () => {
-    if (!walletAddress) {
+    if (!fpSession) {
       openLogin();
     }
   };
 
   return (
     <div className="flex gap-3">
-      {session ?
+      {tgSession ?
         <Button
           className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
           onClick={() => {
             signOut();
           }}
-        >{session.user?.name}</Button> :
+        >{tgSession.user?.name}</Button> :
         <LoginButton
           botUsername={BOT_USERNAME}
           onAuthCallback={(data: any) => {
@@ -49,7 +44,7 @@ const ConnectButtons: React.FC<ConnectButtonsProps> = ({
         className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
         onClick={() => handleWalletConnect()}
       >
-        {walletAddress ? `${shortenAddress(walletAddress)}` : "Connect Wallet"}
+        {fpSession?.futurepass ? `${shortenAddress(fpSession?.futurepass)}` : "Connect Wallet"}
       </Button>
     </div>
   );
