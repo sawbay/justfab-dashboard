@@ -13,28 +13,23 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
   const { userSession: fpSession, signOutPass } = useAuth();
   const { data: tgSession } = useSession();
 
-  const [linking, setLinking] = React.useState(false);
-  const [linked, setLinked] = React.useState(false);
-
   useEffect(() => {
-    if (tgSession && fpSession?.futurepass && !linking && !linked) {
-      setLinking(true);
+    if (fpSession && tgSession) {
       axios.post("/api/linkfp", {
-        telegramId: tgSession.user?.id,
+        telegramId: Number(tgSession.user?.id),
         futurepass: fpSession.futurepass,
       })
-        .then(() => setLinked(true))
+        .then(() => { })
         .catch(console.error)
-        .finally(() => setLinking(false));
+        .finally(() => { });
     }
-  }, [tgSession, fpSession?.futurepass, linking, linked]);
+  }, [fpSession]);
 
   const handleWalletConnect = () => {
     if (!fpSession) {
       openLogin();
     } else {
       signOutPass();
-      setLinked(false);
     }
   };
 
@@ -46,14 +41,12 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
             className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
             onClick={() => {
               signOut();
-              setLinked(false);
             }}
           >{tgSession.user?.name}
           </Button>
           <Button
             className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
             onClick={() => handleWalletConnect()}
-            disabled={linking}
           >
             {fpSession?.futurepass
               ? `${shortenAddress(fpSession?.futurepass)}`

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/utils/prisma";
+import { linkFuturepass } from "@/utils/prisma";
 
 export async function POST(req: NextRequest) {
   const { telegramId, futurepass } = await req.json();
@@ -9,10 +9,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const user = await prisma.user.update({
-      where: { tgId: Number(telegramId) },
-      data: { futurepass },
-    });
+    const user = await linkFuturepass(telegramId, futurepass);
 
     return NextResponse.json({ success: true, user });
   } catch (error) {

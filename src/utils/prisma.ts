@@ -28,3 +28,10 @@ export async function createUserOrUpdate(user: TelegramUserData) {
     },
   });
 }
+
+export async function linkFuturepass(tgId: number, futurepass: string) {
+  return prisma.user.update({
+    where: { tgId },
+    data: { futurepass },
+  });
+}
