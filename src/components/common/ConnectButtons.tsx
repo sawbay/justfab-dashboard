@@ -9,30 +9,36 @@ import { useAuth } from "@futureverse/auth-react";
 
 const ConnectButtons: React.FC<{}> = ({ }) => {
   const { openLogin } = useAuthUi();
-  const { userSession: fpSession } = useAuth();
+  const { userSession: fpSession, signOutPass } = useAuth();
 
   const { data: tgSession, status } = useSession();
-
-  const handleTelegramConnect = () => {
-    // TODO: Implement Telegram connection logic
-    console.log("Connecting to Telegram...");
-  };
 
   const handleWalletConnect = () => {
     if (!fpSession) {
       openLogin();
+    } else {
+      signOutPass();
     }
   };
 
   return (
     <div className="flex gap-3">
       {tgSession ?
-        <Button
-          className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
-          onClick={() => {
-            signOut();
-          }}
-        >{tgSession.user?.name}</Button> :
+        <>
+          <Button
+            className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
+            onClick={() => {
+              signOut();
+            }}
+          >{tgSession.user?.name}</Button>
+          <Button
+            className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
+            onClick={() => handleWalletConnect()}
+          >
+            {fpSession?.futurepass ? `${shortenAddress(fpSession?.futurepass)}` : "Connect Wallet"}
+          </Button>
+        </>
+        :
         <LoginButton
           botUsername={BOT_USERNAME}
           onAuthCallback={(data: any) => {
@@ -40,12 +46,6 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
           }}
         />
       }
-      <Button
-        className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
-        onClick={() => handleWalletConnect()}
-      >
-        {fpSession?.futurepass ? `${shortenAddress(fpSession?.futurepass)}` : "Connect Wallet"}
-      </Button>
     </div>
   );
 };
