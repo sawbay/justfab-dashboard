@@ -12,6 +12,7 @@ declare module "next-auth" {
       name: string;
       image: string;
       email: string;
+      futurepass: string | null;
     };
   }
 }
@@ -36,6 +37,7 @@ export const authOptions: NextAuthOptions = {
             email: user.id.toString(),
             name: [user.first_name, user.last_name || ""].join(" "),
             image: user.photo_url,
+            futurepass: null,
           };
 
           try {

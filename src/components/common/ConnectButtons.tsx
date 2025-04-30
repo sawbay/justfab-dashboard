@@ -23,7 +23,7 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
         .catch(console.error)
         .finally(() => { });
     }
-  }, [fpSession]);
+  }, [tgSession, fpSession]);
 
   const handleWalletConnect = () => {
     if (!fpSession) {
@@ -39,18 +39,18 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
         <>
           <Button
             className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
-            onClick={() => {
-              signOut();
-            }}
-          >{tgSession.user?.name}
-          </Button>
-          <Button
-            className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
             onClick={() => handleWalletConnect()}
           >
             {fpSession?.futurepass
               ? `${shortenAddress(fpSession?.futurepass)}`
               : "Connect Wallet"}
+          </Button>
+          <Button
+            className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
+            onClick={() => {
+              signOut();
+            }}
+          >{tgSession.user?.name}
           </Button>
         </>
         :
@@ -61,6 +61,7 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
           }}
         />
       }
+
     </div>
   );
 };
