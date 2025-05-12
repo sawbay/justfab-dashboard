@@ -3,7 +3,8 @@
 ## Prisma
 ```
 npx prisma init --output ../src/app/generated/prisma
-npx prisma migrate dev --name init
+npx prisma generate # generate schema.prisma
+npx prisma db push # apply to db
 ```
 
 ## FuturePass
