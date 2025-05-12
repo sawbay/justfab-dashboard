@@ -26,6 +26,7 @@ model User {
 model OpenedChest {
   id String  @id @default(auto()) @map("_id") @db.ObjectId
   userId    Int @unique
+  chestId   Int
   reward    Json?
 
   createdAt DateTime @default(now())
