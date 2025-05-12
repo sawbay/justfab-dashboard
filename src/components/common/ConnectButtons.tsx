@@ -7,6 +7,7 @@ import { LoginButton } from "@telegram-auth/react";
 import { BOT_USERNAME } from "@/utils/env";
 import { useAuth } from "@futureverse/auth-react";
 import axios from "axios";
+import { USERS_FUTUREPASS_LINK } from "@/app/api/users/futurepass/link/route";
 
 const ConnectButtons: React.FC<{}> = ({ }) => {
   const { openLogin } = useAuthUi();
@@ -15,7 +16,7 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
 
   useEffect(() => {
     if (fpSession && tgSession) {
-      axios.post("/api/linkfp", {
+      axios.post(USERS_FUTUREPASS_LINK, {
         telegramId: Number(tgSession.user?.id),
         futurepass: fpSession.futurepass,
       })
