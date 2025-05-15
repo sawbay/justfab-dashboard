@@ -24,7 +24,7 @@ jobs:
       # Build the application with Nixpacks
       - name: Build with Nixpacks
         run: |
-          curl -fsSL https://raw.githubusercontent.com/railwayapp/nixpacks/main/install.sh | sh
+          curl -L https://raw.githubusercontent.com/railwayapp/nixpacks/main/install.sh | sh
           nixpacks build . -o output
 
       # Log in to Docker Registry
