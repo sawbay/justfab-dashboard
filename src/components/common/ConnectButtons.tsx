@@ -7,7 +7,7 @@ import { LoginButton } from "@telegram-auth/react";
 import { BOT_USERNAME } from "@/utils/env";
 import { useAuth } from "@futureverse/auth-react";
 import axios from "axios";
-import { USERS_FUTUREPASS_LINK } from "@/app/api/users/futurepass/link/route";
+import { USERS_FUTUREPASS_LINK } from "@/app/api/routes";
 
 const ConnectButtons: React.FC<{}> = ({ }) => {
   const { openLogin } = useAuthUi();

@@ -23,7 +23,7 @@ export const authOptions: NextAuthOptions = {
       id: "telegram-login",
       name: "Telegram Login",
       credentials: {},
-      async authorize(credentials, req) {
+      async authorize(credentials, req): Promise<any | null> {
         const validator = new AuthDataValidator({
           botToken: BOT_TOKEN,
         });

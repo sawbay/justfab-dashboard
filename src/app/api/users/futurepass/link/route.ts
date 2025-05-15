@@ -3,7 +3,6 @@ import { linkFuturepass } from "@/utils/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 
-export const USERS_FUTUREPASS_LINK = "/api/users/futurepass/link";
 
 export async function POST(req: NextRequest) {
   // Get the authenticated session
