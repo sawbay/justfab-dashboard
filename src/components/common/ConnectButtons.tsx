@@ -36,6 +36,12 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
 
   return (
     <div className="flex gap-3">
+      <LoginButton
+        botUsername={BOT_USERNAME}
+        onAuthCallback={(data: any) => {
+          signIn("telegram-login", undefined, data as any);
+        }}
+      />
       {tgSession ?
         <>
           <Button
