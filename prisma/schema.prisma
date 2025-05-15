@@ -34,3 +34,25 @@ model OpenedChest {
 
   @@map("opened_chests")
 }
+
+model InventoryItem {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String   @db.ObjectId
+  inventoryMetadataId String   @db.ObjectId
+  createdAt      DateTime @default(now())
+
+  @@index([userId])
+  @@index([inventoryMetadataId])
+
+  @@map("inventory")
+}
+
+model InventoryMetadata {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  type      Int      
+  name      String
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@map("inventory_metadata")
+}
