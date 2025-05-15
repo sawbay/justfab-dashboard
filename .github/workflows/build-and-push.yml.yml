@@ -4,21 +4,29 @@ on:
   push:
     branches:
       - main
+
 jobs:
   build-and-push:
+    name: Build and Push Docker Image
     runs-on: ubuntu-latest
+
     steps:
+      # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Dependencies
+      # Install Nix
+      - name: Install Nix
         run: |
-          curl -fsSL https://nixpacks.com/install.sh | sh
-          nixpacks --version
+          curl -L https://nixos.org/nix/install | sh
+          . /home/runner/.nix-profile/etc/profile.d/nix.sh
 
-      - name: Build Application
-        run: nixpacks build . -o output
-        
+      # Build the application with Nixpacks
+      - name: Build with Nixpacks
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/railwayapp/nixpacks/main/install.sh | sh
+          nixpacks build . -o output
+
       # Log in to Docker Registry
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
