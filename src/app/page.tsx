@@ -8,7 +8,6 @@ import Button from "@/components/common/Button";
 import VIPRewardCard from "@/components/home/VIPRewardCard";
 import { VIPReward } from "@/types";
 import { useAuth } from "@futureverse/auth-react";
-import { RootQueryBuilder } from '@futureverse/transact';
 import { useQuery } from "@tanstack/react-query";
 import { getBalance } from "@/utils/sdk";
 import { useTrnApi } from '@futureverse/transact-react';
@@ -100,15 +99,14 @@ export default function Home() {
   );
 
   const { authClient, userSession } = useAuth();
-  const { trnApi } = useTrnApi();
-  const transactionQuery = useTransactQuery();
-
   useEffect(() => {
     if (userSession) {
       console.log(userSession)
     }
   }, [authClient, userSession]);
-  
+
+  const { trnApi } = useTrnApi();
+  const transactionQuery = useTransactQuery();
   const accountToCheck = useMemo(() => {
     if (!userSession) {
       return '';
@@ -132,7 +130,7 @@ export default function Home() {
     <MainLayout>
       <div className="space-y-8">
         {/* Stats Grid */}
-        <StatsGrid stats={{...mockStats, rootBalance: Number(rootBalanceOnTrn.data ?? 0)}} />
+        <StatsGrid stats={{ ...mockStats, rootBalance: Number(rootBalanceOnTrn.data ?? 0) }} />
         {/* VIP Rewards */}
         <section>
           <h2 className="text-3xl font-semibold text-primary-dark mb-4 mx-4">
