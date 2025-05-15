@@ -17,17 +17,16 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    if (fpSession) {
+    if (fpSession && !user) {
       axios.get(USERS_GET, {
         params: {
           tgId: tgSession?.user?.id,
         },
       }).then((res) => {
         setUser(res.data.user);
-        console.log(res.data.user);
       });
     }
-  }, [fpSession]);
+  }, [fpSession, user]);
 
   useEffect(() => {
     if (fpSession && user && user.futurepass == null) {
