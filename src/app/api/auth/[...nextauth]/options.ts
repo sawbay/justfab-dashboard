@@ -5,15 +5,17 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { objectToAuthDataMap, AuthDataValidator } from "@telegram-auth/server";
 import { BOT_TOKEN } from "@/utils/env";
 
+export interface User {
+  id: string;
+  name: string;
+  image: string;
+  email: string;
+  futurepass: string | null;
+}
+
 declare module "next-auth" {
   interface Session {
-    user: {
-      id: string;
-      name: string;
-      image: string;
-      email: string;
-      futurepass: string | null;
-    };
+    user: User;
   }
 }
 
