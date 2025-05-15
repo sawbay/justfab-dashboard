@@ -44,9 +44,7 @@ export const authOptions: NextAuthOptions = {
             await createUserOrUpdate(user);
             console.log(user);
           } catch (err) {
-            console.error(
-              "Something went wrong while creating the user.", err
-            );
+            console.error(`Something went wrong while creating the user.${err}`);
           }
 
           return returned;
