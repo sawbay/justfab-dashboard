@@ -8,6 +8,7 @@ import Button from "@/components/common/Button";
 import VIPRewardCard from "@/components/home/VIPRewardCard";
 import { VIPReward } from "@/types";
 import { useAuth } from "@futureverse/auth-react";
+import { RootQueryBuilder } from '@futureverse/transact';
 
 const mockStats = {
   level: 24,
@@ -79,6 +80,7 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 6;
   const totalPages = Math.ceil(mockVIPRewards.length / itemsPerPage);
+  // const queryBuilder = new RootQueryBuilder(api, walletAddress);
 
   const handlePrevPage = () => {
     setCurrentPage((prev) => Math.max(0, prev - 1));

@@ -12,6 +12,7 @@
   "dependencies": {
     "@futureverse/auth-react": "^4.0.5",
     "@futureverse/auth-ui": "^0.10.1",
+    "@futureverse/transact": "^0.7.1",
     "@prisma/client": "^6.6.0",
     "@tanstack/react-query": "^5.74.4",
     "@telegram-apps/sdk-react": "^2.0.22",
