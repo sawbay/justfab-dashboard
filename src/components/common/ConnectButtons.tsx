@@ -36,12 +36,6 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
 
   return (
     <div className="flex gap-3">
-      <LoginButton
-        botUsername={BOT_USERNAME}
-        onAuthCallback={(data: any) => {
-          signIn("telegram-login", undefined, data as any);
-        }}
-      />
       {tgSession ?
         <>
           <Button
@@ -54,21 +48,20 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
           </Button>
           <Button
             className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
-            onClick={() => {
-              signOut();
-            }}
           >{tgSession.user?.name}
           </Button>
         </>
         :
         <LoginButton
           botUsername={BOT_USERNAME}
+          buttonSize="large" // "large" | "medium" | "small"
+          cornerRadius={5} // 0 - 20
+          showAvatar={true}
           onAuthCallback={(data: any) => {
             signIn("telegram-login", undefined, data as any);
           }}
         />
       }
-
     </div>
   );
 };
