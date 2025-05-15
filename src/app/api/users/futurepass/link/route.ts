@@ -24,9 +24,10 @@ export async function POST(req: NextRequest) {
 
   try {
     const user = await linkFuturepass(telegramId, futurepass);
+    // TODO: after linking, we issue welcome chest and key
 
     return NextResponse.json({ success: true, user });
   } catch (error) {
-    return NextResponse.json({ error: "User not found or DB error" }, { status: 500 });
+    return NextResponse.json({ error }, { status: 500 });
   }
 }

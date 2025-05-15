@@ -21,6 +21,7 @@ export async function createUserOrUpdate(user: TelegramUserData) {
       tgId,
       name: user.first_name,
       image: user.photo_url,
+      futurepass: null,
     },
     update: {
       name: user.first_name,
@@ -31,7 +32,7 @@ export async function createUserOrUpdate(user: TelegramUserData) {
 
 export async function linkFuturepass(tgId: number, futurepass: string) {
   return prisma.user.update({
-    where: { tgId },
+    where: { tgId, futurepass: null },
     data: { futurepass },
   });
 }
