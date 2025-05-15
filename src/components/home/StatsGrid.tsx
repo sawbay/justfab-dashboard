@@ -31,7 +31,17 @@ interface StatsGridProps {
   stats: UserStats;
 }
 
+const options = {
+  localeMatcher: 'best fit',
+  style: 'decimal',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 6,
+} as const;
+
+const formatter = new Intl.NumberFormat('en-US', options);
+
 const StatsGrid: React.FC<StatsGridProps> = ({ stats }) => {
+
   return (
     <div className="px-4 pb-2">
       <div className="container mx-auto">
@@ -51,7 +61,7 @@ const StatsGrid: React.FC<StatsGridProps> = ({ stats }) => {
             />
             <StatItem
               label="$ROOT Balance"
-              value={stats.rootBalance}
+              value={formatter.format(stats.rootBalance)}
               subValue={stats.usdValue}
               valueColor="text-green-500"
             />

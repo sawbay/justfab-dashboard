@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import StatsGrid from "@/components/home/StatsGrid";
 import Card from "@/components/common/Card";
@@ -9,6 +9,10 @@ import VIPRewardCard from "@/components/home/VIPRewardCard";
 import { VIPReward } from "@/types";
 import { useAuth } from "@futureverse/auth-react";
 import { RootQueryBuilder } from '@futureverse/transact';
+import { useQuery } from "@tanstack/react-query";
+import { getBalance } from "@/utils/sdk";
+import { useTrnApi } from '@futureverse/transact-react';
+import { useTransactQuery } from "@/hooks/useTransactQuery";
 
 const mockStats = {
   level: 24,
@@ -96,19 +100,39 @@ export default function Home() {
   );
 
   const { authClient, userSession } = useAuth();
+  const { trnApi } = useTrnApi();
+  const transactionQuery = useTransactQuery();
 
   useEffect(() => {
     if (userSession) {
       console.log(userSession)
     }
   }, [authClient, userSession]);
+  
+  const accountToCheck = useMemo(() => {
+    if (!userSession) {
+      return '';
+    }
+    return userSession.futurepass;
+  }, [userSession]);
+
+  const rootBalanceOnTrn = useQuery({
+    queryKey: ['balance', 'futurepass', accountToCheck, 1],
+    queryFn: async () =>
+      getBalance(transactionQuery, accountToCheck as string, 1),
+    enabled:
+      !!trnApi &&
+      !!userSession &&
+      !!accountToCheck &&
+      accountToCheck !== '' &&
+      !!transactionQuery,
+  });
 
   return (
     <MainLayout>
       <div className="space-y-8">
         {/* Stats Grid */}
-        <StatsGrid stats={mockStats} />
-
+        <StatsGrid stats={{...mockStats, rootBalance: Number(rootBalanceOnTrn.data ?? 0)}} />
         {/* VIP Rewards */}
         <section>
           <h2 className="text-3xl font-semibold text-primary-dark mb-4 mx-4">
