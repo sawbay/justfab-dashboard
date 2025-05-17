@@ -1,9 +1,7 @@
 'use client';
 
 import React from 'react';
-
 import { QueryClientProvider } from '@tanstack/react-query';
-
 import { authClient, getWagmiConfig, queryClient } from './config';
 import { TrnApiProvider } from '@futureverse/transact-react';
 import {
@@ -11,7 +9,6 @@ import {
   DefaultTheme,
   ThemeConfig,
 } from '@futureverse/auth-ui';
-
 import { State } from 'wagmi';
 import type { NetworkName } from '@therootnetwork/api';
 import { FutureverseAuthProvider, FutureverseWagmiProvider } from '@futureverse/auth-react';
