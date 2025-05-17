@@ -1,7 +1,6 @@
 {
   "name": "nextjs-template",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "dev": "next dev",
     "dev:https": "next dev --experimental-https",
@@ -14,13 +13,10 @@
     "@futureverse/auth-ui": "^0.10.1",
     "@futureverse/transact": "^0.7.1",
     "@prisma/client": "^6.6.0",
-    "@tanstack/react-query": "^5.74.4",
-    "@telegram-apps/sdk-react": "^2.0.22",
-    "@telegram-apps/telegram-ui": "^2.1.5",
+    "@tanstack/react-query": "^5.51.21",
     "@telegram-auth/react": "^1.0.4",
     "@telegram-auth/server": "^1.0.4",
     "@therootnetwork/api": "^1.0.12",
-    "@tonconnect/ui-react": "^2.0.5",
     "axios": "^1.9.0",
     "eruda": "^3.0.1",
     "next": "^14.2.28",
