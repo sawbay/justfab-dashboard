@@ -10,6 +10,7 @@ import FPProvider from '@/components/providers/FPProvider';
 import AuthProvider from '@/components/providers/AuthProvider';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
+import Providers from '@/components/providers/FvProvider';
 
 export const metadata: Metadata = {
   title: 'JustFAB',
@@ -25,9 +26,10 @@ export default async function RootLayout({ children }: PropsWithChildren) {
       <body>
         <I18nProvider>
           {/* <Root> */}
-            <AuthProvider>
-              <FPProvider>{children}</FPProvider>
-            </AuthProvider>
+          <AuthProvider>
+            {/* <FPProvider>{children}</FPProvider> */}
+            <Providers>{children}</Providers>
+          </AuthProvider>
           {/* </Root> */}
         </I18nProvider>
       </body>
