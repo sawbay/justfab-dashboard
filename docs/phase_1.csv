@@ -1,0 +1,91 @@
+,"Website để users có thể lưu trữ hòm, chìa khóa, vật phẩm và thực hiện các tác vụ on chain!
+
+Gồm 4 trang: Home | Inventory | Store | FABPASS",,
+Home,"Bao gồm các nút:
+- Sign In kết nối ví: Metamask/Futurepass/Wallet connect
+- Kết nối với telegram 
+
+Thanh hiển thị các chỉ số:
++ $FAB Balance (nút Claim)
++ $Root Balance (nút Claim)
++ Treasure Chest
++ Aura Key
+
+Mission: 
+- Tách thành một sesion riêng, bố cục như UI cũ","$FAB Balance: 
++ Lấy từ số $FAB của user trên dashboard
+($FAB rút từ trong game về dashboard trước rồi mới rút onchain về ví)
+ 
+$Root Balance: 
++ Lấy từ số $ROOT của user trên dashboard
+
+Token trên dashboard của user nhận từ các nguồn:
++ Rút về từ game
++ Mở hòm
++Thưởng nhiệm vụ (optional)
++ Deposit (optional)
+","Admin:
+Hệ thống tạo nhiệm vụ gồm:
+= Hệ thống tạo chuỗi nhiệm vụ (sắp xếp từ cha ->con):
+
++ Chuỗi nhiệm vụ: Tên chuỗi
++ Loại nhiệm vụ:
+Dashboard:
+- Open chest
+- Buy key/NFT
+- Hold token/NFT/item (dashboard balance)
+- Kiếm token/NFT/item (từ lúc bắt đầu chơi)
+- Kiếm token/NFT/item (từ lúc bắt đầu nhiệm vụ)
+- Kiếm token/NFT/item (từ nguồn game/hòm)
+In-game:
+- Tổng ngày đăng nhập
+- Đăng nhập liên tiếp
+- Chơi slot machine (số vòng)
+- Sở hữu vàng 
+- Sở hữu item (số lượng)
+- Sở hữu item (xác định)
+- Trang bị item
+- Lực chiến
+- Kiếm vàng (từ lúc bắt đầu chơi)
+- Kiếm vàng (từ lúc bắt đầu nhiệm vụ)
+- Kiếm $FAB (từ lúc bắt đầu chơi)
+- Kiếm $FAB (từ lúc bắt đầu nhiệm vụ)
+Onchain:
+- Deposit token/NFT (optional)
+- Withdraw token/NFT
+- Hold token/NFT (wallet)
+- Stake token/NFT
++ Phần thưởng nhiệm vụ
+- $FAB
+- $ROOT
+- Item (dashboard)
+- Chest
+- Key"
+Inventory,"Filter: 
++ All
++ Chest
++ Key
++ In-game
++ NFT
++ Token voucher
+
+Danh sách vật phẩm dạng lưới:
++ Hình ảnh
++ Tên 
++ Số lượng
++ Nút ""Use"" (nếu là vật phẩm có tương tác)
+
+Pop-up 
+- Thông Tin vật phẩm: tên, hình ảnh, mô tả (kích hoạt bằng click hoặc hover)
+- Sử dụng vật phẩm: Tên, hình ảnh, ô điền số lượng, nút tăng giảm số lượng, nút max, nút ""Use""
+- Thông báo sử dụng vật phẩm thành công + thông báo nhận nhận vật phẩm 
+- Thông báo sử dụng vật phẩm không thành công + thông báo điều kiện dùng
+
+*Hoạt ảnh/ hiệu ứng:
+- Sử dụng vật phẩm thành công
+- Khung và hiệu ứng trúng vật phẩm hiếm
+
+*Nút chú thích cho phần inventory:
+- Dấu ""?"" 
+- Kích hoạt bằng hover
+- Pop up lên bảng chú thích nhỏ",,
