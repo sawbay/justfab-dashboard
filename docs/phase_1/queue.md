@@ -1,7 +1,7 @@
-# Technical Design: Event-Driven Queue for Business Logic
+# Technical Design: Event-Driven Queue for Business Logic (NestJS + BullMQ)
 
 ## 1. Overview
-This document describes the event-driven, queue-based architecture for processing core business logic in the system. Instead of handling business logic directly in Next.js API routes, we offload processing to a queue and dedicated workers. Next.js only fires events and queries state as needed.
+This document describes the event-driven, queue-based architecture for processing core business logic in the system, implemented using **NestJS** and **BullMQ**. Instead of handling business logic directly in Next.js API routes, we offload processing to a BullMQ queue and dedicated NestJS workers. Next.js only fires events and queries state as needed.
 
 ---
 
@@ -45,14 +45,17 @@ This document describes the event-driven, queue-based architecture for processin
   - Does not process main business logic directly.
   - Provides endpoints to query current state (inventory, rewards, etc.).
 
-- **Queue (e.g., Redis, RabbitMQ, SQS):**
-  - Receives events from API.
-  - Ensures reliable delivery and supports retries.
+- **Queue (BullMQ via NestJS):**
+  - Implemented using BullMQ and integrated with NestJS via the `@nestjs/bull` package.
+  - Receives events as jobs from API controllers/services.
+  - Ensures reliable delivery, supports retries, and can be configured with dead-letter queues.
 
-- **Worker(s):**
-  - Listens to the queue for events.
-  - Processes business logic for each event type.
-  - Updates the database and triggers side effects.
+- **Worker(s) (BullMQ Processors in NestJS):**
+  - Implemented as BullMQ processors within NestJS.
+  - Listen to specific queues for event jobs.
+  - Process business logic for each event type (e.g., `reward_inventory_item`, `use_item`).
+  - Update the database and trigger side effects.
+  - Can be scaled horizontally by running multiple worker processes.
 
 - **Database:**
   - Source of truth for inventory, user state, and logs.
@@ -102,10 +105,53 @@ This document describes the event-driven, queue-based architecture for processin
 
 ```
 User → Next.js API: Action (e.g., connect wallet, use item)
-Next.js API → Queue: Fire event (reward_inventory_item or use_item)
-Queue → Worker: Deliver event
+Next.js API → Queue (BullMQ): Fire event (reward_inventory_item or use_item)
+Queue (BullMQ) → Worker (NestJS Processor): Deliver event
 Worker → DB: Process business logic, update state
 User → Next.js API: Query state (e.g., inventory)
 Next.js API → DB: Fetch state
 Next.js API → User: Return updated state
+```
+
+---
+
+## 9. Example: BullMQ Integration in NestJS
+
+```typescript
+// In your NestJS module
+import { BullModule } from '@nestjs/bull';
+
+@Module({
+  imports: [
+    BullModule.forRoot({
+      redis: { host: 'localhost', port: 6379 },
+    }),
+    BullModule.registerQueue({ name: 'events' }),
+  ],
+})
+export class AppModule {}
+
+// Adding a job (event) from a service/controller
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bullmq';
+
+@Injectable()
+export class EventService {
+  constructor(@InjectQueue('events') private eventsQueue: Queue) {}
+
+  async rewardInventoryItem(userId: string, items: string[]) {
+    await this.eventsQueue.add('reward_inventory_item', { userId, items });
+  }
+}
+
+// Processing jobs (worker)
+import { Process, Processor } from '@nestjs/bull';
+
+@Processor('events')
+export class EventsProcessor {
+  @Process('reward_inventory_item')
+  async handleRewardInventoryItem(job: Job) {
+    // Business logic here
+  }
+}
 ``` 
