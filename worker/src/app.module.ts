@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
 import { BullModule } from "@nestjs/bullmq";
 import { BullBoardModule } from "@bull-board/nestjs";
-import { FeatureModule } from "./feature/feature.module";
 import { ExpressAdapter } from "@bull-board/express";
 import { ConfigModule } from '@nestjs/config';
+import { InventoryModule } from "./inventory/inventory.module";
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { ConfigModule } from '@nestjs/config';
       route: "/queues",
       adapter: ExpressAdapter
     }),
-    FeatureModule
+    InventoryModule,
   ],
   controllers: [],
   providers: []

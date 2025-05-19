@@ -1,8 +1,8 @@
 import { Controller, Get } from "@nestjs/common";
 import { BullBoardInstance, InjectBullBoard } from "@bull-board/nestjs";
 
-@Controller('my-feature')
-export class FeatureController {
+@Controller('inventory/bullboard')
+export class BullBoardController {
 
   constructor(
     //inject the bull-board instance using the provided decorator

@@ -1,9 +1,11 @@
-import { Processor } from '@nestjs/bullmq';
+import { Processor, Process } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import { InventoryService } from './inventory.service';
 import { Injectable } from '@nestjs/common';
 
-@Processor('feature_queue')
+export const INVENTORY_QUEUE = 'inventory_queue';
+
+@Processor(INVENTORY_QUEUE)
 @Injectable()
 export class InventoryProcessor {
   constructor(private readonly inventoryService: InventoryService) {}
