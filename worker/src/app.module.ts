@@ -3,26 +3,23 @@ import { BullModule } from "@nestjs/bullmq";
 import { BullBoardModule } from "@bull-board/nestjs";
 import { FeatureModule } from "./feature/feature.module";
 import { ExpressAdapter } from "@bull-board/express";
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    // infrastructure from here
+    ConfigModule.forRoot({ isGlobal: true }),
     BullModule.forRoot({
       connection: {
-        host: "localhost",
-        port: 6379,
-        username: "default",
-        password: "eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81" //defined in the docker compose yml
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT || '6379'),
+        username: process.env.REDIS_USERNAME,
+        password: process.env.REDIS_PASSWORD
       }
     }),
-
-    //register the bull-board module forRoot in your app.module
     BullBoardModule.forRoot({
       route: "/queues",
       adapter: ExpressAdapter
     }),
-
-    //feature modules from here.
     FeatureModule
   ],
   controllers: [],
