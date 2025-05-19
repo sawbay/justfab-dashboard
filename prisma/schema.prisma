@@ -37,7 +37,7 @@ model InventoryItem {
 
 model InventoryMetadata {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  type      Int      
+  type      String   @unique
   name      String
   metadata  Json?
   createdAt DateTime @default(now())
