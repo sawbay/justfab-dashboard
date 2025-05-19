@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import prisma from '../../../../prisma/prisma';
+import prisma from '../../../prisma/prisma';
 
 @Injectable()
 export class InventoryService {
