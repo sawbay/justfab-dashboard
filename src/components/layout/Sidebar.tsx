@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NavItem } from "@/types";
+import Image from "next/image";
+import { IMAGES } from "@/constants/images";
 
 const navItems: NavItem[] = [
   {
@@ -159,50 +161,47 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-40 h-screen transition-transform bg-[#FFE8C8]
-          lg:translate-x-0 lg:w-64
-          ${isMobileMenuOpen ? "w-64 translate-x-0" : "-translate-x-full"}
-        `}
+        className="fixed top-0 left-0 z-40 h-screen w-72 bg-[#f7ecd7] border-r-4 border-[#e0c48c] shadow-2xl flex flex-col items-center"
+        style={{
+          backgroundImage: `url(${IMAGES.sidebarBg})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+        }}
       >
-        <div className="flex flex-col h-full px-4 py-8">
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold text-primary-dark">JustFAB</h1>
+        <div className="flex flex-col items-center mt-6 mb-8">
+          <Image
+            src={IMAGES.logo}
+            alt="logo"
+            width={64}
+            height={64}
+            className="rounded-full border-4 border-[#e0c48c] shadow-lg bg-white"
+          />
+          <div className="mt-2 text-2xl font-bold text-[#B97A1A] font-[LuckiestGuy]">
+            JustFAB
           </div>
-
-          <nav className="flex-1">
-            <ul className="space-y-2">
-              {navItems.map((item) => (
-                <li key={item.path}>
-                  <Link
-                    href={item.path}
-                    className={`flex items-center px-4 py-2 rounded-lg transition-all
-                      ${
-                        pathname === item.path
-                          ? "bg-white text-primary-dark shadow-[2px_2px_8px_rgba(251,147,51,0.3)] font-bold"
-                          : "text-gray-500 font-medium hover:bg-white/50"
-                      }
-                    `}
-                  >
-                    {item.icon && (
-                      <span
-                        className={`mr-3 ${
-                          pathname === item.path
-                            ? "text-primary-dark"
-                            : "text-gray-500"
-                        }`}
-                      >
-                        {item.icon}
-                      </span>
-                    )}
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div className="mt-auto"></div>
         </div>
+        <nav className="flex-1 w-full">
+          <ul className="space-y-2 px-4">
+            {navItems.map((item) => (
+              <li key={item.path}>
+                <Link
+                  href={item.path}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-lg font-[LuckiestGuy] transition-all shadow-md bg-[#fffbe9] hover:bg-[#ffe8c8] hover:scale-105 ${
+                    pathname === item.path
+                      ? "bg-[#ffe8c8] text-[#B97A1A] scale-105"
+                      : "text-[#7B3F00]"
+                  } `}
+                >
+                  <span className="w-8 h-8 flex items-center justify-center bg-[#f7ecd7] rounded-full border border-[#e0c48c] shadow">
+                    {item.icon}
+                  </span>
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <div className="mt-auto mb-6"></div>
       </aside>
     </>
   );

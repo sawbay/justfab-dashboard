@@ -12,6 +12,7 @@ import { useTrnApi } from "@futureverse/transact-react";
 import { useTransactQuery } from "@/hooks/useTransactQuery";
 import { useQuery } from "@tanstack/react-query";
 import { getBalance } from "@/utils/sdk";
+import Image from "next/image";
 
 const mockStats = {
   level: 24,
@@ -101,7 +102,7 @@ export default function Home() {
   const { authClient, userSession } = useAuth();
   useEffect(() => {
     if (userSession) {
-      console.log(userSession)
+      console.log(userSession);
     }
   }, [authClient, userSession]);
 
@@ -109,103 +110,215 @@ export default function Home() {
   const transactionQuery = useTransactQuery();
   const accountToCheck = useMemo(() => {
     if (!userSession) {
-      return '';
+      return "";
     }
     return userSession.futurepass;
   }, [userSession]);
 
   const rootBalanceOnTrn = useQuery({
-    queryKey: ['balance', 'futurepass', accountToCheck, 1],
+    queryKey: ["balance", "futurepass", accountToCheck, 1],
     queryFn: async () =>
       getBalance(transactionQuery, accountToCheck as string, 1),
     enabled:
       !!trnApi &&
       !!userSession &&
       !!accountToCheck &&
-      accountToCheck !== '' &&
+      accountToCheck !== "" &&
       !!transactionQuery,
   });
 
   return (
     <MainLayout>
       <div className="space-y-8">
-        {/* Stats Grid */}
-        <StatsGrid stats={{ ...mockStats, rootBalance: Number(rootBalanceOnTrn.data ?? 0) }} />
+        {/* Banner + Connect Buttons */}
+        {/* <div className="relative flex items-center justify-between px-8 py-2 mt-2 mb-4">
+          <Image
+            src="/justfap/banner.png"
+            alt="banner"
+            width={900}
+            height={80}
+            className="w-full h-20 object-contain"
+          />
+          <div className="absolute right-12 top-1/2 -translate-y-1/2 flex gap-4">
+            <Button className="bg-[#C96B2B] border-4 border-[#7B3F00] text-white font-bold shadow-md px-6 py-2 rounded-xl text-lg hover:bg-[#E08B3A]">
+              Connect Telegram
+            </Button>
+            <Button className="bg-[#C96B2B] border-4 border-[#7B3F00] text-white font-bold shadow-md px-6 py-2 rounded-xl text-lg hover:bg-[#E08B3A]">
+              Connect Wallet
+            </Button>
+          </div>
+        </div> */}
+        {/* Stats Grid Custom */}
+        <div className="flex justify-between gap-2 px-2">
+          {[
+            {
+              label: "Level",
+              value: mockStats.level,
+              sub: null,
+              color: "text-[#E08B3A]",
+            },
+            {
+              label: "Status",
+              value: <span className="text-green-600 font-bold">● ACTIVE</span>,
+              sub: mockStats.playedToday,
+            },
+            {
+              label: "$FAB Balance",
+              value: mockStats.fabBalance,
+              sub: mockStats.yesterdayStats,
+            },
+            {
+              label: "$ROOT Balance",
+              value: (
+                <span className="text-green-600">{mockStats.rootBalance}</span>
+              ),
+              sub: mockStats.usdValue,
+            },
+            {
+              label: "Treasure Chests",
+              value: mockStats.treasureChests,
+              sub: mockStats.unlocksIn,
+            },
+            {
+              label: "Aura Key",
+              value: mockStats.auraKey,
+              sub: mockStats.usedFor,
+            },
+          ].map((item, idx) => (
+            <div
+              key={idx}
+              className="flex-1 flex flex-col items-center justify-center mx-1"
+            >
+              <div
+                className="relative w-full h-20 flex flex-col items-center justify-center"
+                style={{
+                  backgroundImage: "url(/justfap/wood-frame.png)",
+                  backgroundSize: "100% 100%",
+                  backgroundRepeat: "no-repeat",
+                }}
+              >
+                <div className="text-xs font-bold text-[#7B3F00] mt-1">
+                  {item.label}
+                </div>
+                <div className={`text-2xl font-bold ${item.color || ""}`}>
+                  {item.value}
+                </div>
+                {item.sub && (
+                  <div className="text-xs text-[#7B3F00]">{item.sub}</div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
         {/* VIP Rewards */}
         <section>
-          <h2 className="text-3xl font-semibold text-primary-dark mb-4 mx-4">
-            VIP Rewards
+          <h2 className="text-3xl font-bold text-[#444] mb-4 mx-4 font-[LuckiestGuy]">
+            Vip Rewards
           </h2>
           <div className="relative mx-4">
             <button
               onClick={handlePrevPage}
               disabled={currentPage === 0}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 p-2 rounded-full bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed"
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 p-2 bg-transparent"
             >
-              <svg
-                className="w-7 h-7"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+              <span className="text-[#E08B3A] text-3xl">&#60;</span>
             </button>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-0.5 overflow-hidden">
-              {visibleRewards.map((reward) => (
-                <VIPRewardCard key={reward.level} reward={reward} />
-              ))}
+            <div className="grid grid-cols-5 gap-4">
+              {(() => {
+                const items: (VIPReward | null)[] = visibleRewards.slice(0, 5);
+                while (items.length < 5) items.push(null);
+                return items.map((reward, idx) =>
+                  reward ? (
+                    <div
+                      key={idx}
+                      className="relative flex flex-col items-center"
+                      style={{
+                        backgroundImage: "url(/justfap/vip-card.png)",
+                        backgroundSize: "100% 100%",
+                        backgroundRepeat: "no-repeat",
+                        minHeight: 220,
+                      }}
+                    >
+                      <div className="w-full flex flex-col items-center pt-2">
+                        <div className="text-xl font-bold text-[#B97A1A] mb-1">
+                          Day 1
+                        </div>
+                        <Image
+                          src="/justfap/vip-mole.png"
+                          alt="vip"
+                          width={90}
+                          height={90}
+                          className="mb-1"
+                        />
+                        <div className="bg-[#FFF4D0] rounded-b-xl w-full text-center py-2 px-1 text-[#7B3F00] text-sm font-semibold border-t-2 border-[#B97A1A]">
+                          Điểm danh đăng nhập lần đầu
+                        </div>
+                        <div className="flex justify-center gap-4 mt-1 text-[#7B3F00] text-xs">
+                          <span className="flex items-center gap-1">
+                            <Image
+                              src="/justfap/coin.png"
+                              alt="coin"
+                              width={18}
+                              height={18}
+                            />
+                            1
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Image
+                              src="/justfap/chest.png"
+                              alt="chest"
+                              width={18}
+                              height={18}
+                            />
+                            1
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div key={idx} />
+                  )
+                );
+              })()}
             </div>
-
             <button
               onClick={handleNextPage}
               disabled={currentPage === totalPages - 1}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 p-2 rounded-full bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed"
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 p-2 bg-transparent"
             >
-              <svg
-                className="w-7 h-7"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
+              <span className="text-[#E08B3A] text-3xl">&#62;</span>
             </button>
           </div>
         </section>
-
         {/* Welcome Missions */}
         <section>
-          <h2 className="text-3xl font-semibold text-primary-dark mb-4 mx-4">
+          <h2 className="text-3xl font-bold text-[#444] mb-4 mx-4 font-[LuckiestGuy]">
             Welcome Missions
           </h2>
           <div className="mx-4">
-            <Card className="p-6 bg-[#FFE8C8]">
-              <div className="flex justify-between items-center">
+            <div
+              className="relative w-full"
+              style={{
+                backgroundImage: "url(/justfap/scroll-mission.png)",
+                backgroundSize: "100% 100%",
+                backgroundRepeat: "no-repeat",
+                minHeight: 90,
+              }}
+            >
+              <div className="flex justify-between items-center px-8 py-6">
                 <div>
-                  <h3 className="text-2xl font-medium text-secondary-dark">
+                  <h3 className="text-2xl font-bold text-[#444]">
                     Online Game For 3 Days
                   </h3>
-                  <p className="text-secondary text-xl">
-                    Rewards: Welcome Chest
+                  <p className="text-[#7B3F00] text-lg font-semibold">
+                    Reward: Welcome Chest
                   </p>
                 </div>
-                <Button className="bg-primary hover:bg-primary-light text-lg px-6 py-2">
-                  Claim
+                <Button className="bg-[#C96B2B] border-4 border-[#7B3F00] text-white font-bold shadow-md px-8 py-3 rounded-xl text-xl hover:bg-[#E08B3A]">
+                  claim
                 </Button>
               </div>
-            </Card>
+            </div>
           </div>
         </section>
       </div>
