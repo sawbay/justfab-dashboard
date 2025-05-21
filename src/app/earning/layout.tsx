@@ -1,9 +1,6 @@
-import { Metadata } from "next";
+import { createMetadata } from "@/constants/metadata";
 
-export const metadata: Metadata = {
-  title: "JustFAB - Earning",
-  description: "Make predictions and earn rewards on JustFAB platform",
-};
+export const metadata = createMetadata("Earning");
 
 export default function PredictionLayout({
   children,

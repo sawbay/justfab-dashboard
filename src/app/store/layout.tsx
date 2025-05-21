@@ -1,9 +1,6 @@
-import { Metadata } from "next";
+import { createMetadata } from "@/constants/metadata";
 
-export const metadata: Metadata = {
-  title: "JustFAB - Store",
-  description: "Shop exclusive items and NFTs on JustFAB marketplace",
-};
+export const metadata = createMetadata("Store");
 
 export default function StoreLayout({
   children,
