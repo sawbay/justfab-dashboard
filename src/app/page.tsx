@@ -81,6 +81,40 @@ const mockVIPRewards: VIPReward[] = [
   },
 ];
 
+const statsCards = [
+  {
+    label: "Level",
+    value: mockStats.level,
+    sub: null,
+    color: "text-[#E08B3A]",
+  },
+  {
+    label: "Status",
+    value: <span className="text-green-600 font-bold">● ACTIVE</span>,
+    sub: mockStats.playedToday,
+  },
+  {
+    label: "$FAB Balance",
+    value: mockStats.fabBalance,
+    sub: mockStats.yesterdayStats,
+  },
+  {
+    label: "$ROOT Balance",
+    value: <span className="text-green-600">{mockStats.rootBalance}</span>,
+    sub: mockStats.usdValue,
+  },
+  {
+    label: "Treasure Chests",
+    value: mockStats.treasureChests,
+    sub: mockStats.unlocksIn,
+  },
+  {
+    label: "Aura Key",
+    value: mockStats.auraKey,
+    sub: mockStats.usedFor,
+  },
+];
+
 export default function Home() {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 6;
@@ -131,77 +165,24 @@ export default function Home() {
   return (
     <MainLayout>
       <div className="space-y-8">
-        {/* Banner + Connect Buttons */}
-        {/* <div className="relative flex items-center justify-between px-8 py-2 mt-2 mb-4">
-          <Image
-            src="/justfap/banner.png"
-            alt="banner"
-            width={900}
-            height={80}
-            className="w-full h-20 object-contain"
-          />
-          <div className="absolute right-12 top-1/2 -translate-y-1/2 flex gap-4">
-            <Button className="bg-[#C96B2B] border-4 border-[#7B3F00] text-white font-bold shadow-md px-6 py-2 rounded-xl text-lg hover:bg-[#E08B3A]">
-              Connect Telegram
-            </Button>
-            <Button className="bg-[#C96B2B] border-4 border-[#7B3F00] text-white font-bold shadow-md px-6 py-2 rounded-xl text-lg hover:bg-[#E08B3A]">
-              Connect Wallet
-            </Button>
-          </div>
-        </div> */}
-        {/* Stats Grid Custom */}
         <div className="flex justify-between gap-2 px-2">
-          {[
-            {
-              label: "Level",
-              value: mockStats.level,
-              sub: null,
-              color: "text-[#E08B3A]",
-            },
-            {
-              label: "Status",
-              value: <span className="text-green-600 font-bold">● ACTIVE</span>,
-              sub: mockStats.playedToday,
-            },
-            {
-              label: "$FAB Balance",
-              value: mockStats.fabBalance,
-              sub: mockStats.yesterdayStats,
-            },
-            {
-              label: "$ROOT Balance",
-              value: (
-                <span className="text-green-600">{mockStats.rootBalance}</span>
-              ),
-              sub: mockStats.usdValue,
-            },
-            {
-              label: "Treasure Chests",
-              value: mockStats.treasureChests,
-              sub: mockStats.unlocksIn,
-            },
-            {
-              label: "Aura Key",
-              value: mockStats.auraKey,
-              sub: mockStats.usedFor,
-            },
-          ].map((item, idx) => (
+          {statsCards.map((item, idx) => (
             <div
               key={idx}
               className="flex-1 flex flex-col items-center justify-center mx-1"
             >
               <div
-                className="relative w-full h-20 flex flex-col items-center justify-center"
+                className="relative w-full h-36 flex flex-col items-center justify-center"
                 style={{
-                  backgroundImage: "url(/justfap/wood-frame.png)",
+                  backgroundImage: `url(${IMAGES.bgCard})`,
                   backgroundSize: "100% 100%",
                   backgroundRepeat: "no-repeat",
                 }}
               >
-                <div className="text-xs font-bold text-[#7B3F00] mt-1">
+                <div className="text-sm font-bold text-[#7B3F00]">
                   {item.label}
                 </div>
-                <div className={`text-2xl font-bold ${item.color || ""}`}>
+                <div className={`text-2xl font-bold ${item.color || ""} my-1`}>
                   {item.value}
                 </div>
                 {item.sub && (
@@ -222,11 +203,11 @@ export default function Home() {
             <button
               onClick={handlePrevPage}
               disabled={currentPage === 0}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 p-2 bg-transparent"
+              className="absolute -left-12 top-1/2 -translate-y-1/2 z-10 p-2 bg-transparent"
             >
-              <span className="text-[#E08B3A] text-3xl">&#60;</span>
+              <span className="text-[#E08B3A] text-4xl">&#60;</span>
             </button>
-            <div className="grid grid-cols-5 gap-4">
+            <div className="grid grid-cols-5 gap-6">
               {(() => {
                 const items: (VIPReward | null)[] = visibleRewards.slice(0, 5);
                 while (items.length < 5) items.push(null);
@@ -234,32 +215,27 @@ export default function Home() {
                   reward ? (
                     <div
                       key={idx}
-                      className="relative flex flex-col items-center"
+                      className="relative flex flex-col items-center justify-between h-full"
                       style={{
-                        backgroundImage: "url(/justfap/vip-card.png)",
+                        backgroundImage: `url(${IMAGES.bgReward})`,
                         backgroundSize: "100% 100%",
                         backgroundRepeat: "no-repeat",
-                        minHeight: 220,
+                        minHeight: 280,
                       }}
                     >
-                      <div className="w-full flex flex-col items-center pt-2">
-                        <div className="text-xl font-bold text-[#B97A1A] mb-1">
+                      <div className="w-full flex flex-col items-center pt-4">
+                        <div className="text-xl font-bold text-[#B97A1A] font-[dynapuff]">
                           Day 1
                         </div>
-                        <Image
-                          src="/justfap/vip-mole.png"
-                          alt="vip"
-                          width={90}
-                          height={90}
-                          className="mb-1"
-                        />
-                        <div className="bg-[#FFF4D0] rounded-b-xl w-full text-center py-2 px-1 text-[#7B3F00] text-sm font-semibold border-t-2 border-[#B97A1A]">
+                      </div>
+                      <div className="w-full flex flex-col items-center gap-2 pb-4">
+                        <div className="text-center px-4 text-[#7B3F00] text-lg font-semibold">
                           Điểm danh đăng nhập lần đầu
                         </div>
-                        <div className="flex justify-center gap-4 mt-1 text-[#7B3F00] text-xs">
+                        <div className="flex justify-center gap-4 text-[#7B3F00] text-xs">
                           <span className="flex items-center gap-1">
                             <Image
-                              src="/justfap/coin.png"
+                              src={IMAGES.chest}
                               alt="coin"
                               width={18}
                               height={18}
@@ -268,7 +244,7 @@ export default function Home() {
                           </span>
                           <span className="flex items-center gap-1">
                             <Image
-                              src="/justfap/chest.png"
+                              src={IMAGES.chest}
                               alt="chest"
                               width={18}
                               height={18}
@@ -287,9 +263,9 @@ export default function Home() {
             <button
               onClick={handleNextPage}
               disabled={currentPage === totalPages - 1}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 p-2 bg-transparent"
+              className="absolute -right-12 top-1/2 -translate-y-1/2 z-10 p-2 bg-transparent"
             >
-              <span className="text-[#E08B3A] text-3xl">&#62;</span>
+              <span className="text-[#E08B3A] text-4xl">&#62;</span>
             </button>
           </div>
         </section>
