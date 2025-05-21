@@ -1,6 +1,6 @@
 export const IMAGES = {
-  logo: "/justfap/vip-mole.png",
-  sidebarBg: "/justfap/sidebar-paper.png",
+  logo: "/justfap/logo.png",
+  sidebarBg: "/justfap/bg_sidebar.png",
   mainBg: "/justfap/bg-paper.png",
   banner: "/justfap/banner.png",
   woodFrame: "/justfap/wood-frame.png",

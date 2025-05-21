@@ -13,6 +13,7 @@ import { useTransactQuery } from "@/hooks/useTransactQuery";
 import { useQuery } from "@tanstack/react-query";
 import { getBalance } from "@/utils/sdk";
 import Image from "next/image";
+import { IMAGES } from "@/constants/images";
 
 const mockStats = {
   level: 24,
@@ -212,9 +213,12 @@ export default function Home() {
         </div>
         {/* VIP Rewards */}
         <section>
-          <h2 className="text-3xl font-bold text-[#444] mb-4 mx-4 font-[LuckiestGuy]">
-            Vip Rewards
-          </h2>
+          <div className="flex items-center gap-3 mb-4 mx-4">
+            <Image src={IMAGES.logo} alt="logo" width={40} height={40} />
+            <h2 className="text-3xl font-bold text-[#444] font-[LuckiestGuy]">
+              Vip Rewards
+            </h2>
+          </div>
           <div className="relative mx-4">
             <button
               onClick={handlePrevPage}

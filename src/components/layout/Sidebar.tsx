@@ -161,40 +161,39 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside
-        className="fixed top-0 left-0 z-40 h-screen w-72 bg-[#f7ecd7] border-r-4 border-[#e0c48c] shadow-2xl flex flex-col items-center"
+        className="fixed top-0 left-0 z-40 h-screen w-72 flex flex-col items-start"
         style={{
           backgroundImage: `url(${IMAGES.sidebarBg})`,
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
         }}
       >
-        <div className="flex flex-col items-center mt-6 mb-8">
+        <div className="flex flex-col items-start mt-14 mb-5 pl-12">
           <Image
             src={IMAGES.logo}
             alt="logo"
             width={64}
             height={64}
-            className="rounded-full border-4 border-[#e0c48c] shadow-lg bg-white"
+            className="rounded-full border-4 "
           />
-          <div className="mt-2 text-2xl font-bold text-[#B97A1A] font-[LuckiestGuy]">
+          {/* <div className="mt-2 text-2xl font-bold text-[#B97A1A] font-[LuckiestGuy]">
             JustFAB
-          </div>
+          </div> */}
         </div>
         <nav className="flex-1 w-full">
-          <ul className="space-y-2 px-4">
+          <ul className="space-y-2 pl-12 pr-2">
             {navItems.map((item) => (
               <li key={item.path}>
                 <Link
                   href={item.path}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-lg font-[LuckiestGuy] transition-all shadow-md bg-[#fffbe9] hover:bg-[#ffe8c8] hover:scale-105 ${
-                    pathname === item.path
-                      ? "bg-[#ffe8c8] text-[#B97A1A] scale-105"
-                      : "text-[#7B3F00]"
-                  } `}
+                  className={`flex items-center justify-start px-0 py-3 rounded-xl transition-all font-bold
+                    ${
+                      pathname === item.path
+                        ? "text-[#7B3F00] text-3xl"
+                        : "text-white text-2xl"
+                    }
+                  `}
                 >
-                  <span className="w-8 h-8 flex items-center justify-center bg-[#f7ecd7] rounded-full border border-[#e0c48c] shadow">
-                    {item.icon}
-                  </span>
                   {item.label}
                 </Link>
               </li>
