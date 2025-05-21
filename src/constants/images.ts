@@ -8,4 +8,6 @@ export const IMAGES = {
   coin: "/justfap/coin.png",
   chest: "/justfap/chest.png",
   scrollMission: "/justfap/scroll-mission.png",
+  bgHeader: "/justfap/bg_header.png",
+  bgButton: "/justfap/bg_button.png",
 };
