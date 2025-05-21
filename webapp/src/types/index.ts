@@ -53,3 +53,8 @@ export interface StakingInfo {
     percent: string;
   };
 }
+
+export enum InventoryItemId {
+  WELCOME_CHEST = 'welcome_chest',
+  KEY = 'key',
+}

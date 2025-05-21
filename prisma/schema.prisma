@@ -1,6 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  output        = "../src/app/generated/prisma"
+  output        = "generated"
   binaryTargets = ["native"]
 }
 
@@ -23,18 +23,6 @@ model User {
   @@map("users")
 }
 
-model OpenedChest {
-  id String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId    Int @unique
-  chestId   Int
-  reward    Json?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("opened_chests")
-}
-
 model InventoryItem {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   userId          String   @db.ObjectId
@@ -49,7 +37,7 @@ model InventoryItem {
 
 model InventoryMetadata {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  type      Int      
+  type      String   @unique
   name      String
   metadata  Json?
   createdAt DateTime @default(now())
