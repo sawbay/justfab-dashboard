@@ -132,7 +132,7 @@ const Sidebar = () => {
     <>
       {/* Mobile Menu Button */}
       <button
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-primary text-white rounded-xl"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-[#E08B3A] text-white rounded-xl"
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       >
         <svg
@@ -159,9 +159,22 @@ const Sidebar = () => {
         </svg>
       </button>
 
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <aside
-        className="fixed top-0 left-0 z-40 h-screen w-72 flex flex-col items-start"
+        className={`fixed top-0 left-0 z-40 h-screen w-72 transform transition-transform duration-300 ease-in-out
+          ${
+            isMobileMenuOpen
+              ? "translate-x-0"
+              : "-translate-x-full lg:translate-x-0"
+          }`}
         style={{
           backgroundImage: `url(${IMAGES.sidebarBg})`,
           backgroundSize: "cover",
@@ -174,7 +187,7 @@ const Sidebar = () => {
             alt="logo"
             width={80}
             height={80}
-            className="rounded-full border-4 "
+            className="rounded-full border-4"
           />
           {/* <div className="mt-2 text-2xl font-bold text-[#B97A1A] font-[LuckiestGuy]">
             JustFAB
@@ -186,11 +199,12 @@ const Sidebar = () => {
               <li key={item.path}>
                 <Link
                   href={item.path}
+                  onClick={() => setIsMobileMenuOpen(false)}
                   className={`flex items-center justify-start px-0 py-3 rounded-xl transition-all font-bold font-dynapuff text-stroke
                     ${
                       pathname === item.path
-                        ? "text-[#7B3F00] text-3xl"
-                        : "text-white text-2xl"
+                        ? "text-[#7B3F00] text-2xl lg:text-3xl"
+                        : "text-white text-xl lg:text-2xl"
                     }
                   `}
                 >

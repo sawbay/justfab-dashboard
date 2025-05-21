@@ -33,14 +33,14 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       />
 
       {/* Content */}
-      <div className="relative z-10 flex">
-        <div className="hidden lg:block">
+      <div className="relative z-10 flex flex-col lg:flex-row">
+        <div className="lg:block">
           <Sidebar />
         </div>
         <div className="flex-1 lg:ml-72">
           <Header />
           <main
-            className="container mx-auto px-4 py-8 min-h-screen"
+            className="container mx-auto px-4 sm:px-6 lg:px-8 min-h-screen"
             style={{
               minHeight: "calc(100vh - 64px)",
               borderTopLeftRadius: 0,
