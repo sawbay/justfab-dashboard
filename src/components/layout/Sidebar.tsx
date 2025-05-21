@@ -168,12 +168,12 @@ const Sidebar = () => {
           backgroundRepeat: "no-repeat",
         }}
       >
-        <div className="flex flex-col items-start mt-14 mb-5 pl-12">
+        <div className="flex flex-col items-start mt-14 mb-3 pl-12">
           <Image
             src={IMAGES.logo}
             alt="logo"
-            width={64}
-            height={64}
+            width={80}
+            height={80}
             className="rounded-full border-4 "
           />
           {/* <div className="mt-2 text-2xl font-bold text-[#B97A1A] font-[LuckiestGuy]">
@@ -186,7 +186,7 @@ const Sidebar = () => {
               <li key={item.path}>
                 <Link
                   href={item.path}
-                  className={`flex items-center justify-start px-0 py-3 rounded-xl transition-all font-bold
+                  className={`flex items-center justify-start px-0 py-3 rounded-xl transition-all font-bold font-dynapuff text-stroke
                     ${
                       pathname === item.path
                         ? "text-[#7B3F00] text-3xl"
