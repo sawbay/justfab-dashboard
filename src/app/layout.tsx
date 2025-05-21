@@ -10,8 +10,8 @@ import 'normalize.css/normalize.css';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'JustFAB',
-  description: 'Your application description goes here',
+  title: 'JustFAB Dashboard',
+  description: "Yo! Welcome to the world of JustFAB! We’re about to go on some crazy ride, where we’ll probably try to save this whole damn thing for $ROOT & $FAB. You don't want to miss what's we are cooking!",
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
