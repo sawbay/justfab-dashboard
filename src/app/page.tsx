@@ -214,8 +214,7 @@ export default function Home() {
         {/* VIP Rewards */}
         <section>
           <div className="flex items-center gap-3 mb-4 mx-4">
-            <Image src={IMAGES.logo} alt="logo" width={40} height={40} />
-            <h2 className="text-3xl font-bold text-[#444] font-[LuckiestGuy]">
+            <h2 className="text-3xl font-bold text-[#585858] font-[dynapuff]">
               Vip Rewards
             </h2>
           </div>
@@ -296,20 +295,20 @@ export default function Home() {
         </section>
         {/* Welcome Missions */}
         <section>
-          <h2 className="text-3xl font-bold text-[#444] mb-4 mx-4 font-[LuckiestGuy]">
+          <h2 className="text-3xl font-bold text-[#585858] font-[dynapuff]">
             Welcome Missions
           </h2>
-          <div className="mx-4">
+          <div className="mt-4">
             <div
-              className="relative w-full"
+              className="relative w-full h-40"
               style={{
-                backgroundImage: "url(/justfap/scroll-mission.png)",
+                backgroundImage: `url(${IMAGES.bgMission})`,
                 backgroundSize: "100% 100%",
                 backgroundRepeat: "no-repeat",
                 minHeight: 90,
               }}
             >
-              <div className="flex justify-between items-center px-8 py-6">
+              <div className="flex justify-between items-center h-full pl-16 py-4">
                 <div>
                   <h3 className="text-2xl font-bold text-[#444]">
                     Online Game For 3 Days
@@ -318,8 +317,8 @@ export default function Home() {
                     Reward: Welcome Chest
                   </p>
                 </div>
-                <Button className="bg-[#C96B2B] border-4 border-[#7B3F00] text-white font-bold shadow-md px-8 py-3 rounded-xl text-xl hover:bg-[#E08B3A]">
-                  claim
+                <Button size="xl" className="mr-32">
+                  Claim
                 </Button>
               </div>
             </div>

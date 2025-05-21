@@ -66,6 +66,7 @@ const ConnectButtons: React.FC<{}> = ({}) => {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    fontFamily: "DynaPuff",
   };
 
   return (

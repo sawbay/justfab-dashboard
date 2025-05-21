@@ -10,11 +10,9 @@ interface MainLayoutProps {
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
     <div
-      className="min-h-screen relative bg-[#f7ecd7]"
+      className="min-h-screen relative"
       style={{
-        backgroundImage: `url(${IMAGES.mainBg})`,
-        backgroundSize: "cover",
-        backgroundRepeat: "repeat",
+        background: "linear-gradient(to bottom, #EAE3DE, #F5F0EB)",
       }}
     >
       {/* Base gradient */}

@@ -10,4 +10,5 @@ export const IMAGES = {
   scrollMission: "/justfap/scroll-mission.png",
   bgHeader: "/justfap/bg_header.png",
   bgButton: "/justfap/bg_button.png",
+  bgMission: "/justfap/bg_missions.png",
 };
