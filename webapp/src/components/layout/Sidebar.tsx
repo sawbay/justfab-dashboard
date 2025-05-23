@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NavItem } from "@/types";
+import Image from "next/image";
+import { IMAGES } from "@/constants/images";
 
 const navItems: NavItem[] = [
   {
@@ -130,7 +132,7 @@ const Sidebar = () => {
     <>
       {/* Mobile Menu Button */}
       <button
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-primary text-white rounded-xl"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-[#E08B3A] text-white rounded-xl"
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       >
         <svg
@@ -157,52 +159,62 @@ const Sidebar = () => {
         </svg>
       </button>
 
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-40 h-screen transition-transform bg-[#FFE8C8]
-          lg:translate-x-0 lg:w-64
-          ${isMobileMenuOpen ? "w-64 translate-x-0" : "-translate-x-full"}
-        `}
+        className={`fixed top-0 left-0 z-40 h-screen w-72 transform transition-transform duration-300 ease-in-out
+          ${
+            isMobileMenuOpen
+              ? "translate-x-0"
+              : "-translate-x-full lg:translate-x-0"
+          }`}
+        style={{
+          backgroundImage: `url(${IMAGES.sidebarBg})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+        }}
       >
-        <div className="flex flex-col h-full px-4 py-8">
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold text-primary-dark">JustFAB</h1>
-          </div>
-
-          <nav className="flex-1">
-            <ul className="space-y-2">
-              {navItems.map((item) => (
-                <li key={item.path}>
-                  <Link
-                    href={item.path}
-                    className={`flex items-center px-4 py-2 rounded-lg transition-all
-                      ${
-                        pathname === item.path
-                          ? "bg-white text-primary-dark shadow-[2px_2px_8px_rgba(251,147,51,0.3)] font-bold"
-                          : "text-gray-500 font-medium hover:bg-white/50"
-                      }
-                    `}
-                  >
-                    {item.icon && (
-                      <span
-                        className={`mr-3 ${
-                          pathname === item.path
-                            ? "text-primary-dark"
-                            : "text-gray-500"
-                        }`}
-                      >
-                        {item.icon}
-                      </span>
-                    )}
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div className="mt-auto"></div>
+        <div className="flex flex-col items-start mt-14 mb-3 pl-12">
+          <Image
+            src={IMAGES.logo}
+            alt="logo"
+            width={80}
+            height={80}
+            className="rounded-full border-4"
+          />
+          {/* <div className="mt-2 text-2xl font-bold text-[#B97A1A] font-[LuckiestGuy]">
+            JustFAB
+          </div> */}
         </div>
+        <nav className="flex-1 w-full">
+          <ul className="space-y-2 pl-12 pr-2">
+            {navItems.map((item) => (
+              <li key={item.path}>
+                <Link
+                  href={item.path}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`flex items-center justify-start px-0 py-3 rounded-xl transition-all font-bold font-dynapuff text-stroke
+                    ${
+                      pathname === item.path
+                        ? "text-[#7B3F00] text-2xl lg:text-3xl"
+                        : "text-white text-xl lg:text-2xl"
+                    }
+                  `}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <div className="mt-auto mb-6"></div>
       </aside>
     </>
   );

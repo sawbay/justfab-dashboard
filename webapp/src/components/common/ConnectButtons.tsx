@@ -9,8 +9,9 @@ import { useAuth } from "@futureverse/auth-react";
 import axios from "axios";
 import { USERS_FUTUREPASS_LINK, USERS_GET } from "@/app/api/routes";
 import { User } from "@/app/api/auth/[...nextauth]/options";
+import { IMAGES } from "@/constants/images";
 
-const ConnectButtons: React.FC<{}> = ({ }) => {
+const ConnectButtons: React.FC<{}> = ({}) => {
   const { openLogin } = useAuthUi();
   const { userSession: fpSession, signOutPass } = useAuth();
   const { data: tgSession } = useSession();
@@ -18,23 +19,27 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
 
   useEffect(() => {
     if (fpSession && !user) {
-      axios.get(USERS_GET, {
-        params: {
-          tgId: tgSession?.user?.id,
-        },
-      }).then((res) => {
-        setUser(res.data.user);
-      });
+      axios
+        .get(USERS_GET, {
+          params: {
+            tgId: tgSession?.user?.id,
+          },
+        })
+        .then((res) => {
+          setUser(res.data.user);
+        });
     }
   }, [fpSession, user]);
 
   useEffect(() => {
     if (fpSession && user && user.futurepass == null) {
-      axios.post(USERS_FUTUREPASS_LINK, {
-        telegramId: Number(tgSession?.user?.id),
-        futurepass: fpSession.futurepass,
-      }).then(() => { })
-        .catch(console.error)
+      axios
+        .post(USERS_FUTUREPASS_LINK, {
+          telegramId: Number(tgSession?.user?.id),
+          futurepass: fpSession.futurepass,
+        })
+        .then(() => {})
+        .catch(console.error);
     }
   }, [fpSession, user]);
 
@@ -46,12 +51,31 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
     }
   };
 
+  const buttonStyle = {
+    backgroundImage: `url(${IMAGES.bgButton})`,
+    backgroundSize: "100% 100%",
+    backgroundRepeat: "no-repeat",
+    border: "none",
+    boxShadow: "none",
+    color: "#fff",
+    fontWeight: 700,
+    fontSize: "18px",
+    padding: "10px 28px",
+    minWidth: 160,
+    minHeight: 48,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontFamily: "DynaPuff",
+  };
+
   return (
-    <div className="flex gap-3">
-      {tgSession ?
+    <div className="flex gap-3 justify-end items-center">
+      {tgSession ? (
         <>
           <Button
-            className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
+            style={buttonStyle}
+            className="!bg-transparent !border-none !shadow-none"
             onClick={() => handleWalletConnect()}
           >
             {fpSession?.futurepass
@@ -59,21 +83,23 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
               : "Connect Wallet"}
           </Button>
           <Button
-            className="bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white transition-colors"
-          >{tgSession.user?.name}
+            style={buttonStyle}
+            className="!bg-transparent !border-none !shadow-none"
+          >
+            {tgSession.user?.name}
           </Button>
         </>
-        :
+      ) : (
         <LoginButton
           botUsername={BOT_USERNAME}
-          buttonSize="large" // "large" | "medium" | "small"
-          cornerRadius={5} // 0 - 20
+          buttonSize="large"
+          cornerRadius={5}
           showAvatar={true}
           onAuthCallback={(data: any) => {
             signIn("telegram-login", undefined, data as any);
           }}
         />
-      }
+      )}
     </div>
   );
 };
