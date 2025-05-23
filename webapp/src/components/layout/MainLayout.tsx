@@ -1,6 +1,7 @@
 import React from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import { IMAGES } from "@/constants/images";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -8,7 +9,12 @@ interface MainLayoutProps {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen relative">
+    <div
+      className="min-h-screen relative"
+      style={{
+        background: "linear-gradient(to bottom, #EAE3DE, #F5F0EB)",
+      }}
+    >
       {/* Base gradient */}
       <div className="absolute inset-0 bg-gradient-to-bl from-[#FFE8C8]/40 to-white" />
 
@@ -27,11 +33,22 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       />
 
       {/* Content */}
-      <div className="relative z-10">
-        <Sidebar />
-        <div className="lg:ml-64">
+      <div className="relative z-10 flex flex-col lg:flex-row">
+        <div className="lg:block">
+          <Sidebar />
+        </div>
+        <div className="flex-1 lg:ml-72">
           <Header />
-          <main className="container mx-auto px-4 py-8">{children}</main>
+          <main
+            className="container mx-auto px-4 sm:px-6 lg:px-8 min-h-screen"
+            style={{
+              minHeight: "calc(100vh - 64px)",
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+            }}
+          >
+            {children}
+          </main>
         </div>
       </div>
     </div>

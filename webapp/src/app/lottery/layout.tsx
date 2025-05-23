@@ -1,9 +1,6 @@
-import { Metadata } from "next";
+import { createMetadata } from "@/constants/metadata";
 
-export const metadata: Metadata = {
-  title: "JustFAB - Lottery",
-  description: "Play lottery and win big prizes on JustFAB platform",
-};
+export const metadata = createMetadata("Lottery");
 
 export default function LotteryLayout({
   children,
