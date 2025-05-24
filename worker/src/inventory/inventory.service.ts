@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import prisma from '../../../prisma/prisma';
+import prisma from '../../../webapp/prisma/prisma';
 import { WELCOME_CHEST_ITEM_TYPE, KEY_ITEM_TYPE } from '../../../prisma/types';
 
 @Injectable()
