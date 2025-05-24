@@ -7,3 +7,5 @@ export const FUTUREVERSE_REDIRECT_URI = process.env.NEXT_PUBLIC_FUTUREVERSE_REDI
 export const PUBLIC_NETWORK = process.env.NEXT_PUBLIC_NETWORK!;
 
 export const WALLET_CONNECT_PROJECT_ID = '068808367940b9806150ffeb8f1970e2';
+
+export const WORKER_URL = process.env.WORKER_URL!;

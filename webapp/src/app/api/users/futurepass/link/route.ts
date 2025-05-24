@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { linkFuturepass } from "@/utils/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import axios from "axios";
+import { WORKER_URL } from "@/utils/env";
+import { KEY_ITEM_TYPE, WELCOME_CHEST_ITEM_TYPE } from "@/types/item_types";
 
 
 export async function POST(req: NextRequest) {
@@ -24,7 +27,10 @@ export async function POST(req: NextRequest) {
 
   try {
     const user = await linkFuturepass(telegramId, futurepass);
-    // TODO: after linking, we issue welcome chest and key
+    axios.post(`${WORKER_URL}/inventory/enqueue/reward_welcome_chest`, {
+      userId: telegramId,
+      itemIds: [WELCOME_CHEST_ITEM_TYPE, KEY_ITEM_TYPE]
+    });
 
     return NextResponse.json({ success: true, user });
   } catch (error) {
