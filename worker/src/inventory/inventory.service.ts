@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import prisma from '../../../webapp/prisma/prisma';
-import { WELCOME_CHEST_ITEM_TYPE, KEY_ITEM_TYPE } from '../../../prisma/types';
+import prisma from '../lib/prisma';
+import { WELCOME_CHEST_ITEM_TYPE, KEY_ITEM_TYPE } from '../lib/types';
 
 @Injectable()
 export class InventoryService {
