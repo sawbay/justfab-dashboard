@@ -12,7 +12,7 @@ cmds = ["npm ci"]
 cmds = [
   "cd ../prisma",
   "npx prisma generate",
-  "cd webapp",
+  "cd ../webapp",
   "npm run build"
 ]
 
