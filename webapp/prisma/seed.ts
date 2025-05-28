@@ -1,4 +1,4 @@
-import prisma from '../../worker/src/lib/prisma';
+import prisma from './prisma';
 
 async function main() {
   // Upsert inventory metadata for welcome chest and key
