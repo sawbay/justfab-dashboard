@@ -127,6 +127,7 @@ const navItems: NavItem[] = [
 const Sidebar = () => {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   return (
     <>
@@ -189,29 +190,53 @@ const Sidebar = () => {
             height={80}
             className="rounded-full border-4"
           />
-          {/* <div className="mt-2 text-2xl font-bold text-[#B97A1A] font-[LuckiestGuy]">
-            JustFAB
-          </div> */}
         </div>
         <nav className="flex-1 w-full">
           <ul className="space-y-2 pl-12 pr-2">
-            {navItems.map((item) => (
-              <li key={item.path}>
-                <Link
-                  href={item.path}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex items-center justify-start px-0 py-3 rounded-xl transition-all font-bold font-dynapuff text-stroke
-                    ${
-                      pathname === item.path
-                        ? "text-[#7B3F00] text-2xl lg:text-3xl"
-                        : "text-white text-xl lg:text-2xl"
-                    }
-                  `}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+            {navItems.map((item) => {
+              const isHome = item.path === "/";
+              return (
+                <li key={item.path} className="relative">
+                  {isHome ? (
+                    <Link
+                      href={item.path}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`flex items-center justify-start px-0 py-3 rounded-xl transition-all font-bold font-dynapuff text-stroke
+                        ${
+                          pathname === item.path
+                            ? "text-[#7B3F00] text-2xl lg:text-3xl"
+                            : "text-white text-xl lg:text-2xl"
+                        }
+                      `}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <div
+                      className="relative"
+                      onMouseEnter={() => setHoveredItem(item.path)}
+                      onMouseLeave={() => setHoveredItem(null)}
+                      onClick={() => setHoveredItem(item.path)}
+                    >
+                      <div
+                        className={`flex items-center justify-start px-0 py-3 rounded-xl transition-all font-bold font-dynapuff text-stroke cursor-not-allowed opacity-50
+                          text-white text-xl lg:text-2xl
+                        `}
+                      >
+                        {item.label}
+                      </div>
+                      {hoveredItem === item.path && (
+                        <div className="absolute left-0 top-full mt-2 bg-white px-4 py-2 rounded-lg shadow-lg z-50">
+                          <span className="text-[#7B3F00] font-dynapuff whitespace-nowrap">
+                            Coming Soon
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </nav>
         <div className="mt-auto mb-6"></div>

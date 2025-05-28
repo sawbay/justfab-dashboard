@@ -14,70 +14,29 @@ import { useQuery } from "@tanstack/react-query";
 import { getBalance } from "@/utils/sdk";
 import Image from "next/image";
 import { IMAGES } from "@/constants/images";
+import ComingSoon from "@/components/common/ComingSoon";
 
 const mockStats = {
-  level: 24,
-  status: "ACTIVE",
-  fabBalance: 1248,
-  rootBalance: 85.72,
-  treasureChests: 3,
-  auraKey: 7,
-  playedToday: "2 hrs played today",
-  yesterdayStats: "+122 yesterday",
-  usdValue: "~ $214.30 USD",
+  level: 0,
+  status: "",
+  fabBalance: 0,
+  rootBalance: 0,
+  treasureChests: 0,
+  auraKey: 0,
+  playedToday: "0 hrs played today",
+  yesterdayStats: "+0 yesterday",
+  usdValue: "~ $0 USD",
   unlocksIn: "1 unlocks in 2h",
   usedFor: "Used for rare quests",
 };
 
 const mockVIPRewards: VIPReward[] = [
   {
-    level: 12,
-    isCompleted: true,
-    isLocked: false,
-    rewards: { game: 50, token: 50 },
-    description: "Upgrade your base to level 2",
-  },
-  {
-    level: 13,
-    isCompleted: true,
-    isLocked: false,
-    rewards: { game: 50, token: 50 },
-    description: "Upgrade your base to level 2",
-  },
-  {
-    level: 14,
-    isCompleted: false,
-    isLocked: false,
-    rewards: { game: 50, token: 50 },
-    description: "Upgrade your base to level 2",
-  },
-  {
-    level: 15,
+    level: 1,
     isCompleted: false,
     isLocked: true,
     rewards: { game: 50, token: 50 },
-    description: "Upgrade your base to level 2",
-  },
-  {
-    level: 16,
-    isCompleted: false,
-    isLocked: true,
-    rewards: { game: 50, token: 50 },
-    description: "Upgrade your base to level 2",
-  },
-  {
-    level: 17,
-    isCompleted: false,
-    isLocked: true,
-    rewards: { game: 50, token: 50 },
-    description: "Upgrade your base to level 2",
-  },
-  {
-    level: 18,
-    isCompleted: false,
-    isLocked: true,
-    rewards: { game: 50, token: 50 },
-    description: "Upgrade your base to level 2",
+    description: "Login for the first time",
   },
 ];
 
@@ -117,6 +76,7 @@ const statsCards = [
 
 export default function Home() {
   const [currentPage, setCurrentPage] = useState(0);
+  const [showComingSoon, setShowComingSoon] = useState(false);
   const itemsPerPage = 6;
   const totalPages = Math.ceil(mockVIPRewards.length / itemsPerPage);
   // const queryBuilder = new RootQueryBuilder(api, walletAddress);
@@ -164,6 +124,9 @@ export default function Home() {
 
   return (
     <MainLayout>
+      {showComingSoon && (
+        <ComingSoon onClose={() => setShowComingSoon(false)} />
+      )}
       <div className="space-y-6 sm:space-y-8">
         {/* Stats Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4">
@@ -204,7 +167,7 @@ export default function Home() {
         <section className="px-2 sm:px-4">
           <div className="flex items-center gap-3 mb-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-[#585858] font-[dynapuff]">
-              Vip Rewards
+              VIP Rewards
             </h2>
           </div>
           <div className="relative">
@@ -229,39 +192,54 @@ export default function Home() {
                         backgroundSize: "100% 100%",
                         backgroundRepeat: "no-repeat",
                         minHeight: 280,
+                        opacity: reward.isLocked ? 0.5 : 1,
                       }}
                     >
                       <div className="w-full flex flex-col items-center pt-4">
                         <div className="text-lg sm:text-xl font-bold text-[#B97A1A] font-[dynapuff]">
-                          Day 1
+                          Level {reward.level}
                         </div>
+                        {reward.isCompleted && (
+                          <div className="text-sm text-green-600 font-semibold mt-1">
+                            Completed
+                          </div>
+                        )}
                       </div>
                       <div className="w-full flex flex-col items-center gap-2 pb-4">
                         <div className="text-center px-2 sm:px-4 text-[#7B3F00] text-base sm:text-lg font-semibold">
-                          Điểm danh đăng nhập lần đầu
+                          {reward.description}
                         </div>
                         <div className="flex justify-center gap-4 text-[#7B3F00] text-xs">
                           <span className="flex items-center gap-1">
                             <Image
                               src={IMAGES.chest}
-                              alt="coin"
+                              alt="game"
                               width={16}
                               height={16}
                               className="sm:w-[18px] sm:h-[18px]"
                             />
-                            1
+                            {reward.rewards.game}
                           </span>
                           <span className="flex items-center gap-1">
                             <Image
                               src={IMAGES.chest}
-                              alt="chest"
+                              alt="token"
                               width={16}
                               height={16}
                               className="sm:w-[18px] sm:h-[18px]"
                             />
-                            1
+                            {reward.rewards.token}
                           </span>
                         </div>
+                        {!reward.isLocked && !reward.isCompleted && (
+                          <Button
+                            size="sm"
+                            className="mt-2"
+                            onClick={() => setShowComingSoon(true)}
+                          >
+                            Claim
+                          </Button>
+                        )}
                       </div>
                     </div>
                   ) : (
@@ -303,7 +281,11 @@ export default function Home() {
                     Reward: Welcome Chest
                   </p>
                 </div>
-                <Button size="xl" className="sm:mr-8 lg:mr-32">
+                <Button
+                  size="xl"
+                  className="sm:mr-8 lg:mr-32"
+                  onClick={() => setShowComingSoon(true)}
+                >
                   Claim
                 </Button>
               </div>
