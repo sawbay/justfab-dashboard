@@ -19,17 +19,17 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
 
   useEffect(() => {
-    if (fpSession && !user) {
-      axios
-        .get(USERS_GET, {
-          params: {
-            tgId: tgSession?.user?.id,
-          },
-        })
-        .then((res) => {
-          setUser(res.data.user);
-        });
-    }
+    // if (fpSession && !user) {
+    //   axios
+    //     .get(USERS_GET, {
+    //       params: {
+    //         tgId: tgSession?.user?.id,
+    //       },
+    //     })
+    //     .then((res) => {
+    //       setUser(res.data.user);
+    //     });
+    // }
   }, [fpSession, user]);
 
   // useEffect(() => {

@@ -12,5 +12,6 @@ export const PUBLIC_NETWORK = process.env.NEXT_PUBLIC_NETWORK!;
 
 export const APPWRITE_PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!;
 export const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!;
+export const APPWRITE_KEY = process.env.NEXT_PUBLIC_APPWRITE_KEY!;
 
 export const WORKER_URL = process.env.WORKER_URL!;
