@@ -11,7 +11,7 @@ import { useAuth } from "@futureverse/auth-react";
 import { useTrnApi } from "@futureverse/transact-react";
 import { useTransactQuery } from "@/hooks/useTransactQuery";
 import { useQuery } from "@tanstack/react-query";
-import { getBalance } from "@/utils/sdk";
+import { getBalance } from "@/utils/trn_sdk";
 import Image from "next/image";
 import { IMAGES } from "@/constants/images";
 import ComingSoon from "@/components/common/ComingSoon";

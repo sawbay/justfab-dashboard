@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { linkFuturepass } from "@/utils/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import axios from "axios";
 import { WORKER_URL } from "@/utils/env";
 import { KEY_ITEM_TYPE, WELCOME_CHEST_ITEM_TYPE } from "@/types/item_types";
