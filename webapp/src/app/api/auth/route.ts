@@ -26,8 +26,8 @@ export async function POST(req: NextRequest) {
   let systemUser;
   try {
     systemUser = await users.get(userId);
-  } catch (error) {
-    if (error instanceof AppwriteException && error.code == 404) {
+  } catch (error: any) {
+    if (error.code == 404) {
       systemUser = await users.create(
         userId,
         undefined,
