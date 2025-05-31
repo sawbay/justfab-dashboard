@@ -3,8 +3,8 @@ import prisma from '../lib/prisma';
 import { WELCOME_CHEST_ITEM_TYPE, KEY_ITEM_TYPE } from '../lib/types';
 
 @Injectable()
-export class InventoryService {
-  private readonly logger = new Logger(InventoryService.name);
+export class WelcomeChestService {
+  private readonly logger = new Logger(WelcomeChestService.name);
 
   async rewardWelcomeChest(userId: string) {
     // Implement welcome chest reward

@@ -1,12 +1,12 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import { INVENTORY_QUEUE } from './inventory.processor';
+import { WELCOME_CHEST_QUEUE } from './queues/welcome-chest.processor';
 
-@Controller('inventory/enqueue')
-export class InventoryEnqueueController {
+@Controller('queue/enqueue')
+export class EnqueueController {
   constructor(
-    @InjectQueue(INVENTORY_QUEUE) private readonly queue: Queue
+    @InjectQueue(WELCOME_CHEST_QUEUE) private readonly welcomeChestQueue: Queue
   ) { }
 
   @Post('reward_welcome_chest')
@@ -14,7 +14,8 @@ export class InventoryEnqueueController {
     @Body() body: { userId: string; itemIds: string[] }
   ) {
     const { userId, itemIds } = body;
-    await this.queue.add('reward_welcome_chest', { userId, itemIds });
+    const jobName = `${WELCOME_CHEST_QUEUE}_${userId}`;
+    await this.welcomeChestQueue.add(jobName, { userId, itemIds });
     return { success: true };
   }
 } 

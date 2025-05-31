@@ -3,7 +3,7 @@ import { BullModule } from "@nestjs/bullmq";
 import { BullBoardModule } from "@bull-board/nestjs";
 import { ExpressAdapter } from "@bull-board/express";
 import { ConfigModule } from '@nestjs/config';
-import { InventoryModule } from "./inventory/inventory.module";
+import { QueueModule } from "./queue/queue.module";
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { InventoryModule } from "./inventory/inventory.module";
       route: "/queues",
       adapter: ExpressAdapter
     }),
-    InventoryModule,
+    QueueModule,
   ],
   controllers: [],
   providers: []
