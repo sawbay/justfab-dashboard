@@ -60,8 +60,6 @@ export function useAppwrite() {
   }
 
   const linkFuturepass = async (futurepass: string) => {
-    console.log(user);
-    console.log(futurepass);
     const databases = new Databases(client!);
     await databases.createDocument(
       DATABASE_ID,
