@@ -1,4 +1,4 @@
-import { DATABASE_ID, USER_FUTUREPASS_COL_ID } from "@/utils/appwrite/const";
+import { DATABASE_ID, INVENTORY_COL_ID, USER_FUTUREPASS_COL_ID } from "@/utils/appwrite/const";
 import getClient from "@/utils/appwrite/server";
 import { NextRequest, NextResponse } from "next/server";
 import { Databases, ID, Permission, Role } from "node-appwrite";
@@ -45,6 +45,39 @@ export async function POST(req: NextRequest) {
       USER_FUTUREPASS_COL_ID,
       "futurepass",
       100,
+      true
+    );
+  } catch (error) {
+    errs.push(error);
+  }
+
+  try {
+    const collection = await databases.createCollection(
+      DATABASE_ID,
+      INVENTORY_COL_ID,
+      "inventory",
+      [
+        Permission.read(Role.any()),
+        Permission.update(Role.any()),
+        Permission.write(Role.any()),
+        Permission.delete(Role.any()),
+      ],
+      true,
+      true
+    );
+
+    await databases.createStringAttribute(
+      DATABASE_ID,
+      INVENTORY_COL_ID,
+      "userId",
+      100,
+      true
+    );
+
+    await databases.createIntegerAttribute(
+      DATABASE_ID,
+      INVENTORY_COL_ID,
+      "itemType",
       true
     );
   } catch (error) {
