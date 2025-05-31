@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Button from "./Button";
 import { useAuthUi } from "@futureverse/auth-ui";
 import { shortenAddress } from "@/utils/addressUtils";
-import { useSession } from "next-auth/react";
 import { LoginButton } from "@telegram-auth/react";
 import { BOT_USERNAME } from "@/utils/env";
 import { useAuth } from "@futureverse/auth-react";
 import axios from "axios";
 import { USERS_FUTUREPASS_LINK, USERS_GET, USERS_TELEGRAM_LOGIN } from "@/app/api/routes";
 import { IMAGES } from "@/constants/images";
-import { Account, Models } from "appwrite";
-import client from "@/utils/appwrite/client";
+import { Account, Client, Models } from "appwrite";
+import { useAppwrite } from "@/hooks/useAppwrite";
 
 const ConnectButtons: React.FC<{}> = ({ }) => {
   const { openLogin } = useAuthUi();
   const { userSession: fpSession, signOutPass } = useAuth();
-  const { data: tgSession } = useSession();
-  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
+  const { client, account, session, user, telegramAuthenticated } = useAppwrite();
 
   useEffect(() => {
     // if (fpSession && !user) {
@@ -71,20 +69,17 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
   };
 
   const handleTelegramLogin = async (data: any) => {
-    const response = await axios.post(USERS_TELEGRAM_LOGIN, data);
+    const response = await axios.post(USERS_TELEGRAM_LOGIN, { data });
     if (response.data.success) {
-      const { id, jwt, name, email } = response.data.data;
-      console.log(response.data);
-      client.setJWT(jwt);
-      const account = new Account(client);
-      const user = await account.get();
+      const { id, jwt, name, email, tempSessionId } = response.data.data;
+      await telegramAuthenticated(jwt, tempSessionId);
+      const user = await account!.get();
       console.log(user);
-      setUser(user);
     }
   };
 
   return (
-    <div className="flex gap-3 justify-end items-center">
+    session && <div className="flex gap-3 justify-end items-center">
       {user ? (
         <>
           <Button

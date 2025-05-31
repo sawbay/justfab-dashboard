@@ -1,12 +1,11 @@
-import client from "@/utils/appwrite/server";
+import getClient from "@/utils/appwrite/server";
 import { BOT_TOKEN } from "@/utils/env";
 import { objectToAuthDataMap, AuthDataValidator } from "@telegram-auth/server";
-import { AppwriteException } from "appwrite";
 import { NextRequest, NextResponse } from "next/server";
 import { Users } from "node-appwrite";
 
 export async function POST(req: NextRequest) {
-  let data = await req.json();
+  let { data } = await req.json();
   data = objectToAuthDataMap(data);
   const validator = new AuthDataValidator({
     botToken: BOT_TOKEN,
@@ -19,10 +18,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const userId = telegramUser.id.toString();
-
+  const client = await getClient();
   const users = new Users(client);
 
+  const userId = telegramUser.id.toString();
   let systemUser;
   try {
     systemUser = await users.get(userId);
@@ -32,23 +31,21 @@ export async function POST(req: NextRequest) {
         userId,
         undefined,
         undefined,
-        telegramUser.username || telegramUser.first_name
+        telegramUser.username ?? telegramUser.first_name
       );
     } else {
       return NextResponse.json({ error }, { status: 500 });
     }
   }
 
-  const sessions = await users.listSessions(userId);
-  if (sessions.total == 0) {
-    await users.createSession(userId);
-  }
-
+  const tempSession = await users.createSession(userId);
   const jwt = await users.createJWT(userId);
+
   return NextResponse.json({
     success: true, data: {
       id: systemUser.$id,
       jwt: jwt.jwt,
+      tempSessionId: tempSession.$id,
       name: systemUser.name,
       email: systemUser.email
     }
