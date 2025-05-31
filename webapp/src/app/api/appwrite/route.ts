@@ -80,6 +80,13 @@ export async function POST(req: NextRequest) {
       "itemType",
       true
     );
+
+    await databases.createBooleanAttribute(
+      DATABASE_ID,
+      INVENTORY_COL_ID,
+      "used",
+      true
+    );
   } catch (error) {
     errs.push(error);
   }
