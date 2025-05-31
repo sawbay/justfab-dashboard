@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Users } from "node-appwrite";
 
 export async function POST(req: NextRequest) {
-  let { data } = await req.json();
+  let data = await req.json();
   data = objectToAuthDataMap(data);
   const validator = new AuthDataValidator({
     botToken: BOT_TOKEN,
