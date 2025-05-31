@@ -3,9 +3,9 @@ import { Job } from 'bullmq';
 import { Injectable, Logger } from '@nestjs/common';
 import { WorkerHost } from '@nestjs/bullmq';
 import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
-import getClient from 'src/lib/appwrite/server';
-import { DATABASE_ID, INVENTORY_COL_ID } from 'src/lib/appwrite/const';
-import { ItemType } from 'src/lib/types';
+import getClient from 'src/queue/appwrite/server';
+import { DATABASE_ID, INVENTORY_COL_ID } from 'src/queue/appwrite/const';
+import { ItemType } from 'src/queue/types';
 import { WelcomeChestEventPayload } from './types';
 
 export const WELCOME_CHEST_QUEUE = 'welcome_chest_queue';
