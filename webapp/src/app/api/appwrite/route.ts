@@ -1,3 +1,4 @@
+import { ItemType } from "@/types/item_types";
 import { DATABASE_ID, INVENTORY_COL_ID, USER_FUTUREPASS_COL_ID } from "@/utils/appwrite/const";
 import getClient from "@/utils/appwrite/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -74,10 +75,11 @@ export async function POST(req: NextRequest) {
       true
     );
 
-    await databases.createIntegerAttribute(
+    await databases.createEnumAttribute(
       DATABASE_ID,
       INVENTORY_COL_ID,
       "itemType",
+      [ItemType.WELCOME_CHEST, ItemType.AURA_KEY],
       true
     );
 

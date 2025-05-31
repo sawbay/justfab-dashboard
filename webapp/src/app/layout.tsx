@@ -4,7 +4,7 @@ import type { PropsWithChildren } from "react";
 import { getLocale } from "next-intl/server";
 import { I18nProvider } from "@/core/i18n/provider";
 import Providers from "@/components/providers/FvProvider";
-import { createMetadata } from "@/constants/metadata";
+import { createMetadata } from "@/utils/metadata";
 
 export const metadata = createMetadata("Dashboard");
 

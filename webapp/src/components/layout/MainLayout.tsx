@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
-import { IMAGES } from "@/constants/images";
+import { IMAGES } from "@/utils/images";
 
 interface MainLayoutProps {
   children: React.ReactNode;

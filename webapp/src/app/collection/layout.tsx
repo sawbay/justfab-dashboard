@@ -1,4 +1,4 @@
-import { createMetadata } from "@/constants/metadata";
+import { createMetadata } from "@/utils/metadata";
 
 export const metadata = createMetadata("Collection");
 

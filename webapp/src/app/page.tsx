@@ -9,11 +9,11 @@ import VIPRewardCard from "@/components/home/VIPRewardCard";
 import { VIPReward } from "@/types";
 import { useAuth } from "@futureverse/auth-react";
 import { useTrnApi } from "@futureverse/transact-react";
-import { useTransactQuery } from "@/hooks/useTransactQuery";
+import { useTransactQuery } from "@/core/hooks/useTransactQuery";
 import { useQuery } from "@tanstack/react-query";
 import { getBalance } from "@/utils/trn_sdk";
 import Image from "next/image";
-import { IMAGES } from "@/constants/images";
+import { IMAGES } from "@/utils/images";
 import ComingSoon from "@/components/common/ComingSoon";
 
 const mockStats = {
