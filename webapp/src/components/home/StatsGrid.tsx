@@ -1,83 +1,128 @@
-import React from "react";
-import { UserStats } from "@/types";
+import React, { useEffect, useState } from "react";
+import { IMAGES } from "@/utils/images";
+import { useAppwrite } from "@/core/hooks/useAppwrite";
+interface StatsGridProps { }
 
-interface StatItemProps {
-  label: string;
-  value: string | number;
-  subValue?: string;
-  valueColor?: string;
-}
+const mockStats = {
+  level: 0,
+  status: "",
+  fabBalance: 0,
+  rootBalance: 0,
+  treasureChests: 0,
+  auraKey: 0,
+  playedToday: "0 hrs played today",
+  yesterdayStats: "+0 yesterday",
+  usdValue: "~ $0 USD",
+  unlocksIn: "1 unlocks in 2h",
+  usedFor: "Used for rare quests",
+};
 
-const StatItem: React.FC<StatItemProps> = ({
-  label,
-  value,
-  subValue,
-  valueColor = "text-primary",
-}) => (
-  <div className="bg-white rounded-t-xl border border-primary border-b-4 p-4 text-center">
-    <div className="text-sm text-primary font-medium">{label}</div>
-    <div
-      className={`text-xl font-bold ${valueColor} drop-shadow-[0_1px_1px_rgba(0,0,0,0.1)]`}
-    >
-      {value}
-    </div>
-    {subValue && (
-      <div className="text-sm text-primary/70 font-medium">{subValue}</div>
-    )}
-  </div>
-);
+const mockStatsCards = [
+  {
+    label: "Level",
+    value: mockStats.level,
+    sub: null,
+    color: "text-[#E08B3A]",
+  },
+  {
+    label: "Status",
+    value: <span className="text-green-600 font-bold">● ACTIVE</span>,
+    sub: mockStats.playedToday,
+  },
+  {
+    label: "$FAB Balance",
+    value: mockStats.fabBalance,
+    sub: mockStats.yesterdayStats,
+  },
+  {
+    label: "$ROOT Balance",
+    value: <span className="text-green-600">{mockStats.rootBalance}</span>,
+    sub: mockStats.usdValue,
+  },
+  {
+    label: "Treasure Chests",
+    value: mockStats.treasureChests,
+    sub: mockStats.unlocksIn,
+  },
+  {
+    label: "Aura Key",
+    value: mockStats.auraKey,
+    sub: mockStats.usedFor,
+  },
+];
 
-interface StatsGridProps {
-  stats: UserStats;
-}
+const StatsGrid: React.FC<StatsGridProps> = ({ }) => {
+  const { user, treasureChestTotal, auraKeyTotal } = useAppwrite();
+  const [statsCards, setStatsCards] = useState<any[]>(mockStatsCards);
 
-const options = {
-  localeMatcher: 'best fit',
-  style: 'decimal',
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 6,
-} as const;
-
-const formatter = new Intl.NumberFormat('en-US', options);
-
-const StatsGrid: React.FC<StatsGridProps> = ({ stats }) => {
+  useEffect(() => {
+    setStatsCards([
+      {
+        label: "Level",
+        value: mockStats.level,
+        sub: null,
+        color: "text-[#E08B3A]",
+      },
+      {
+        label: "Status",
+        value: <span className="text-green-600 font-bold">● ACTIVE</span>,
+        sub: mockStats.playedToday,
+      },
+      {
+        label: "$FAB Balance",
+        value: mockStats.fabBalance,
+        sub: mockStats.yesterdayStats,
+      },
+      {
+        label: "$ROOT Balance",
+        value: <span className="text-green-600">{mockStats.rootBalance}</span>,
+        sub: mockStats.usdValue,
+      },
+      {
+        label: "Treasure Chests",
+        value: treasureChestTotal,
+        sub: "",
+      },
+      {
+        label: "Aura Key",
+        value: auraKeyTotal,
+        sub: "",
+      },
+    ]);
+  }, [treasureChestTotal, auraKeyTotal]);
 
   return (
-    <div className="px-4 pb-2">
-      <div className="container mx-auto">
-        <div className="bg-[#FFF4EA] border border-primary/20 rounded-xl px-6 py-4 mx-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-            <StatItem label="Level" value={stats.level} />
-            <StatItem
-              label="Status"
-              value={stats.status}
-              subValue={stats.playedToday}
-              valueColor="text-green-500"
-            />
-            <StatItem
-              label="$FAB Balance"
-              value={stats.fabBalance}
-              subValue={stats.yesterdayStats}
-            />
-            <StatItem
-              label="$ROOT Balance"
-              value={formatter.format(stats.rootBalance)}
-              subValue={stats.usdValue}
-              valueColor="text-green-500"
-            />
-            <StatItem
-              label="Treasure Chests"
-              value={stats.treasureChests}
-              subValue={stats.unlocksIn}
-            />
-            <StatItem
-              label="Aura Key"
-              value={stats.auraKey}
-              subValue={stats.usedFor}
-            />
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4">
+      {statsCards.map((item, idx) => (
+        <div
+          key={idx}
+          className="flex flex-col items-center justify-center"
+        >
+          <div
+            className="relative w-full h-28 sm:h-36 flex flex-col items-center justify-center"
+            style={{
+              backgroundImage: `url(${IMAGES.bgCard})`,
+              backgroundSize: "100% 100%",
+              backgroundRepeat: "no-repeat",
+            }}
+          >
+            <div className="text-xs sm:text-sm font-bold text-[#7B3F00]">
+              {item.label}
+            </div>
+            <div
+              className={`text-lg sm:text-2xl font-bold ${item.color || ""
+                } my-1`}
+            >
+              {item.value}
+            </div>
+            {item.sub && (
+              <div className="text-[10px] sm:text-xs text-[#7B3F00]">
+                {item.sub}
+              </div>
+            )}
           </div>
         </div>
-      </div>
+      ))}
     </div>
   );
 };

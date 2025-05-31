@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import { Account, Client, Databases, Models, Permission, Role } from "appwrite";
+import { Account, Client, Databases, Models, Permission, Query, Role } from "appwrite";
 import getClient from "@/utils/appwrite/client";
-import { DATABASE_ID, USER_FUTUREPASS_COL_ID } from "@/utils/appwrite/const";
+import { DATABASE_ID, INVENTORY_COL_ID, USER_FUTUREPASS_COL_ID } from "@/utils/appwrite/const";
+import { ItemType } from "@/types/item_types";
 
 export function useAppwrite() {
   const [client, setClient] = useState<Client | null>(null);
   const [account, setAccount] = useState<Account | null>(null);
   const [session, setSession] = useState<Models.Session | null>(null);
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
+  const [treasureChestTotal, setTreasureChestTotal] = useState<number>(0);
+  const [auraKeyTotal, setAuraKeyTotal] = useState<number>(0);
 
   useEffect(() => {
     if (client == null) {
@@ -15,6 +18,13 @@ export function useAppwrite() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (user != null) {
+      fetchInventory();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const initClient = async () => {
     const client = getClient();
@@ -78,6 +88,21 @@ export function useAppwrite() {
     );
   }
 
+  const fetchInventory = async () => {
+    const databases = new Databases(client!);
+    const inventory = await databases.listDocuments(
+      DATABASE_ID,
+      INVENTORY_COL_ID,
+      [
+        Query.equal("userId", user!.$id),
+        Query.equal("used", false),
+      ]
+    );
+
+    setTreasureChestTotal(inventory.documents.filter(item => item.itemType === ItemType.WELCOME_CHEST).length);
+    setAuraKeyTotal(inventory.documents.filter(item => item.itemType === ItemType.AURA_KEY).length);
+  }
+
   return {
     client,
     account,
@@ -85,6 +110,8 @@ export function useAppwrite() {
     user,
     telegramAuthenticated,
     logoutSession,
-    linkFuturepass
+    linkFuturepass,
+    treasureChestTotal,
+    auraKeyTotal,
   };
 }
