@@ -4,6 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Forwards the event to the worker
 export async function POST(req: NextRequest) {
+  // TODO: validate session or token
+
   const data = await req.json();
   try {
     const res = await axios.post(`${WORKER_URL}/queue/enqueue`, data);
