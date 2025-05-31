@@ -6,29 +6,15 @@ import { LoginButton } from "@telegram-auth/react";
 import { BOT_USERNAME } from "@/utils/env";
 import { useAuth } from "@futureverse/auth-react";
 import axios from "axios";
-import { USERS_FUTUREPASS_LINK, USERS_TELEGRAM_LOGIN } from "@/app/api/routes";
+import { USERS_TELEGRAM_LOGIN } from "@/app/api/routes";
 import { IMAGES } from "@/constants/images";
 import { useAppwrite } from "@/hooks/useAppwrite";
 import { fireEvent, WorkerEventType } from "@/utils/worker_events";
 
 const ConnectButtons: React.FC<{}> = ({ }) => {
   const { openLogin } = useAuthUi();
-  const { userSession: fpSession, signOutPass } = useAuth();
-  const { client, account, logoutSession, user, telegramAuthenticated, linkFuturepass } = useAppwrite();
-
-  useEffect(() => {
-    // if (fpSession && !user) {
-    //   axios
-    //     .get(USERS_GET, {
-    //       params: {
-    //         tgId: tgSession?.user?.id,
-    //       },
-    //     })
-    //     .then((res) => {
-    //       setUser(res.data.user);
-    //     });
-    // }
-  }, [fpSession, user]);
+  const { userSession: fpSession } = useAuth();
+  const { account, logoutSession, user, telegramAuthenticated, linkFuturepass } = useAppwrite();
 
   useEffect(() => {
     if (fpSession && user) {
@@ -37,13 +23,17 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
   }, [fpSession, user]);
 
   const linkFP = async (futurepass: string) => {
-    await linkFuturepass(futurepass);
-    await fireEvent({
-      etype: WorkerEventType.REWARD_WELCOME_CHEST,
-      payload: {
-        userId: user!.$id,
-      }
-    });
+    try {
+      await linkFuturepass(futurepass);
+      await fireEvent({
+        etype: WorkerEventType.REWARD_WELCOME_CHEST,
+        payload: {
+          userId: user!.$id,
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const handleWalletConnect = () => {
