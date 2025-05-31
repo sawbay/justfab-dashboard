@@ -75,6 +75,14 @@ export async function POST(req: NextRequest) {
       true
     );
 
+    await databases.createStringAttribute(
+      DATABASE_ID,
+      INVENTORY_COL_ID,
+      "originId",
+      100,
+      false
+    );
+
     await databases.createEnumAttribute(
       DATABASE_ID,
       INVENTORY_COL_ID,
