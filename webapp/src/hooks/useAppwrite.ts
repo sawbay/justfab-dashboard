@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Account, Client, Models } from "appwrite";
+import { Account, Client, Databases, Models, Permission, Role } from "appwrite";
 import getClient from "@/utils/appwrite/client";
+import { DATABASE_ID, USER_FUTUREPASS_COL_ID } from "@/utils/appwrite/const";
 
 export function useAppwrite() {
   const [client, setClient] = useState<Client | null>(null);
@@ -58,5 +59,34 @@ export function useAppwrite() {
     setAccount(null);
   }
 
-  return { client, account, session, user, telegramAuthenticated, logoutSession };
+  const linkFuturepass = async (futurepass: string) => {
+    console.log(user);
+    console.log(futurepass);
+    const databases = new Databases(client!);
+    await databases.createDocument(
+      DATABASE_ID,
+      USER_FUTUREPASS_COL_ID,
+      user!.$id,
+      {
+        userId: user!.$id,
+        futurepass,
+      },
+      [
+        Permission.read(Role.user(user!.$id)),
+        Permission.write(Role.user(user!.$id)),
+        Permission.delete(Role.user(user!.$id)),
+        Permission.update(Role.user(user!.$id)),
+      ]
+    );
+  }
+
+  return {
+    client,
+    account,
+    session,
+    user,
+    telegramAuthenticated,
+    logoutSession,
+    linkFuturepass
+  };
 }

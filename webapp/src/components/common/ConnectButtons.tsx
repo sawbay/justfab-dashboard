@@ -1,20 +1,20 @@
 import React, { useEffect } from "react";
 import Button from "./Button";
 import { useAuthUi } from "@futureverse/auth-ui";
-import { shortenAddress } from "@/utils/addressUtils";
+import { shortenAddress } from "@/utils/address";
 import { LoginButton } from "@telegram-auth/react";
 import { BOT_USERNAME } from "@/utils/env";
 import { useAuth } from "@futureverse/auth-react";
 import axios from "axios";
-import { USERS_FUTUREPASS_LINK, USERS_GET, USERS_TELEGRAM_LOGIN } from "@/app/api/routes";
+import { USERS_FUTUREPASS_LINK, USERS_TELEGRAM_LOGIN } from "@/app/api/routes";
 import { IMAGES } from "@/constants/images";
-import { Account, Client, Models } from "appwrite";
 import { useAppwrite } from "@/hooks/useAppwrite";
+import { fireEvent, WorkerEventType } from "@/utils/worker_events";
 
 const ConnectButtons: React.FC<{}> = ({ }) => {
   const { openLogin } = useAuthUi();
   const { userSession: fpSession, signOutPass } = useAuth();
-  const { client, account, logoutSession, user, telegramAuthenticated } = useAppwrite();
+  const { client, account, logoutSession, user, telegramAuthenticated, linkFuturepass } = useAppwrite();
 
   useEffect(() => {
     // if (fpSession && !user) {
@@ -30,23 +30,28 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
     // }
   }, [fpSession, user]);
 
-  // useEffect(() => {
-  //   if (fpSession && user && user.futurepass == null) {
-  //     axios
-  //       .post(USERS_FUTUREPASS_LINK, {
-  //         telegramId: Number(tgSession?.user?.id),
-  //         futurepass: fpSession.futurepass,
-  //       })
-  //       .then(() => { })
-  //       .catch(console.error);
-  //   }
-  // }, [fpSession, user]);
+  useEffect(() => {
+    if (fpSession && user) {
+      linkFP(fpSession.futurepass);
+    }
+  }, [fpSession, user]);
+
+  const linkFP = async (futurepass: string) => {
+    await linkFuturepass(futurepass);
+    await fireEvent({
+      etype: WorkerEventType.REWARD_WELCOME_CHEST,
+      payload: {
+        userId: user!.$id,
+      }
+    });
+  }
 
   const handleWalletConnect = () => {
     if (!fpSession) {
       openLogin();
     } else {
-      signOutPass();
+      // signOutPass();
+      linkFuturepass(fpSession.futurepass);
     }
   };
 
