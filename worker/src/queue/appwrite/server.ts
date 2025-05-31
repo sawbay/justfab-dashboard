@@ -1,11 +1,10 @@
 import { Client } from "node-appwrite";
-import { APPWRITE_ENDPOINT, APPWRITE_KEY, APPWRITE_PROJECT_ID } from "./const";
 
-export const getClient = () => {
+export const getClient = (projectId: string, endpoint: string, key: string) => {
   const client = new Client()
-    .setProject(APPWRITE_PROJECT_ID)
-    .setEndpoint(APPWRITE_ENDPOINT)
-    .setKey(APPWRITE_KEY);
+    .setProject(projectId)
+    .setEndpoint(endpoint)
+    .setKey(key);
   return client;
 }
 

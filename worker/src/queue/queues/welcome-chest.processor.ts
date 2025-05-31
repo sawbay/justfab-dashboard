@@ -1,12 +1,12 @@
 import { Processor } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { WorkerHost } from '@nestjs/bullmq';
 import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 import getClient from 'src/queue/appwrite/server';
-import { DATABASE_ID, INVENTORY_COL_ID } from 'src/queue/appwrite/const';
 import { ItemType } from 'src/queue/types';
 import { WelcomeChestEventPayload } from './types';
+import { ConfigService } from '@nestjs/config';
 
 export const WELCOME_CHEST_QUEUE = 'welcome_chest_queue';
 
@@ -14,18 +14,28 @@ export const WELCOME_CHEST_QUEUE = 'welcome_chest_queue';
 @Injectable()
 export class WelcomeChestProcessor extends WorkerHost {
   private readonly client: Client;
+  private readonly DATABASE_ID: string;
+  private readonly INVENTORY_COL_ID: string;
 
-  constructor() {
+  constructor(
+    @Inject() private readonly configService: ConfigService,
+  ) {
     super();
-    this.client = getClient();
+    this.client = getClient(
+      this.configService.get("APPWRITE_PROJECT_ID"),
+      this.configService.get("APPWRITE_ENDPOINT"),
+      this.configService.get("APPWRITE_KEY")
+    );
+    this.DATABASE_ID = this.configService.get("DATABASE_ID");
+    this.INVENTORY_COL_ID = this.configService.get("INVENTORY_COL_ID");
   }
 
   async process(job: Job) {
     const data: WelcomeChestEventPayload = job.data;
     const databases = new Databases(this.client);
     const existingWelcomeChest = await databases.listDocuments(
-      DATABASE_ID,
-      INVENTORY_COL_ID,
+      this.DATABASE_ID,
+      this.INVENTORY_COL_ID,
       [
         Query.equal("userId", data.userId),
         Query.equal("itemType", ItemType.WELCOME_CHEST)
@@ -38,8 +48,8 @@ export class WelcomeChestProcessor extends WorkerHost {
 
     try {
       await databases.createDocument(
-        DATABASE_ID,
-        INVENTORY_COL_ID,
+        this.DATABASE_ID,
+        this.INVENTORY_COL_ID,
         ID.unique(),
         {
           userId: data.userId,
@@ -53,8 +63,8 @@ export class WelcomeChestProcessor extends WorkerHost {
       job.log(`User ${data.userId} has been rewarded welcome chest`);
 
       await databases.createDocument(
-        DATABASE_ID,
-        INVENTORY_COL_ID,
+        this.DATABASE_ID,
+        this.INVENTORY_COL_ID,
         ID.unique(),
         {
           userId: data.userId,
