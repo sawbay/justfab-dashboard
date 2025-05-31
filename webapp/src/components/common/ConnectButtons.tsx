@@ -71,8 +71,8 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
   const handleTelegramLogin = async (data: any) => {
     const response = await axios.post(USERS_TELEGRAM_LOGIN, { data });
     if (response.data.success) {
-      const { id, jwt, name, email, tempSessionId } = response.data.data;
-      await telegramAuthenticated(jwt, tempSessionId);
+      const { userId, secret } = response.data.data;
+      await telegramAuthenticated(userId, secret);
       const user = await account!.get();
       console.log(user);
     }

@@ -34,22 +34,18 @@ export async function POST(req: NextRequest) {
         undefined,
         telegramUser.username ?? telegramUser.first_name,
       );
-      await users.updateStatus(userId, true);
+      await users.updateEmailVerification(userId, true);
     } else {
       return NextResponse.json({ error }, { status: 500 });
     }
   }
 
-  const tempSession = await users.createSession(userId);
-  const jwt = await users.createJWT(userId);
+  const secret = await users.createToken(userId);
 
   return NextResponse.json({
     success: true, data: {
-      id: systemUser.$id,
-      jwt: jwt.jwt,
-      tempSessionId: tempSession.$id,
-      name: systemUser.name,
-      email: systemUser.email
+      userId: systemUser.$id,
+      secret: secret.secret,
     }
   });
 }

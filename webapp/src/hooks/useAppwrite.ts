@@ -8,16 +8,42 @@ export function useAppwrite() {
   const [session, setSession] = useState<Models.Session | null>(null);
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
 
-  const telegramAuthenticated = async (jwt: string, tempSessionId: string) => {
+  useEffect(() => {
+    if (client == null) {
+      initClient();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const initClient = async () => {
+    const client = getClient();
+    setClient(client);
+    const account = new Account(client);
+    setAccount(account);
+
+    try {
+      const session = await account.getSession('current');
+      setSession(session);
+    } catch (error) {
+      setSession(null);
+    }
+
+    try {
+      const user = await account.get();
+      setUser(user);
+    } catch (error) {
+      setUser(null);
+    }
+  }
+
+  const telegramAuthenticated = async (userId: string, secret: string) => {
     const client = getClient()
-      .setJWT(jwt)
-      .setSession(tempSessionId);
     setClient(client);
 
     const account = new Account(client);
     setAccount(account);
 
-    const session = await account.getSession(tempSessionId);
+    const session = await account.createSession(userId, secret);
     setSession(session);
 
     const user = await account.get();
