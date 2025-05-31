@@ -14,8 +14,8 @@ export class QueueController {
     this.logger = new Logger(QueueController.name);
   }
 
-  @Post('fire_event')
-  async enqueueRewardWelcomeChest(
+  @Post('enqueue')
+  async enqueue(
     @Body() body: { event: WorkerEvent }
   ) {
     const { event } = body;
