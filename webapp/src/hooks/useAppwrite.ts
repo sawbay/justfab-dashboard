@@ -24,5 +24,13 @@ export function useAppwrite() {
     setUser(user);
   }
 
-  return { client, account, session, user, telegramAuthenticated };
+  const logoutSession = async () => {
+    await account!.deleteSession(session!.$id);
+    setSession(null);
+    setUser(null);
+    setClient(null);
+    setAccount(null);
+  }
+
+  return { client, account, session, user, telegramAuthenticated, logoutSession };
 }

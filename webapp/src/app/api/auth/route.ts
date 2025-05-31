@@ -1,6 +1,6 @@
 import getClient from "@/utils/appwrite/server";
 import { BOT_TOKEN } from "@/utils/env";
-import { objectToAuthDataMap, AuthDataValidator } from "@telegram-auth/server";
+import { objectToAuthDataMap, AuthDataValidator, TelegramUserData } from "@telegram-auth/server";
 import { NextRequest, NextResponse } from "next/server";
 import { Users } from "node-appwrite";
 
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     botToken: BOT_TOKEN,
   });
 
-  let telegramUser;
+  let telegramUser: TelegramUserData;
   try {
     telegramUser = await validator.validate(data);
   } catch (error) {
@@ -31,8 +31,10 @@ export async function POST(req: NextRequest) {
         userId,
         undefined,
         undefined,
-        telegramUser.username ?? telegramUser.first_name
+        undefined,
+        telegramUser.username ?? telegramUser.first_name,
       );
+      await users.updateStatus(userId, true);
     } else {
       return NextResponse.json({ error }, { status: 500 });
     }

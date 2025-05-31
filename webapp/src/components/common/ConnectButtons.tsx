@@ -14,7 +14,7 @@ import { useAppwrite } from "@/hooks/useAppwrite";
 const ConnectButtons: React.FC<{}> = ({ }) => {
   const { openLogin } = useAuthUi();
   const { userSession: fpSession, signOutPass } = useAuth();
-  const { client, account, session, user, telegramAuthenticated } = useAppwrite();
+  const { client, account, logoutSession, user, telegramAuthenticated } = useAppwrite();
 
   useEffect(() => {
     // if (fpSession && !user) {
@@ -79,7 +79,7 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
   };
 
   return (
-    session && <div className="flex gap-3 justify-end items-center">
+    <div className="flex gap-3 justify-end items-center">
       {user ? (
         <>
           <Button
@@ -94,6 +94,7 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
           <Button
             style={buttonStyle}
             className="!bg-transparent !border-none !shadow-none"
+            onClick={() => logoutSession()}
           >
             {user.name}
           </Button>
