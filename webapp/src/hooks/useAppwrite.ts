@@ -61,7 +61,7 @@ export function useAppwrite() {
 
   const linkFuturepass = async (futurepass: string) => {
     const databases = new Databases(client!);
-    await databases.createDocument(
+    return await databases.createDocument(
       DATABASE_ID,
       USER_FUTUREPASS_COL_ID,
       user!.$id,
@@ -70,7 +70,7 @@ export function useAppwrite() {
         futurepass,
       },
       [
-        Permission.read(Role.user(user!.$id)),
+        Permission.read(Role.any()),
         Permission.write(Role.user(user!.$id)),
         Permission.delete(Role.user(user!.$id)),
         Permission.update(Role.user(user!.$id)),
