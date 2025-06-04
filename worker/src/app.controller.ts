@@ -136,6 +136,24 @@ export class AppController {
       5000,
       true
     );
+
+    await this.databases.createDocument(
+      this.DATABASE_ID,
+      this.APP_STATE_COL_ID,
+      "TOTAL_CHESTS_OPENED",
+      {
+        stateValue: "0"
+      }
+    );
+
+    await this.databases.createDocument(
+      this.DATABASE_ID,
+      this.APP_STATE_COL_ID,
+      "REWARD_COUNTS",
+      {
+        stateValue: "{}"
+      }
+    );
   }
 
   private async populateUserFuturepass() {
