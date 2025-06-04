@@ -58,6 +58,16 @@ export class OpenChestService implements OnApplicationBootstrap {
   }
 
   async onApplicationBootstrap() {
+    const { totalChestsOpened, rewardCounts } = await this.getRewardCounts();
+    this.totalChestsOpened = totalChestsOpened;
+    this.rewardCounts = rewardCounts;
+    this.logger.log(`Total chests opened: ${this.totalChestsOpened}. Reward counts: `, this.rewardCounts);
+  }
+
+  async getRewardCounts() {
+    let totalChestsOpened = 0;
+    let rewardCounts = {};
+
     let result = await this.databases.listDocuments(
       this.DATABASE_ID,
       this.APP_STATE_COL_ID,
@@ -67,8 +77,7 @@ export class OpenChestService implements OnApplicationBootstrap {
       ]
     );
     if (result.total > 0) {
-      const rewardCounts = JSON.parse(result.documents[0].stateValue);
-      this.rewardCounts = rewardCounts;
+      rewardCounts = JSON.parse(result.documents[0].stateValue);
     }
 
     result = await this.databases.listDocuments(
@@ -81,11 +90,10 @@ export class OpenChestService implements OnApplicationBootstrap {
     );
 
     if (result.total > 0) {
-      const totalChestsOpened: number = parseInt(result.documents[0].stateValue);
-      this.totalChestsOpened = totalChestsOpened;
+      totalChestsOpened = parseInt(result.documents[0].stateValue);
     }
 
-    this.logger.log(`Total chests opened: ${this.totalChestsOpened}. Reward counts: `, this.rewardCounts);
+    return { totalChestsOpened, rewardCounts };
   }
 
   async openChest(userId: string, chestId: string): Promise<RewardType> {
