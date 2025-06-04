@@ -4,6 +4,8 @@ import { BullBoardModule } from "@bull-board/nestjs";
 import { ExpressAdapter } from "@bull-board/express";
 import { ConfigModule } from '@nestjs/config';
 import { QueueModule } from "./queue/queue.module";
+import { UseModule } from './use/use.module';
+import { OpenChestModule } from './open-chest/open-chest.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { QueueModule } from "./queue/queue.module";
       adapter: ExpressAdapter
     }),
     QueueModule,
+    UseModule,
+    OpenChestModule,
   ],
   controllers: [],
   providers: []
