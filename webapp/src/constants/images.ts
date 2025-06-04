@@ -9,4 +9,5 @@ export const IMAGES = {
   bgCard: "/justfap/bg_card.png",
   bgReward: "/justfap/bg_reward.png",
   chest: "/justfap/chest.png",
+  key: "/justfap/key.png",
 };
