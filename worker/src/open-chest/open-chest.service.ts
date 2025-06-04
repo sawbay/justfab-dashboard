@@ -36,6 +36,7 @@ export class OpenChestService implements OnApplicationBootstrap, BeforeApplicati
   private readonly databases: Databases;
   private readonly DATABASE_ID: string;
   private readonly INVENTORY_COL_ID: string;
+  private readonly APP_STATE_COL_ID: string;
 
   private readonly mutex = new Mutex();
   private readonly K = 200;
@@ -53,12 +54,33 @@ export class OpenChestService implements OnApplicationBootstrap, BeforeApplicati
     this.databases = new Databases(this.client);
     this.DATABASE_ID = this.configService.get("DATABASE_ID");
     this.INVENTORY_COL_ID = this.configService.get("INVENTORY_COL_ID");
+    this.APP_STATE_COL_ID = this.configService.get("APP_STATE_COL_ID");
   }
 
   async onApplicationBootstrap() {
-    // load rewards from database
-    // this.totalChestsOpened = await this.getTotalChestsOpened();
-    // this.rewardCounts = await this.getRewardCounts();
+    let result = await this.databases.listDocuments(
+      this.DATABASE_ID,
+      this.APP_STATE_COL_ID,
+      [
+        Query.equal("state_key", "REWARD_COUNTS"),
+        Query.limit(1)
+      ]
+    );
+    const rewardCounts = JSON.parse(result.documents[0].state_value);
+    this.rewardCounts = rewardCounts;
+
+    result = await this.databases.listDocuments(
+      this.DATABASE_ID,
+      this.APP_STATE_COL_ID,
+      [
+        Query.equal("state_key", "TOTAL_CHESTS_OPENED"),
+        Query.limit(1)
+      ]
+    );
+    const totalChestsOpened: number = parseInt(result.documents[0].state_value);
+    this.totalChestsOpened = totalChestsOpened;
+
+    this.logger.log(`Total chests opened: ${this.totalChestsOpened}. Reward counts: `, this.rewardCounts);
   }
 
   async beforeApplicationShutdown() {
@@ -70,10 +92,13 @@ export class OpenChestService implements OnApplicationBootstrap, BeforeApplicati
       const { keyId } = await this.checkChestAndKey(userId, chestId);
 
       const reward = await this.mutex.runExclusive(async () => {
-        return await this.randomReward();
+        const reward = await this.randomReward();
+        await this.updateRewardState(reward);
+        return reward;
       });
 
-      return await this.applyReward(userId, chestId, keyId, reward);
+      await this.applyReward(userId, chestId, keyId, reward);
+      return reward;
     } catch (error) {
       throw Error(`Failed to open chest, err=${error}`);
     }
@@ -87,6 +112,29 @@ export class OpenChestService implements OnApplicationBootstrap, BeforeApplicati
 
     const selected = availableRewards[Math.floor(Math.random() * availableRewards.length)];
     return selected;
+  }
+
+  private async updateRewardState(reward: RewardType) {
+    this.totalChestsOpened += 1;
+    this.rewardCounts[reward] = (this.rewardCounts[reward] || 0) + 1;
+
+    await this.databases.updateDocument(
+      this.DATABASE_ID,
+      this.APP_STATE_COL_ID,
+      "684087db00371a41585a", // "TOTAL_CHESTS_OPENED"
+      {
+        state_value: this.totalChestsOpened.toString()
+      }
+    );
+
+    await this.databases.updateDocument(
+      this.DATABASE_ID,
+      this.APP_STATE_COL_ID,
+      "6840879e0017204b93bd", // "REWARD_COUNTS"
+      {
+        state_value: JSON.stringify(this.rewardCounts)
+      }
+    );
   }
 
   private getAvailableRewards() {
@@ -146,23 +194,21 @@ export class OpenChestService implements OnApplicationBootstrap, BeforeApplicati
     return { keyId: existingKey.documents[0].$id };
   }
 
-  private async applyReward(userId: string, chestId: string, keyId: string, reward: RewardType): Promise<RewardType> {
-    this.rewardCounts[reward] = (this.rewardCounts[reward] || 0) + 1;
-    this.totalChestsOpened += 1;
-    // mark chest as opened
-    this.databases.updateDocument(
-      this.DATABASE_ID,
-      this.INVENTORY_COL_ID,
-      chestId,
-      { used: true }
-    );
-    // mark key as used
-    this.databases.updateDocument(
-      this.DATABASE_ID,
-      this.INVENTORY_COL_ID,
-      keyId,
-      { used: true }
-    );
+  private async applyReward(userId: string, chestId: string, keyId: string, reward: RewardType) {
+    // // mark chest as opened
+    // this.databases.updateDocument(
+    //   this.DATABASE_ID,
+    //   this.INVENTORY_COL_ID,
+    //   chestId,
+    //   { used: true }
+    // );
+    // // mark key as used
+    // this.databases.updateDocument(
+    //   this.DATABASE_ID,
+    //   this.INVENTORY_COL_ID,
+    //   keyId,
+    //   { used: true }
+    // );
 
     // create reward
     await this.createReward(userId, chestId, keyId, reward);
