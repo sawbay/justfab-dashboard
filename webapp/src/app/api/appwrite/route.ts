@@ -1,4 +1,4 @@
-import { ItemType } from "@/types/item_types";
+import { ItemType, MilestoneRewardType, RatioRewardType } from "@/types/item_types";
 import { DATABASE_ID, INVENTORY_COL_ID, USER_FUTUREPASS_COL_ID } from "@/utils/appwrite/const";
 import getClient from "@/utils/appwrite/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -87,7 +87,30 @@ export async function POST(req: NextRequest) {
       DATABASE_ID,
       INVENTORY_COL_ID,
       "itemType",
-      [ItemType.WELCOME_CHEST, ItemType.AURA_KEY],
+      [
+        ItemType.CHEST, 
+        ItemType.AURA_KEY,
+
+        RatioRewardType.ROOT_1,
+        RatioRewardType.ROOT_10,
+        RatioRewardType.ROOT_50,
+        RatioRewardType.FAB_1,
+        RatioRewardType.FAB_10,
+        RatioRewardType.FAB_50,
+        RatioRewardType.FAB_100,
+        RatioRewardType.GOLD_BAG,
+        RatioRewardType.FOOD_BAG,
+        RatioRewardType.ENERGY_BAG,
+
+        MilestoneRewardType.ROOT_70,
+        MilestoneRewardType.ROOT_100,
+        MilestoneRewardType.ROOT_500,
+        MilestoneRewardType.ROOT_1000,
+        MilestoneRewardType.CHEST_2,
+        MilestoneRewardType.KEY_1,
+        MilestoneRewardType.KEYS_2,
+        MilestoneRewardType.KEYS_3,
+      ],
       true
     );
 
