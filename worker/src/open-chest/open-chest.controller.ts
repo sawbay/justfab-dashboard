@@ -8,7 +8,11 @@ export class OpenChestController {
   @Post()
   async openChest(@Body() body: { userId: string, chestId: string }) {
     const { chestId, keyId } = await this.openChestService.checkChestAndKey(body.userId, body.chestId);
-    const reward = await this.openChestService.openChest(body.userId, chestId, keyId);
-    return { reward };
+    const rewards = [];
+    for (let i = 0; i < 200; i++) {
+      const reward = await this.openChestService.openChest(body.userId, chestId, keyId);
+      rewards.push(reward);
+    }
+    return { rewards };
   }
 }

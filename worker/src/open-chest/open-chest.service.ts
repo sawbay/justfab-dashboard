@@ -3,16 +3,16 @@ import { BeforeApplicationShutdown, Inject, Injectable, Logger, OnApplicationBoo
 import { MilestoneRewardType, RatioRewardType, RewardType } from 'src/types';
 
 const RATIO_REWARD_CONFIG = [
-  { name: RatioRewardType.ROOT_1, rate: 0.05 },
-  { name: RatioRewardType.ROOT_10, rate: 0.10 },
-  { name: RatioRewardType.ROOT_50, rate: 0.45 },
-  { name: RatioRewardType.FAB_1, rate: 0.03 },
-  { name: RatioRewardType.FAB_10, rate: 0.02 },
-  { name: RatioRewardType.FAB_50, rate: 0.14 },
-  { name: RatioRewardType.FAB_100, rate: 0.01 },
-  { name: RatioRewardType.GOLD_BAG, rate: 0.05 },
-  { name: RatioRewardType.FOOD_BAG, rate: 0.05 },
-  { name: RatioRewardType.ENERGY_BAG, rate: 0.10 },
+  { name: RatioRewardType.ROOT_1, rate: 0.05 }, // 10
+  { name: RatioRewardType.ROOT_10, rate: 0.10 }, // 20
+  { name: RatioRewardType.ROOT_50, rate: 0.45 }, // 90
+  { name: RatioRewardType.FAB_1, rate: 0.03 }, // 6
+  { name: RatioRewardType.FAB_10, rate: 0.02 }, // 4
+  { name: RatioRewardType.FAB_50, rate: 0.14 }, // 28
+  { name: RatioRewardType.FAB_100, rate: 0.01 }, // 2
+  { name: RatioRewardType.GOLD_BAG, rate: 0.05 }, // 10
+  { name: RatioRewardType.FOOD_BAG, rate: 0.05 }, // 10
+  { name: RatioRewardType.ENERGY_BAG, rate: 0.10 }, // 20
 ];
 
 const MILESTONE_REWARD_CONFIG = [
@@ -76,10 +76,11 @@ export class OpenChestService implements OnApplicationBootstrap, BeforeApplicati
 
   private getAvailableRewards() {
     const available: RewardType[] = [];
-    const base = this.totalChestsOpened < this.K ? this.K : this.totalChestsOpened;
+    const chestCount = this.totalChestsOpened + 1;
+    const base = chestCount < this.K ? this.K : chestCount;
 
     for (const r of RATIO_REWARD_CONFIG) {
-      const maxCount = Math.floor(r.rate * 100 * base);
+      const maxCount = Math.floor(r.rate * base);
       const currentCount = this.rewardCounts[r.name] || 0;
       if (currentCount < maxCount) {
         available.push(r.name);
