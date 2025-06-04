@@ -124,7 +124,7 @@ export class OpenChestService implements OnApplicationBootstrap {
       this.APP_STATE_COL_ID,
       "TOTAL_CHESTS_OPENED",
       {
-        state_value: this.totalChestsOpened.toString()
+        stateValue: this.totalChestsOpened.toString()
       }
     );
 
@@ -133,7 +133,7 @@ export class OpenChestService implements OnApplicationBootstrap {
       this.APP_STATE_COL_ID,
       "REWARD_COUNTS",
       {
-        state_value: JSON.stringify(this.rewardCounts)
+        stateValue: JSON.stringify(this.rewardCounts)
       }
     );
   }
