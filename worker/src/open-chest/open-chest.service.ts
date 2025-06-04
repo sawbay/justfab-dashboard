@@ -1,7 +1,7 @@
 import { Mutex } from 'async-mutex';
 import { Inject, Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { ItemType, MilestoneRewardType, RatioRewardType, RewardType } from 'src/types';
-import { Client, Databases, Query } from 'node-appwrite';
+import { Client, Databases, ID, Query } from 'node-appwrite';
 import { ConfigService } from '@nestjs/config';
 import getClient from 'src/queue/appwrite/server';
 
@@ -62,23 +62,28 @@ export class OpenChestService implements OnApplicationBootstrap {
       this.DATABASE_ID,
       this.APP_STATE_COL_ID,
       [
-        Query.equal("state_key", "REWARD_COUNTS"),
+        Query.equal("$id", "REWARD_COUNTS"),
         Query.limit(1)
       ]
     );
-    const rewardCounts = JSON.parse(result.documents[0].state_value);
-    this.rewardCounts = rewardCounts;
+    if (result.total > 0) {
+      const rewardCounts = JSON.parse(result.documents[0].stateValue);
+      this.rewardCounts = rewardCounts;
+    }
 
     result = await this.databases.listDocuments(
       this.DATABASE_ID,
       this.APP_STATE_COL_ID,
       [
-        Query.equal("state_key", "TOTAL_CHESTS_OPENED"),
+        Query.equal("$id", "TOTAL_CHESTS_OPENED"),
         Query.limit(1)
       ]
     );
-    const totalChestsOpened: number = parseInt(result.documents[0].state_value);
-    this.totalChestsOpened = totalChestsOpened;
+
+    if (result.total > 0) {
+      const totalChestsOpened: number = parseInt(result.documents[0].stateValue);
+      this.totalChestsOpened = totalChestsOpened;
+    }
 
     this.logger.log(`Total chests opened: ${this.totalChestsOpened}. Reward counts: `, this.rewardCounts);
   }
@@ -117,7 +122,7 @@ export class OpenChestService implements OnApplicationBootstrap {
     await this.databases.updateDocument(
       this.DATABASE_ID,
       this.APP_STATE_COL_ID,
-      "684087db00371a41585a", // "TOTAL_CHESTS_OPENED"
+      "TOTAL_CHESTS_OPENED",
       {
         state_value: this.totalChestsOpened.toString()
       }
@@ -126,7 +131,7 @@ export class OpenChestService implements OnApplicationBootstrap {
     await this.databases.updateDocument(
       this.DATABASE_ID,
       this.APP_STATE_COL_ID,
-      "6840879e0017204b93bd", // "REWARD_COUNTS"
+      "REWARD_COUNTS",
       {
         state_value: JSON.stringify(this.rewardCounts)
       }
@@ -191,31 +196,33 @@ export class OpenChestService implements OnApplicationBootstrap {
   }
 
   private async applyReward(userId: string, chestId: string, keyId: string, reward: RewardType) {
-    // // mark chest as opened
-    // this.databases.updateDocument(
-    //   this.DATABASE_ID,
-    //   this.INVENTORY_COL_ID,
-    //   chestId,
-    //   { used: true }
-    // );
-    // // mark key as used
-    // this.databases.updateDocument(
-    //   this.DATABASE_ID,
-    //   this.INVENTORY_COL_ID,
-    //   keyId,
-    //   { used: true }
-    // );
+    // mark chest as opened
+    this.databases.updateDocument(
+      this.DATABASE_ID,
+      this.INVENTORY_COL_ID,
+      chestId,
+      { used: true }
+    );
+    // mark key as used
+    this.databases.updateDocument(
+      this.DATABASE_ID,
+      this.INVENTORY_COL_ID,
+      keyId,
+      { used: true }
+    );
 
     // create reward
-    await this.createReward(userId, chestId, keyId, reward);
+    await this.createReward(userId, chestId, reward);
 
     this.logger.log(`User ${userId} opened chest ${chestId} with key ${keyId} and received reward ${reward}`);
-    this.logger.log(`Total chests opened: ${this.totalChestsOpened}. Reward counts: `, this.rewardCounts);
-
-    return reward;
   }
 
-  private async createReward(userId: string, chestId: string, keyId: string, reward: RewardType) {
-    // TODO: create reward
+  private async createReward(userId: string, chestId: string, reward: RewardType) {
+    this.databases.createDocument(
+      this.DATABASE_ID,
+      this.INVENTORY_COL_ID,
+      ID.unique(),
+      { userId, originId: chestId, itemType: reward, used: false }
+    );
   }
 }

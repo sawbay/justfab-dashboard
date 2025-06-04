@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { QueueModule } from "./queue/queue.module";
 import { UseModule } from './use/use.module';
 import { OpenChestModule } from './open-chest/open-chest.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { OpenChestModule } from './open-chest/open-chest.module';
     UseModule,
     OpenChestModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: []
 })
 export class AppModule {
