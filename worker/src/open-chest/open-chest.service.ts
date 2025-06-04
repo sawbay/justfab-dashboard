@@ -1,7 +1,7 @@
 import { Mutex } from 'async-mutex';
-import { BeforeApplicationShutdown, Inject, Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { ItemType, MilestoneRewardType, RatioRewardType, RewardType } from 'src/types';
-import { Client, Databases, ID, Query } from 'node-appwrite';
+import { Client, Databases, Query } from 'node-appwrite';
 import { ConfigService } from '@nestjs/config';
 import getClient from 'src/queue/appwrite/server';
 
