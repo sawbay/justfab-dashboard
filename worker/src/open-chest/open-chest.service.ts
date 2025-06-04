@@ -30,7 +30,7 @@ const MILESTONE_REWARD_CONFIG = [
 ];
 
 @Injectable()
-export class OpenChestService implements OnApplicationBootstrap, BeforeApplicationShutdown {
+export class OpenChestService implements OnApplicationBootstrap {
   private readonly logger = new Logger(OpenChestService.name);
   private readonly client: Client;
   private readonly databases: Databases;
@@ -81,10 +81,6 @@ export class OpenChestService implements OnApplicationBootstrap, BeforeApplicati
     this.totalChestsOpened = totalChestsOpened;
 
     this.logger.log(`Total chests opened: ${this.totalChestsOpened}. Reward counts: `, this.rewardCounts);
-  }
-
-  async beforeApplicationShutdown() {
-    // save load rewards from database
   }
 
   async openChest(userId: string, chestId: string): Promise<RewardType> {
