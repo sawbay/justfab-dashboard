@@ -27,6 +27,7 @@ const navItems: NavItem[] = [
       </svg>
     ),
   },
+  /* Commented out other menu items
   {
     label: "Collection",
     path: "/collection",
@@ -122,6 +123,7 @@ const navItems: NavItem[] = [
       </svg>
     ),
   },
+  */
 ];
 
 const Sidebar = () => {
@@ -204,7 +206,7 @@ const Sidebar = () => {
                       className={`flex items-center justify-start px-0 py-3 rounded-xl transition-all font-bold font-dynapuff text-stroke
                         ${
                           pathname === item.path
-                            ? "text-[#7B3F00] text-2xl lg:text-3xl"
+                            ? "text-[#CA8953] text-2xl lg:text-3xl"
                             : "text-white text-xl lg:text-2xl"
                         }
                       `}
