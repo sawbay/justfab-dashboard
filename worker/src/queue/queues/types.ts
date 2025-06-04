@@ -1,4 +1,4 @@
-import { ItemType } from "../types";
+import { ItemType } from "../../types";
 
 export interface WelcomeChestEventPayload {
   userId: string;

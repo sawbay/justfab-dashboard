@@ -4,7 +4,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { WorkerHost } from '@nestjs/bullmq';
 import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 import getClient from 'src/queue/appwrite/server';
-import { ItemType } from 'src/queue/types';
+import { ItemType } from 'src/types';
 import { WelcomeChestEventPayload } from './types';
 import { ConfigService } from '@nestjs/config';
 

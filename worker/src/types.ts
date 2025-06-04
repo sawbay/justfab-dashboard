@@ -4,6 +4,8 @@ export enum ItemType {
   CHEST = "CHEST",
 }
 
+export type RewardType = RatioRewardType | MilestoneRewardType;
+
 export enum RatioRewardType {
   ROOT_1 = "1 $ROOT",
   ROOT_10 = "10 $ROOT",
