@@ -60,6 +60,7 @@ export class OpenChestService implements OnApplicationBootstrap, BeforeApplicati
   async checkChestAndKey(userId: string, chestId: string): Promise<{ chestId: string, keyId: string }> {
     // const chest = await this.getChest(userId, chestId);
     // const key = await this.getKey(userId, chestId);
+    // get unused key
     return { chestId: "CHEST01", keyId: "KEY01" };
   }
 
