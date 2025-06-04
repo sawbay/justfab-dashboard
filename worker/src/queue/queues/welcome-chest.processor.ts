@@ -38,7 +38,7 @@ export class WelcomeChestProcessor extends WorkerHost {
       this.INVENTORY_COL_ID,
       [
         Query.equal("userId", data.userId),
-        Query.equal("itemType", ItemType.WELCOME_CHEST)
+        Query.equal("itemType", ItemType.CHEST)
       ]);
 
     if (existingWelcomeChest.total > 0) {
@@ -53,7 +53,7 @@ export class WelcomeChestProcessor extends WorkerHost {
         ID.unique(),
         {
           userId: data.userId,
-          itemType: ItemType.WELCOME_CHEST,
+          itemType: ItemType.CHEST,
           used: false,
         },
         [
