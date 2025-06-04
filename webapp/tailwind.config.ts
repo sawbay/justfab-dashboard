@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        dynapuff: ["DynaPuff", "sans-serif"],
+      },
       colors: {
         primary: {
           DEFAULT: "#FB9333",
@@ -20,7 +23,7 @@ const config: Config = {
         },
         background: {
           light: "#FFF8F3",
-          DEFAULT: "#FFF1E6",
+          DEFAULT: "#D17436",
         },
       },
       backgroundImage: {

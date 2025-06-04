@@ -34,7 +34,7 @@ const mockVIPRewards: VIPReward[] = [
   {
     level: 1,
     isCompleted: false,
-    isLocked: true,
+    isLocked: false,
     rewards: { game: 50, token: 50 },
     description: "Login for the first time",
   },
@@ -143,18 +143,18 @@ export default function Home() {
                   backgroundRepeat: "no-repeat",
                 }}
               >
-                <div className="text-xs sm:text-sm font-bold text-[#7B3F00]">
+                <div className="text-2xl sm:text-sm font-bold text-[#585858]">
                   {item.label}
                 </div>
                 <div
-                  className={`text-lg sm:text-2xl font-bold ${
+                  className={`text-2xl sm:text-2xl font-bold ${
                     item.color || ""
                   } my-1`}
                 >
                   {item.value}
                 </div>
                 {item.sub && (
-                  <div className="text-[10px] sm:text-xs text-[#7B3F00]">
+                  <div className="text-[10px] sm:text-xs text-[#585858]">
                     {item.sub}
                   </div>
                 )}
@@ -166,7 +166,7 @@ export default function Home() {
         {/* VIP Rewards */}
         <section className="px-2 sm:px-4">
           <div className="flex items-center gap-3 mb-4">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#585858] font-[dynapuff]">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white font-[dynapuff]">
               VIP Rewards
             </h2>
           </div>
@@ -176,7 +176,7 @@ export default function Home() {
               disabled={currentPage === 0}
               className="absolute -left-8 sm:-left-12 top-1/2 -translate-y-1/2 z-10 p-2 bg-transparent"
             >
-              <span className="text-[#E08B3A] text-3xl sm:text-4xl">&#60;</span>
+              <span className="text-white text-3xl sm:text-4xl">&#60;</span>
             </button>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
               {(() => {
@@ -222,7 +222,7 @@ export default function Home() {
                           </span>
                           <span className="flex items-center gap-1">
                             <Image
-                              src={IMAGES.chest}
+                              src={IMAGES.key}
                               alt="token"
                               width={16}
                               height={16}
@@ -231,7 +231,7 @@ export default function Home() {
                             {reward.rewards.token}
                           </span>
                         </div>
-                        {!reward.isLocked && !reward.isCompleted && (
+                        {/* {!reward.isLocked && !reward.isCompleted && (
                           <Button
                             size="sm"
                             className="mt-2"
@@ -239,7 +239,7 @@ export default function Home() {
                           >
                             Claim
                           </Button>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   ) : (
@@ -253,14 +253,14 @@ export default function Home() {
               disabled={currentPage === totalPages - 1}
               className="absolute -right-8 sm:-right-12 top-1/2 -translate-y-1/2 z-10 p-2 bg-transparent"
             >
-              <span className="text-[#E08B3A] text-3xl sm:text-4xl">&#62;</span>
+              <span className="text-white text-3xl sm:text-4xl">&#62;</span>
             </button>
           </div>
         </section>
 
         {/* Welcome Missions */}
-        <section className="px-2 sm:px-4">
-          <h2 className="text-2xl sm:text-3xl font-bold text-[#585858] font-[dynapuff]">
+        {/* <section className="px-2 sm:px-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white font-[dynapuff]">
             Welcome Missions
           </h2>
           <div className="mt-4">
@@ -291,7 +291,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
       </div>
     </MainLayout>
   );
