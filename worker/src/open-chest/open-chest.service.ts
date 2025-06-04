@@ -1,6 +1,9 @@
 import { Mutex } from 'async-mutex';
 import { BeforeApplicationShutdown, Inject, Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
-import { MilestoneRewardType, RatioRewardType, RewardType } from 'src/types';
+import { ItemType, MilestoneRewardType, RatioRewardType, RewardType } from 'src/types';
+import { Client, Databases, ID, Query } from 'node-appwrite';
+import { ConfigService } from '@nestjs/config';
+import getClient from 'src/queue/appwrite/server';
 
 const RATIO_REWARD_CONFIG = [
   { name: RatioRewardType.ROOT_1, rate: 0.05 }, // 10
@@ -29,11 +32,28 @@ const MILESTONE_REWARD_CONFIG = [
 @Injectable()
 export class OpenChestService implements OnApplicationBootstrap, BeforeApplicationShutdown {
   private readonly logger = new Logger(OpenChestService.name);
+  private readonly client: Client;
+  private readonly databases: Databases;
+  private readonly DATABASE_ID: string;
+  private readonly INVENTORY_COL_ID: string;
 
   private readonly mutex = new Mutex();
   private readonly K = 200;
   private totalChestsOpened: number = 0;
   private rewardCounts: object = {};
+
+  constructor(
+    @Inject() private readonly configService: ConfigService,
+  ) {
+    this.client = getClient(
+      this.configService.get("APPWRITE_PROJECT_ID"),
+      this.configService.get("APPWRITE_ENDPOINT"),
+      this.configService.get("APPWRITE_KEY")
+    );
+    this.databases = new Databases(this.client);
+    this.DATABASE_ID = this.configService.get("DATABASE_ID");
+    this.INVENTORY_COL_ID = this.configService.get("INVENTORY_COL_ID");
+  }
 
   async onApplicationBootstrap() {
     // load rewards from database
@@ -45,23 +65,18 @@ export class OpenChestService implements OnApplicationBootstrap, BeforeApplicati
     // save load rewards from database
   }
 
-  async openChest(userId: string, chestId: string, keyId: string): Promise<RewardType> {
+  async openChest(userId: string, chestId: string): Promise<RewardType> {
     try {
-      return await this.mutex.runExclusive(async () => {
-        const rewardType = await this.randomReward();
+      const { keyId } = await this.checkChestAndKey(userId, chestId);
 
-        return await this.apply(userId, chestId, keyId, rewardType);
+      const reward = await this.mutex.runExclusive(async () => {
+        return await this.randomReward();
       });
+
+      return await this.applyReward(userId, chestId, keyId, reward);
     } catch (error) {
       throw Error(`Failed to open chest, err=${error}`);
     }
-  }
-
-  async checkChestAndKey(userId: string, chestId: string): Promise<{ chestId: string, keyId: string }> {
-    // const chest = await this.getChest(userId, chestId);
-    // const key = await this.getKey(userId, chestId);
-    // get unused key
-    return { chestId: "CHEST01", keyId: "KEY01" };
   }
 
   private async randomReward(): Promise<RewardType> {
@@ -98,17 +113,67 @@ export class OpenChestService implements OnApplicationBootstrap, BeforeApplicati
     return available;
   }
 
-  private async apply(userId: string, chestId: string, keyId: string, reward: RewardType): Promise<RewardType> {
+  private async checkChestAndKey(userId: string, chestId: string): Promise<{ keyId: string }> {
+    const existingWelcomeChest = await this.databases.listDocuments(
+      this.DATABASE_ID,
+      this.INVENTORY_COL_ID,
+      [
+        Query.equal("$id", chestId),
+        Query.equal("itemType", ItemType.CHEST),
+        Query.equal("userId", userId),
+        Query.equal("used", false),
+        Query.limit(1)
+      ]);
+
+    if (existingWelcomeChest.total === 0) {
+      throw new Error(`Invalid chestId ${chestId} for user ${userId}`);
+    }
+
+    const existingKey = await this.databases.listDocuments(
+      this.DATABASE_ID,
+      this.INVENTORY_COL_ID,
+      [
+        Query.equal("userId", userId),
+        Query.equal("itemType", ItemType.AURA_KEY),
+        Query.equal("used", false),
+        Query.limit(1)
+      ]);
+
+    if (existingKey.total === 0) {
+      throw new Error(`No available key for user ${userId}`);
+    }
+
+    return { keyId: existingKey.documents[0].$id };
+  }
+
+  private async applyReward(userId: string, chestId: string, keyId: string, reward: RewardType): Promise<RewardType> {
     this.rewardCounts[reward] = (this.rewardCounts[reward] || 0) + 1;
     this.totalChestsOpened += 1;
     // mark chest as opened
+    this.databases.updateDocument(
+      this.DATABASE_ID,
+      this.INVENTORY_COL_ID,
+      chestId,
+      { used: true }
+    );
     // mark key as used
-    // create reward
+    this.databases.updateDocument(
+      this.DATABASE_ID,
+      this.INVENTORY_COL_ID,
+      keyId,
+      { used: true }
+    );
 
-    this.logger.log(`Total chests opened: ${this.totalChestsOpened}`);
-    this.logger.log(this.rewardCounts);
+    // create reward
+    await this.createReward(userId, chestId, keyId, reward);
+
     this.logger.log(`User ${userId} opened chest ${chestId} with key ${keyId} and received reward ${reward}`);
+    this.logger.log(`Total chests opened: ${this.totalChestsOpened}. Reward counts: `, this.rewardCounts);
 
     return reward;
+  }
+
+  private async createReward(userId: string, chestId: string, keyId: string, reward: RewardType) {
+    // TODO: create reward
   }
 }

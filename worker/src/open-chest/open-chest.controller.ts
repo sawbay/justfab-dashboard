@@ -7,12 +7,11 @@ export class OpenChestController {
 
   @Post()
   async openChest(@Body() body: { userId: string, chestId: string }) {
-    const { chestId, keyId } = await this.openChestService.checkChestAndKey(body.userId, body.chestId);
-    const rewards = [];
-    for (let i = 0; i < 200; i++) {
-      const reward = await this.openChestService.openChest(body.userId, chestId, keyId);
-      rewards.push(reward);
+    try {
+      const reward = await this.openChestService.openChest(body.userId, body.chestId);
+      return { success: true, reward };
+    } catch (error) {
+      return { success: false, error: `${error}` };
     }
-    return { rewards };
   }
 }
