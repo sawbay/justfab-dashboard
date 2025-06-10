@@ -7,6 +7,11 @@ import { ItemType } from "@/types/item_types";
 import { DATABASE_ID, FUNCTION_ID, INVENTORY_COL_ID, USER_COL_ID } from "@/utils/env";
 import { WorkerEvent } from "@/utils/worker";
 
+export interface FetchInventoryOptions {
+  used?: boolean;
+  itemTypes?: ItemType[];
+}
+
 interface AppwriteContextProps {
   client: Client | null;
   account: Account | null;
@@ -16,6 +21,7 @@ interface AppwriteContextProps {
   treasureChestTotal: number;
   auraKeyTotal: number;
 
+  fetchInventory: (options: FetchInventoryOptions) => Promise<Models.DocumentList<Models.Document>>;
   telegramAuthenticated: (userId: string, secret: string) => Promise<void>;
   logoutSession: () => Promise<void>;
   linkFuturepass: (futurepass: string) => Promise<void>;
@@ -40,6 +46,7 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [session, setSession] = useState<Models.Session | null>(null);
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
   const [userDetail, setUserDetail] = useState<Models.Document | null>(null);
+  const [inventory, setInventory] = useState<Models.Document[]>([]);
   const [treasureChestTotal, setTreasureChestTotal] = useState<number>(0);
   const [auraKeyTotal, setAuraKeyTotal] = useState<number>(0);
 
@@ -52,8 +59,9 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
 
   useEffect(() => {
     if (user != null) {
-      fetchInventory();
       fetchUserDetail();
+      fetchTreasureChest();
+      fetchAuraKey();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -77,6 +85,44 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
     } catch (error) {
       setUser(null);
     }
+  }
+
+  const fetchUserDetail = async () => {
+    const databases = new Databases(client!);
+    const userDetail = await databases.getDocument(
+      DATABASE_ID,
+      USER_COL_ID,
+      user!.$id,
+    );
+    setUserDetail(userDetail);
+  }
+
+  const fetchTreasureChest = async () => {
+    const databases = new Databases(client!);
+    const res = await databases.listDocuments(
+      DATABASE_ID,
+      INVENTORY_COL_ID,
+      [
+        Query.equal("userId", user!.$id),
+        Query.equal("itemType", ItemType.CHEST),
+        Query.equal("used", false),
+      ]
+    );
+    setTreasureChestTotal(res.total);
+  }
+
+  const fetchAuraKey = async () => {
+    const databases = new Databases(client!);
+    const res = await databases.listDocuments(
+      DATABASE_ID,
+      INVENTORY_COL_ID,
+      [
+        Query.equal("userId", user!.$id),
+        Query.equal("itemType", ItemType.AURA_KEY),
+        Query.equal("used", false),
+      ]
+    );
+    setAuraKeyTotal(res.total);
   }
 
   const telegramAuthenticated = async (userId: string, secret: string) => {
@@ -121,29 +167,22 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
     );
   }
 
-  const fetchUserDetail = async () => {
+  const fetchInventory = async (options: FetchInventoryOptions) => {
     const databases = new Databases(client!);
-    const userDetail = await databases.getDocument(
-      DATABASE_ID,
-      USER_COL_ID,
-      user!.$id,
-    );
-    setUserDetail(userDetail);
-  }
 
-  const fetchInventory = async () => {
-    const databases = new Databases(client!);
-    const inventory = await databases.listDocuments(
+    const queries = [];
+    if (options.used) {
+      queries.push(Query.equal("used", options.used));
+    }
+    if (options.itemTypes) {
+      queries.push(Query.or(options.itemTypes.map(itemType => Query.equal("itemType", itemType))));
+    }
+
+    return await databases.listDocuments(
       DATABASE_ID,
       INVENTORY_COL_ID,
-      [
-        Query.equal("userId", user!.$id),
-        Query.equal("used", false),
-      ]
+      queries
     );
-
-    setTreasureChestTotal(inventory.documents.filter(item => item.itemType === ItemType.CHEST).length);
-    setAuraKeyTotal(inventory.documents.filter(item => item.itemType === ItemType.AURA_KEY).length);
   }
 
   const proxiedApi = async (path: string, method: ExecutionMethod, body: any): Promise<{ responseStatusCode: number, responseBody: any }> => {
@@ -179,6 +218,7 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
       treasureChestTotal,
       auraKeyTotal,
       telegramAuthenticated,
+      fetchInventory,
       logoutSession,
       linkFuturepass,
       fireEvent,
