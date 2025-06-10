@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IMAGES } from "@/utils/images";
-import { useAppwrite } from "@/core/hooks/useAppwrite";
+import { useAppwrite } from "@/components/providers/AppwriteProvider";
 interface StatsGridProps { }
 
 const mockStats = {

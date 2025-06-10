@@ -1,10 +1,36 @@
-import { useEffect, useState } from "react";
+"use client";
+
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { Account, Client, Databases, Models, Permission, Query, Role } from "appwrite";
 import getClient from "@/utils/appwrite/client";
 import { DATABASE_ID, INVENTORY_COL_ID, USER_FUTUREPASS_COL_ID } from "@/utils/appwrite/const";
 import { ItemType } from "@/types/item_types";
 
+interface AppwriteContextProps {
+  client: Client | null;
+  account: Account | null;
+  user: Models.User<Models.Preferences> | null;
+  session: Models.Session | null;
+  telegramAuthenticated: (userId: string, secret: string) => Promise<void>;
+  logoutSession: () => Promise<void>;
+  linkFuturepass: (futurepass: string) => Promise<void>;
+  treasureChestTotal: number;
+  auraKeyTotal: number;
+}
+
+const AppwriteContext = createContext<AppwriteContextProps | undefined>(undefined);
+
 export function useAppwrite() {
+  const context = useContext(AppwriteContext);
+  if (context === undefined) {
+    throw new Error("useAppwrite must be used within an AppwriteProvider");
+  }
+  return context;
+}
+
+export default AppwriteContext;
+
+export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [client, setClient] = useState<Client | null>(null);
   const [account, setAccount] = useState<Account | null>(null);
   const [session, setSession] = useState<Models.Session | null>(null);
@@ -71,7 +97,7 @@ export function useAppwrite() {
 
   const linkFuturepass = async (futurepass: string) => {
     const databases = new Databases(client!);
-    return await databases.createDocument(
+    await databases.createDocument(
       DATABASE_ID,
       USER_FUTUREPASS_COL_ID,
       user!.$id,
@@ -80,9 +106,7 @@ export function useAppwrite() {
         futurepass,
       },
       [
-        Permission.read(Role.any()),
         Permission.write(Role.user(user!.$id)),
-        Permission.delete(Role.user(user!.$id)),
         Permission.update(Role.user(user!.$id)),
       ]
     );
@@ -99,19 +123,26 @@ export function useAppwrite() {
       ]
     );
 
-    setTreasureChestTotal(inventory.documents.filter(item => item.itemType === ItemType.WELCOME_CHEST).length);
+    setTreasureChestTotal(inventory.documents.filter(item => item.itemType === ItemType.CHEST).length);
     setAuraKeyTotal(inventory.documents.filter(item => item.itemType === ItemType.AURA_KEY).length);
   }
 
-  return {
-    client,
-    account,
-    session,
-    user,
-    telegramAuthenticated,
-    logoutSession,
-    linkFuturepass,
-    treasureChestTotal,
-    auraKeyTotal,
-  };
+  return (
+    <AppwriteContext.Provider value={{
+      client,
+      account,
+      user,
+      // login,
+      // logout,
+      // register,
+      session,
+      telegramAuthenticated,
+      logoutSession,
+      linkFuturepass,
+      treasureChestTotal,
+      auraKeyTotal,
+    }}>
+      {children}
+    </AppwriteContext.Provider>
+  )
 }

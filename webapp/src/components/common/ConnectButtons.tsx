@@ -8,8 +8,8 @@ import { useAuth } from "@futureverse/auth-react";
 import axios from "axios";
 import { USERS_TELEGRAM_LOGIN } from "@/app/api/routes";
 import { IMAGES } from "@/utils/images";
-import { useAppwrite } from "@/core/hooks/useAppwrite";
 import { fireEvent, WorkerEventType } from "@/utils/worker_events";
+import { useAppwrite } from "../providers/AppwriteProvider";
 
 const ConnectButtons: React.FC<{}> = ({ }) => {
   const { openLogin } = useAuthUi();
