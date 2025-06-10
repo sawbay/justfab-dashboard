@@ -8,29 +8,7 @@ interface MainLayoutProps {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
-    <div
-      className="min-h-screen relative"
-      style={{
-        background: "linear-gradient(to bottom, #EAE3DE, #F5F0EB)",
-      }}
-    >
-      {/* Base gradient */}
-      <div className="absolute inset-0 bg-gradient-to-bl from-[#FFE8C8]/40 to-white" />
-
-      {/* Subtle stripes */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `repeating-linear-gradient(
-            45deg,
-            #FFE8C8,
-            #FFE8C8 2px,
-            transparent 2px,
-            transparent 12px
-          )`,
-        }}
-      />
-
+    <div className="min-h-screen relative bg-background">
       {/* Content */}
       <div className="relative z-10 flex flex-col lg:flex-row">
         <div className="lg:block">
