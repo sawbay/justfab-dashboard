@@ -5,7 +5,7 @@ import { Account, Client, Databases, ExecutionMethod, Functions, Models, Permiss
 import getClient from "@/utils/appwrite/client";
 import { ItemType } from "@/types/item_types";
 import { DATABASE_ID, FUNCTION_ID, INVENTORY_COL_ID, USER_COL_ID } from "@/utils/env";
-import { WorkerEvent } from "@/utils/worker_events";
+import { WorkerEvent } from "@/utils/worker";
 
 interface AppwriteContextProps {
   client: Client | null;

@@ -1,6 +1,4 @@
-import { WORKER_URL } from "@/utils/env";
-import { WorkerEvent } from "@/utils/worker_events";
-import axios from "axios";
+import { worker, WorkerEvent } from "@/utils/worker";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -14,13 +12,9 @@ export async function POST(req: NextRequest) {
   event.userId = userId;
 
   try {
-    const res = await enqueueEvent(event as WorkerEvent);
+    const res = await worker.enqueueEvent(event as WorkerEvent);
     return NextResponse.json({ ...res.data });
   } catch (error) {
     return NextResponse.json({ success: false, error: error });
   }
-}
-
-export const enqueueEvent = async (event: WorkerEvent) => {
-  return await axios.post(`${WORKER_URL}/queue/enqueue`, { event });
 }

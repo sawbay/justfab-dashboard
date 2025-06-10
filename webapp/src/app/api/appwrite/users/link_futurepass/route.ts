@@ -2,8 +2,8 @@ import getClient from '@/utils/appwrite/server';
 import { DATABASE_ID, USER_COL_ID } from '@/utils/env';
 import { NextResponse } from 'next/server';
 import { Databases } from 'node-appwrite';
-import { WorkerEventType } from "@/utils/worker_events";
-import { enqueueEvent } from '../../worker_events/route';
+import { WorkerEventType } from "@/utils/worker";
+import { worker } from '@/utils/worker';
 
 export async function POST(request: Request) {
   const userId = await request.headers.get('x-appwrite-user-id');
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
       },
     );
 
-    await enqueueEvent({
+    await worker.enqueueEvent({
       etype: WorkerEventType.REWARD_WELCOME_CHEST,
       userId,
       payload: {

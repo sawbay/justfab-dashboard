@@ -6,7 +6,7 @@ import { LoginButton } from "@telegram-auth/react";
 import { BOT_USERNAME } from "@/utils/env";
 import { useAuth } from "@futureverse/auth-react";
 import axios from "axios";
-import { USERS_TELEGRAM_LOGIN } from "@/app/api/routes";
+import { USERS_TELEGRAM_LOGIN } from "@/app/api";
 import { IMAGES } from "@/utils/images";
 import { useAppwrite } from "../providers/AppwriteProvider";
 
