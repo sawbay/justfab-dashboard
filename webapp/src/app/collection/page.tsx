@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import Image from "next/image";
 import Button from "@/components/common/Button";
+import { useAppwrite } from "@/components/providers/AppwriteProvider";
+import { ItemType } from "@/types/item_types";
 
 // Mock data for filters
 const filterTypes = [
@@ -22,8 +24,27 @@ const collectionItems = Array(12).fill({
 });
 
 export default function Collection() {
-  const [activeFilter, setActiveFilter] = useState("All");
+  const { user, fetchInventory } = useAppwrite();
+  const [activeFilter, setActiveFilter] = useState([ItemType.CHEST, ItemType.AURA_KEY, ItemType.GOLD_BAG, ItemType.FOOD_BAG, ItemType.ENERGY_BAG]);
   const [itemCount, setItemCount] = useState(12); // State for item count
+  const [inventory, setInventory] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (user) {
+      fetchInventory({ used: false, itemTypes: activeFilter }).then((inventory) => {
+        setItemCount(inventory.total);
+        const docs = inventory.documents.map((doc) => {
+          return {
+            id: doc.$id,
+            type: doc.itemType,
+            owner: 1,
+            image: "/icons/microphone.svg",
+          };
+        });
+        setInventory(docs);
+      });
+    }
+  }, [user]);
 
   return (
     <MainLayout>
@@ -41,11 +62,10 @@ export default function Collection() {
                 <Button
                   key={filter.id}
                   onClick={() => setActiveFilter(filter.name)}
-                  className={`${
-                    activeFilter === filter.name
-                      ? "bg-[#ffe8c8] text-[#FF9F5A] border border-[#FF9F5A] hover:text-[#FF9F5A]"
-                      : "border border-gray-200 hover:bg-[#ffe8c8] hover:text-[#FF9F5A]"
-                  }`}
+                  className={`${activeFilter === filter.name
+                    ? "bg-[#ffe8c8] text-[#FF9F5A] border border-[#FF9F5A] hover:text-[#FF9F5A]"
+                    : "border border-gray-200 hover:bg-[#ffe8c8] hover:text-[#FF9F5A]"
+                    }`}
                 >
                   {filter.name}
                 </Button>
@@ -59,7 +79,7 @@ export default function Collection() {
 
         {/* Collection Grid */}
         <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {collectionItems.map((item, index) => (
+          {inventory.map((item, index) => (
             <div
               key={index}
               className="rounded-xl p-4 sm:p-6 flex flex-col items-center border-2 border-primary"

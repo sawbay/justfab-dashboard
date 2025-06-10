@@ -1,6 +1,9 @@
 export enum ItemType {
   AURA_KEY = "AURA_KEY",
   CHEST = "CHEST",
+  GOLD_BAG = "GOLD_BAG",
+  FOOD_BAG = "FOOD_BAG",
+  ENERGY_BAG = "ENERGY_BAG",
 }
 
 export type RewardType = RatioRewardType | MilestoneRewardType;

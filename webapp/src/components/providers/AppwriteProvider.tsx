@@ -170,7 +170,7 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
   const fetchInventory = async (options: FetchInventoryOptions) => {
     const databases = new Databases(client!);
 
-    const queries = [];
+    const queries = [Query.equal("userId", user!.$id)];
     if (options.used) {
       queries.push(Query.equal("used", options.used));
     }

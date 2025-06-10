@@ -58,7 +58,7 @@ export class WelcomeChestProcessor extends WorkerHost {
           used: false,
         },
         [
-          Permission.read(Role.any()),
+          Permission.read(Role.user(payload.userId)),
         ]
       );
       job.log(`User ${payload.userId} has been rewarded welcome chest`);
@@ -73,7 +73,7 @@ export class WelcomeChestProcessor extends WorkerHost {
           used: false,
         },
         [
-          Permission.read(Role.any()),
+          Permission.read(Role.user(payload.userId)),
         ]
       );
       job.log(`User ${payload.userId} has been rewarded aura key`);
