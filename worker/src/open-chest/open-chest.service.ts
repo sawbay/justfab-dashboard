@@ -220,7 +220,6 @@ export class OpenChestService implements OnApplicationBootstrap {
       { used: true }
     );
 
-    // create reward
     switch (reward) {
       case RatioRewardType.ROOT_1:
       case RatioRewardType.ROOT_10:
@@ -241,6 +240,12 @@ export class OpenChestService implements OnApplicationBootstrap {
             user.$id,
             { rootBalance: user.rootBalance + parseInt(reward.split(" ")[0]) }
           );
+          await this.databases.createDocument(
+            this.DATABASE_ID,
+            this.INVENTORY_COL_ID,
+            ID.unique(),
+            { userId, originId: chestId, itemType: reward, used: true }
+          );
         }
         break;
       case RatioRewardType.FAB_1:
@@ -258,6 +263,12 @@ export class OpenChestService implements OnApplicationBootstrap {
             this.USER_COL_ID,
             user.$id,
             { fabBalance: user.fabBalance + parseInt(reward.split(" ")[0]) }
+          );
+          await this.databases.createDocument(
+            this.DATABASE_ID,
+            this.INVENTORY_COL_ID,
+            ID.unique(),
+            { userId, originId: chestId, itemType: reward, used: true }
           );
         }
         break;
