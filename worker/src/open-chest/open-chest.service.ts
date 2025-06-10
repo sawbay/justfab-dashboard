@@ -36,6 +36,7 @@ export class OpenChestService implements OnApplicationBootstrap {
   private readonly databases: Databases;
   private readonly DATABASE_ID: string;
   private readonly INVENTORY_COL_ID: string;
+  private readonly USER_COL_ID: string;
   private readonly APP_STATE_COL_ID: string;
 
   private readonly mutex = new Mutex();
@@ -53,6 +54,7 @@ export class OpenChestService implements OnApplicationBootstrap {
     );
     this.databases = new Databases(this.client);
     this.DATABASE_ID = this.configService.get("DATABASE_ID");
+    this.USER_COL_ID = this.configService.get("USER_COL_ID");
     this.INVENTORY_COL_ID = this.configService.get("INVENTORY_COL_ID");
     this.APP_STATE_COL_ID = this.configService.get("APP_STATE_COL_ID");
   }
@@ -98,7 +100,7 @@ export class OpenChestService implements OnApplicationBootstrap {
 
   async openChest(userId: string, chestId: string): Promise<RewardType> {
     try {
-      
+
       const reward = await this.mutex.runExclusive(async () => {
         const { keyId } = await this.checkChestAndKey(userId, chestId);
         const reward = await this.randomReward();
@@ -205,14 +207,14 @@ export class OpenChestService implements OnApplicationBootstrap {
 
   private async applyReward(userId: string, chestId: string, keyId: string, reward: RewardType) {
     // mark chest as opened
-    this.databases.updateDocument(
+    await this.databases.updateDocument(
       this.DATABASE_ID,
       this.INVENTORY_COL_ID,
       chestId,
       { used: true }
     );
     // mark key as used
-    this.databases.updateDocument(
+    await this.databases.updateDocument(
       this.DATABASE_ID,
       this.INVENTORY_COL_ID,
       keyId,
@@ -220,17 +222,55 @@ export class OpenChestService implements OnApplicationBootstrap {
     );
 
     // create reward
-    await this.createReward(userId, chestId, reward);
-
+    switch (reward) {
+      case RatioRewardType.ROOT_1:
+      case RatioRewardType.ROOT_10:
+      case RatioRewardType.ROOT_50:
+      case MilestoneRewardType.ROOT_70:
+      case MilestoneRewardType.ROOT_100:
+      case MilestoneRewardType.ROOT_500:
+      case MilestoneRewardType.ROOT_1000:
+        {
+          const user = await this.databases.getDocument(
+            this.DATABASE_ID,
+            this.USER_COL_ID,
+            userId
+          );
+          await this.databases.updateDocument(
+            this.DATABASE_ID,
+            this.USER_COL_ID,
+            user.$id,
+            { rootBalance: user.rootBalance + parseInt(reward.split(" ")[0]) }
+          );
+        }
+        break;
+      case RatioRewardType.FAB_1:
+      case RatioRewardType.FAB_10:
+      case RatioRewardType.FAB_50:
+      case RatioRewardType.FAB_100:
+        {
+          const user = await this.databases.getDocument(
+            this.DATABASE_ID,
+            this.USER_COL_ID,
+            userId
+          );
+          await this.databases.updateDocument(
+            this.DATABASE_ID,
+            this.USER_COL_ID,
+            user.$id,
+            { fabBalance: user.fabBalance + parseInt(reward.split(" ")[0]) }
+          );
+        }
+        break;
+      default:
+        await this.databases.createDocument(
+          this.DATABASE_ID,
+          this.INVENTORY_COL_ID,
+          ID.unique(),
+          { userId, originId: chestId, itemType: reward, used: false }
+        );
+        break;
+    }
     this.logger.log(`User ${userId} opened chest ${chestId} with key ${keyId} and received reward ${reward}`);
-  }
-
-  private async createReward(userId: string, chestId: string, reward: RewardType) {
-    this.databases.createDocument(
-      this.DATABASE_ID,
-      this.INVENTORY_COL_ID,
-      ID.unique(),
-      { userId, originId: chestId, itemType: reward, used: false }
-    );
   }
 }
