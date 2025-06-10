@@ -8,7 +8,7 @@ export default async ({ req, res, log, error }) => {
   try {
     const axiosRes = await axios.request({
       method: req.method,
-      baseURL: process.env.SMS_BACKEND_URL,
+      baseURL: process.env.BACKEND_URL,
       url: req.path,
       headers: {
         'x-appwrite-key': req.headers['x-appwrite-key'],
