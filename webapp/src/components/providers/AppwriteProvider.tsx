@@ -4,18 +4,22 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import { Account, Client, Databases, ExecutionMethod, Functions, Models, Permission, Query, Role } from "appwrite";
 import getClient from "@/utils/appwrite/client";
 import { ItemType } from "@/types/item_types";
-import { DATABASE_ID, FUNCTION_ID, INVENTORY_COL_ID } from "@/utils/env";
+import { DATABASE_ID, FUNCTION_ID, INVENTORY_COL_ID, USER_COL_ID } from "@/utils/env";
+import { WorkerEvent } from "@/utils/worker_events";
 
 interface AppwriteContextProps {
   client: Client | null;
   account: Account | null;
   user: Models.User<Models.Preferences> | null;
+  userDetail: Models.Document | null;
   session: Models.Session | null;
+  treasureChestTotal: number;
+  auraKeyTotal: number;
+
   telegramAuthenticated: (userId: string, secret: string) => Promise<void>;
   logoutSession: () => Promise<void>;
   linkFuturepass: (futurepass: string) => Promise<void>;
-  treasureChestTotal: number;
-  auraKeyTotal: number;
+  fireEvent: (event: WorkerEvent) => Promise<void>;
 }
 
 const AppwriteContext = createContext<AppwriteContextProps | undefined>(undefined);
@@ -35,6 +39,7 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [account, setAccount] = useState<Account | null>(null);
   const [session, setSession] = useState<Models.Session | null>(null);
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
+  const [userDetail, setUserDetail] = useState<Models.Document | null>(null);
   const [treasureChestTotal, setTreasureChestTotal] = useState<number>(0);
   const [auraKeyTotal, setAuraKeyTotal] = useState<number>(0);
 
@@ -48,6 +53,7 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
   useEffect(() => {
     if (user != null) {
       fetchInventory();
+      fetchUserDetail();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -105,6 +111,26 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
     );
   }
 
+  const fireEvent = async (event: WorkerEvent) => {
+    const { responseStatusCode, responseBody } = await proxiedApi(
+      "api/appwrite/worker_events",
+      ExecutionMethod.POST,
+      {
+        event,
+      }
+    );
+  }
+
+  const fetchUserDetail = async () => {
+    const databases = new Databases(client!);
+    const userDetail = await databases.getDocument(
+      DATABASE_ID,
+      USER_COL_ID,
+      user!.$id,
+    );
+    setUserDetail(userDetail);
+  }
+
   const fetchInventory = async () => {
     const databases = new Databases(client!);
     const inventory = await databases.listDocuments(
@@ -120,45 +146,44 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
     setAuraKeyTotal(inventory.documents.filter(item => item.itemType === ItemType.AURA_KEY).length);
   }
 
+  const proxiedApi = async (path: string, method: ExecutionMethod, body: any): Promise<{ responseStatusCode: number, responseBody: any }> => {
+    const functions = new Functions(client!);
+    const response = await functions.createExecution(
+      FUNCTION_ID,
+      JSON.stringify(body),
+      false,
+      path,
+      method,
+      {
+        "Content-Type": "application/json",
+      }
+    );
+
+    const responseStatusCode = response.responseStatusCode;
+    const responseBody = JSON.parse(response.responseBody);
+
+    console.log(`api: ${path} status: ${responseStatusCode} body: `, responseBody);
+    return {
+      responseStatusCode,
+      responseBody,
+    }
+  }
+
   return (
     <AppwriteContext.Provider value={{
       client,
       account,
-      user,
-      // login,
-      // logout,
-      // register,
       session,
+      user,
+      userDetail,
+      treasureChestTotal,
+      auraKeyTotal,
       telegramAuthenticated,
       logoutSession,
       linkFuturepass,
-      treasureChestTotal,
-      auraKeyTotal,
+      fireEvent,
     }}>
       {children}
     </AppwriteContext.Provider>
   )
-}
-
-const proxiedApi = async (path: string, method: ExecutionMethod, body: any): Promise<{ responseStatusCode: number, responseBody: any }> => {
-  const functions = new Functions(getClient());
-  const response = await functions.createExecution(
-    FUNCTION_ID,
-    JSON.stringify(body),
-    false,
-    path,
-    method,
-    {
-      "Content-Type": "application/json",
-    }
-  );
-
-  const responseStatusCode = response.responseStatusCode;
-  const responseBody = JSON.parse(response.responseBody);
-
-  console.log(`api: ${path} status: ${responseStatusCode} body: `, responseBody);
-  return {
-    responseStatusCode,
-    responseBody,
-  }
 }

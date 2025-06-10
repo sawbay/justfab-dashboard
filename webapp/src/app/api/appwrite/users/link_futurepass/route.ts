@@ -2,6 +2,8 @@ import getClient from '@/utils/appwrite/server';
 import { DATABASE_ID, USER_COL_ID } from '@/utils/env';
 import { NextResponse } from 'next/server';
 import { Databases } from 'node-appwrite';
+import { WorkerEventType } from "@/utils/worker_events";
+import { enqueueEvent } from '../../worker_events/route';
 
 export async function POST(request: Request) {
   const userId = await request.headers.get('x-appwrite-user-id');
@@ -22,6 +24,15 @@ export async function POST(request: Request) {
         futurepass,
       },
     );
+
+    await enqueueEvent({
+      etype: WorkerEventType.REWARD_WELCOME_CHEST,
+      userId,
+      payload: {
+        userId,
+      }
+    });
+
     return NextResponse.json({ success: true });
   } catch (e) {
     return NextResponse.json({ error: e }, { status: 400 });

@@ -8,17 +8,24 @@ import { useAuth } from "@futureverse/auth-react";
 import axios from "axios";
 import { USERS_TELEGRAM_LOGIN } from "@/app/api/routes";
 import { IMAGES } from "@/utils/images";
-import { fireEvent, WorkerEventType } from "@/utils/worker_events";
 import { useAppwrite } from "../providers/AppwriteProvider";
 
 const ConnectButtons: React.FC<{}> = ({ }) => {
   const { openLogin } = useAuthUi();
-  const { userSession: fpSession } = useAuth();
-  const { account, logoutSession, user, telegramAuthenticated, linkFuturepass } = useAppwrite();
+  const { userSession: fpSession, signOutPass } = useAuth();
+  const {
+    account,
+    logoutSession,
+    user,
+    userDetail,
+    telegramAuthenticated,
+    linkFuturepass } = useAppwrite();
 
   useEffect(() => {
-    if (fpSession && user) {
-      linkFP(fpSession.futurepass);
+    if (fpSession && userDetail) {
+      if (!userDetail.futurepass) {
+        linkFP(fpSession.futurepass);
+      }
     }
   }, [fpSession, user]);
 
@@ -34,8 +41,7 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
     if (!fpSession) {
       openLogin();
     } else {
-      // signOutPass();
-      linkFuturepass(fpSession.futurepass);
+      signOutPass();
     }
   };
 

@@ -5,7 +5,7 @@ import { WorkerHost } from '@nestjs/bullmq';
 import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 import getClient from 'src/queue/appwrite/server';
 import { ItemType } from 'src/types';
-import { WelcomeChestEventPayload } from './types';
+import { WelcomeChestEventPayload } from '../types';
 import { ConfigService } from '@nestjs/config';
 
 export const WELCOME_CHEST_QUEUE = 'welcome_chest_queue';

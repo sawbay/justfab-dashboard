@@ -2,7 +2,7 @@ import { Controller, Post, Body, Logger } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { WELCOME_CHEST_QUEUE } from './queues/welcome-chest.processor';
-import { WorkerEvent, WorkerEventType } from './queue';
+import { WorkerEvent, WorkerEventType } from './types';
 
 @Controller('queue')
 export class QueueController {
