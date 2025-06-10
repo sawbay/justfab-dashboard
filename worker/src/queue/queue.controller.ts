@@ -32,7 +32,7 @@ export class QueueController {
   async routeEvent(event: WorkerEvent) {
     switch (event.etype) {
       case WorkerEventType.REWARD_WELCOME_CHEST:
-        await this.welcomeChestQueue.add(WELCOME_CHEST_QUEUE, event.payload);
+        await this.welcomeChestQueue.add(WELCOME_CHEST_QUEUE, event);
         break;
       default:
         this.logger.error(`Unknown event type: ${event.etype}`);

@@ -5,7 +5,7 @@ import { WorkerHost } from '@nestjs/bullmq';
 import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 import getClient from 'src/queue/appwrite/server';
 import { ItemType } from 'src/types';
-import { WelcomeChestEventPayload } from '../types';
+import { WelcomeChestEventPayload, WorkerEvent } from '../types';
 import { ConfigService } from '@nestjs/config';
 
 export const WELCOME_CHEST_QUEUE = 'welcome_chest_queue';
@@ -31,18 +31,19 @@ export class WelcomeChestProcessor extends WorkerHost {
   }
 
   async process(job: Job) {
-    const data: WelcomeChestEventPayload = job.data;
+    const event: WorkerEvent = job.data;
+    const payload = event.payload as WelcomeChestEventPayload;
     const databases = new Databases(this.client);
     const existingWelcomeChest = await databases.listDocuments(
       this.DATABASE_ID,
       this.INVENTORY_COL_ID,
       [
-        Query.equal("userId", data.userId),
+        Query.equal("userId", payload.userId),
         Query.equal("itemType", ItemType.CHEST)
       ]);
 
     if (existingWelcomeChest.total > 0) {
-      job.log(`User ${data.userId} already rewarded welcome chest`);
+      job.log(`User ${payload.userId} already rewarded welcome chest`);
       return; // already rewarded welcome chest
     }
 
@@ -52,7 +53,7 @@ export class WelcomeChestProcessor extends WorkerHost {
         this.INVENTORY_COL_ID,
         ID.unique(),
         {
-          userId: data.userId,
+          userId: payload.userId,
           itemType: ItemType.CHEST,
           used: false,
         },
@@ -60,14 +61,14 @@ export class WelcomeChestProcessor extends WorkerHost {
           Permission.read(Role.any()),
         ]
       );
-      job.log(`User ${data.userId} has been rewarded welcome chest`);
+      job.log(`User ${payload.userId} has been rewarded welcome chest`);
 
       await databases.createDocument(
         this.DATABASE_ID,
         this.INVENTORY_COL_ID,
         ID.unique(),
         {
-          userId: data.userId,
+          userId: payload.userId,
           itemType: ItemType.AURA_KEY,
           used: false,
         },
@@ -75,9 +76,9 @@ export class WelcomeChestProcessor extends WorkerHost {
           Permission.read(Role.any()),
         ]
       );
-      job.log(`User ${data.userId} has been rewarded aura key`);
+      job.log(`User ${payload.userId} has been rewarded aura key`);
     } catch (error) {
-      job.log(`Error rewarding welcome chest to user ${data.userId}: ${error}`);
+      job.log(`Error rewarding welcome chest to user ${payload.userId}: ${error}`);
       throw error;
     }
   }

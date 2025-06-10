@@ -7,7 +7,7 @@ export enum WorkerEventType {
 export interface WorkerEvent {
   etype: number;
   userId: string;
-  payload: any;
+  payload: WelcomeChestEventPayload | UseEventPayload;
 }
 
 export interface WelcomeChestEventPayload {

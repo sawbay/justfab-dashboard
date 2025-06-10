@@ -1,3 +1,4 @@
+import { ItemType } from "@/types/item_types";
 import axios from "axios";
 
 export const fireEvent = async (event: WorkerEvent) => {
@@ -15,5 +16,14 @@ export enum WorkerEventType {
 export interface WorkerEvent {
   etype: number;
   userId: string;
-  payload: any;
+  payload: WelcomeChestEventPayload | UseEventPayload;
+}
+
+export interface WelcomeChestEventPayload {
+  userId: string;
+}
+
+export interface UseEventPayload {
+  userId: string;
+  itemType: ItemType;
 }
