@@ -3,9 +3,8 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { Account, Client, Databases, ExecutionMethod, Functions, Models, Permission, Query, Role } from "appwrite";
 import getClient from "@/utils/appwrite/client";
-import { DATABASE_ID, INVENTORY_COL_ID, USER_FUTUREPASS_COL_ID } from "@/utils/appwrite/const";
 import { ItemType } from "@/types/item_types";
-import { FUNCTION_ID } from "@/utils/env";
+import { DATABASE_ID, FUNCTION_ID, INVENTORY_COL_ID } from "@/utils/env";
 
 interface AppwriteContextProps {
   client: Client | null;

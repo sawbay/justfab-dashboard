@@ -1,7 +1,7 @@
-import { DATABASE_ID, USER_FUTUREPASS_COL_ID } from '@/utils/appwrite/const';
 import getClient from '@/utils/appwrite/server';
+import { DATABASE_ID, USER_COL_ID } from '@/utils/env';
 import { NextResponse } from 'next/server';
-import { Databases, Permission, Role } from 'node-appwrite';
+import { Databases } from 'node-appwrite';
 
 export async function POST(request: Request) {
   const userId = await request.headers.get('x-appwrite-user-id');
@@ -13,18 +13,14 @@ export async function POST(request: Request) {
   const client = await getClient();
   try {
     const databases = new Databases(client);
-    await databases.createDocument(
+
+    await databases.updateDocument(
       DATABASE_ID,
-      USER_FUTUREPASS_COL_ID,
+      USER_COL_ID,
       userId,
       {
-        userId: userId,
         futurepass,
       },
-      [
-        Permission.write(Role.user(userId)),
-        Permission.update(Role.user(userId)),
-      ]
     );
     return NextResponse.json({ success: true });
   } catch (e) {

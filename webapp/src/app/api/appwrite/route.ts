@@ -1,6 +1,6 @@
 import { ItemType, MilestoneRewardType, RatioRewardType } from "@/types/item_types";
-import { DATABASE_ID, INVENTORY_COL_ID, USER_FUTUREPASS_COL_ID } from "@/utils/appwrite/const";
 import getClient from "@/utils/appwrite/server";
+import { DATABASE_ID, INVENTORY_COL_ID, USER_COL_ID } from "@/utils/env";
 import { NextRequest, NextResponse } from "next/server";
 import { Databases, ID, Permission, Role } from "node-appwrite";
 
@@ -21,8 +21,8 @@ export async function POST(req: NextRequest) {
   try {
     const collection = await databases.createCollection(
       DATABASE_ID,
-      USER_FUTUREPASS_COL_ID,
-      "user_futurepass",
+      USER_COL_ID,
+      "user",
       [
         Permission.read(Role.any()),
         Permission.update(Role.any()),
@@ -35,19 +35,40 @@ export async function POST(req: NextRequest) {
 
     await databases.createStringAttribute(
       DATABASE_ID,
-      USER_FUTUREPASS_COL_ID,
-      "userId",
-      100,
-      true
-    );
-
-    await databases.createStringAttribute(
-      DATABASE_ID,
-      USER_FUTUREPASS_COL_ID,
+      USER_COL_ID,
       "futurepass",
       100,
-      true
+      false
     );
+
+    await databases.createIntegerAttribute(
+      DATABASE_ID,
+      USER_COL_ID,
+      "level",
+      true,
+      0,
+      undefined,
+    );
+
+    await databases.createIntegerAttribute(
+      DATABASE_ID,
+      USER_COL_ID,
+      "fabBalance",
+      true,
+      0,
+      undefined,
+    );
+
+    await databases.createIntegerAttribute(
+      DATABASE_ID,
+      USER_COL_ID,
+      "rootBalance",
+      true,
+      0,
+      undefined,
+      0
+    );
+
   } catch (error) {
     errs.push(error);
   }
@@ -88,7 +109,7 @@ export async function POST(req: NextRequest) {
       INVENTORY_COL_ID,
       "itemType",
       [
-        ItemType.CHEST, 
+        ItemType.CHEST,
         ItemType.AURA_KEY,
 
         RatioRewardType.ROOT_1,

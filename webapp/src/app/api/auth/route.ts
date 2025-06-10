@@ -1,8 +1,8 @@
 import getClient from "@/utils/appwrite/server";
-import { BOT_TOKEN } from "@/utils/env";
+import { BOT_TOKEN, DATABASE_ID, USER_COL_ID } from "@/utils/env";
 import { objectToAuthDataMap, AuthDataValidator, TelegramUserData } from "@telegram-auth/server";
 import { NextRequest, NextResponse } from "next/server";
-import { Users } from "node-appwrite";
+import { Databases, Users } from "node-appwrite";
 
 export async function POST(req: NextRequest) {
   let { data } = await req.json();
@@ -35,6 +35,18 @@ export async function POST(req: NextRequest) {
         telegramUser.username ?? telegramUser.first_name,
       );
       await users.updateEmailVerification(userId, true);
+      const databases = new Databases(client);
+      await databases.createDocument(
+        DATABASE_ID,
+        USER_COL_ID,
+        userId,
+        {
+          futurepass: "",
+          level: 0,
+          fabBalance: 0,
+          rootBalance: 0,
+        },
+      );
     } else {
       return NextResponse.json({ error }, { status: 500 });
     }

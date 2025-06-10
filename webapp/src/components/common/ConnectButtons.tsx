@@ -25,12 +25,6 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
   const linkFP = async (futurepass: string) => {
     try {
       await linkFuturepass(futurepass);
-      await fireEvent({
-        etype: WorkerEventType.REWARD_WELCOME_CHEST,
-        payload: {
-          userId: user!.$id,
-        }
-      });
     } catch (error) {
       console.error(error);
     }

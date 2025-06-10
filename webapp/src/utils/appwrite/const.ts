@@ -1,3 +1,0 @@
-export const DATABASE_ID = '683ae0e700022ecb0670';
-export const USER_FUTUREPASS_COL_ID = '683af4390015ea017999';
-export const INVENTORY_COL_ID = '683af4390015ea017888';
