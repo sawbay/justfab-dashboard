@@ -100,9 +100,8 @@ export class OpenChestService implements OnApplicationBootstrap {
 
   async openChest(userId: string, chestId: string): Promise<RewardType> {
     try {
-
+      const { keyId } = await this.checkChestAndKey(userId, chestId);
       const reward = await this.mutex.runExclusive(async () => {
-        const { keyId } = await this.checkChestAndKey(userId, chestId);
         const reward = await this.randomReward();
         await this.updateRewardState(reward);
         await this.applyReward(userId, chestId, keyId, reward);
