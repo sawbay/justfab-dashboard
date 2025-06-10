@@ -1,29 +1,47 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import Image from "next/image";
 import Button from "@/components/common/Button";
+import { useAppwrite } from "@/components/providers/AppwriteProvider";
+import { ItemType } from "@/types/item_types";
 
-// Mock data for filters
 const filterTypes = [
-  { id: 1, name: "All" },
-  { id: 2, name: "Treasure Chests" },
-  { id: 3, name: "Aura Keys" },
-  { id: 4, name: "Gold Bags" },
+  { id: 0, name: "ALL" },
+  { id: 1, name: ItemType.CHEST as string },
+  { id: 2, name: ItemType.AURA_KEY as string },
+  { id: 3, name: ItemType.GOLD_BAG as string },
+  { id: 4, name: ItemType.FOOD_BAG as string },
+  { id: 5, name: ItemType.ENERGY_BAG as string },
 ];
 
-// Mock data for collection items
-const collectionItems = Array(12).fill({
-  id: Math.random().toString(),
-  type: "Common Chest",
-  owner: 3,
-  image: "/icons/microphone.svg", // You'll need to add this icon
-});
-
 export default function Collection() {
-  const [activeFilter, setActiveFilter] = useState("All");
+  const { user, fetchInventory } = useAppwrite();
+  const [activeFilter, setActiveFilter] = useState(0);
   const [itemCount, setItemCount] = useState(12); // State for item count
+  const [inventory, setInventory] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (user) {
+      const itemTypes = activeFilter === 0 ?
+        Object.values(ItemType) :
+        [filterTypes.find((filter) => filter.id === activeFilter)?.name as ItemType];
+
+      fetchInventory({ used: false, itemTypes: itemTypes }).then((inventory) => {
+        setItemCount(inventory.total);
+        const docs = inventory.documents.map((doc) => {
+          return {
+            id: doc.$id,
+            type: doc.itemType,
+            owner: 1,
+            image: "/icons/microphone.svg",
+          };
+        });
+        setInventory(docs);
+      });
+    }
+  }, [user, activeFilter]);
 
   return (
     <MainLayout>
@@ -40,12 +58,11 @@ export default function Collection() {
               {filterTypes.map((filter) => (
                 <Button
                   key={filter.id}
-                  onClick={() => setActiveFilter(filter.name)}
-                  className={`${
-                    activeFilter === filter.name
-                      ? "bg-[#ffe8c8] text-[#FF9F5A] border border-[#FF9F5A] hover:text-[#FF9F5A]"
-                      : "border border-gray-200 hover:bg-[#ffe8c8] hover:text-[#FF9F5A]"
-                  }`}
+                  onClick={() => setActiveFilter(filter.id)}
+                  className={`${activeFilter === filter.id
+                    ? "bg-[#ffe8c8] text-[#FF9F5A] border border-[#FF9F5A] hover:text-[#FF9F5A]"
+                    : "border border-gray-200 hover:bg-[#ffe8c8] hover:text-[#FF9F5A]"
+                    }`}
                 >
                   {filter.name}
                 </Button>
@@ -59,7 +76,7 @@ export default function Collection() {
 
         {/* Collection Grid */}
         <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {collectionItems.map((item, index) => (
+          {inventory.map((item, index) => (
             <div
               key={index}
               className="rounded-xl p-4 sm:p-6 flex flex-col items-center border-2 border-primary"

@@ -1,6 +1,6 @@
 import React from "react";
 import ConnectButtons from "../common/ConnectButtons";
-import { IMAGES } from "@/constants/images";
+import { IMAGES } from "@/utils/images";
 
 const Header = () => {
   return (

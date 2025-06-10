@@ -1,5 +1,5 @@
 import React from "react";
-import { IMAGES } from "@/constants/images";
+import { IMAGES } from "@/utils/images";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "outline";

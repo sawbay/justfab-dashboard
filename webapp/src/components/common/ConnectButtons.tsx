@@ -1,47 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Button from "./Button";
 import { useAuthUi } from "@futureverse/auth-ui";
-import { shortenAddress } from "@/utils/addressUtils";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { shortenAddress } from "@/utils/address";
 import { LoginButton } from "@telegram-auth/react";
 import { BOT_USERNAME } from "@/utils/env";
 import { useAuth } from "@futureverse/auth-react";
 import axios from "axios";
-import { USERS_FUTUREPASS_LINK, USERS_GET } from "@/app/api/routes";
-import { User } from "@/app/api/auth/[...nextauth]/options";
-import { IMAGES } from "@/constants/images";
+import { USERS_TELEGRAM_LOGIN } from "@/app/api";
+import { IMAGES } from "@/utils/images";
+import { useAppwrite } from "../providers/AppwriteProvider";
 
-const ConnectButtons: React.FC<{}> = ({}) => {
+const ConnectButtons: React.FC<{}> = ({ }) => {
   const { openLogin } = useAuthUi();
   const { userSession: fpSession, signOutPass } = useAuth();
-  const { data: tgSession } = useSession();
-  const [user, setUser] = useState<User | null>(null);
+  const {
+    account,
+    logoutSession,
+    user,
+    userDetail,
+    telegramAuthenticated,
+    linkFuturepass } = useAppwrite();
 
   useEffect(() => {
-    if (fpSession && !user) {
-      axios
-        .get(USERS_GET, {
-          params: {
-            tgId: tgSession?.user?.id,
-          },
-        })
-        .then((res) => {
-          setUser(res.data.user);
-        });
+    if (fpSession && userDetail) {
+      if (!userDetail.futurepass) {
+        linkFP(fpSession.futurepass);
+      }
     }
   }, [fpSession, user]);
 
-  useEffect(() => {
-    if (fpSession && user && user.futurepass == null) {
-      axios
-        .post(USERS_FUTUREPASS_LINK, {
-          telegramId: Number(tgSession?.user?.id),
-          futurepass: fpSession.futurepass,
-        })
-        .then(() => {})
-        .catch(console.error);
+  const linkFP = async (futurepass: string) => {
+    try {
+      await linkFuturepass(futurepass);
+    } catch (error) {
+      console.error(error);
     }
-  }, [fpSession, user]);
+  }
 
   const handleWalletConnect = () => {
     if (!fpSession) {
@@ -69,9 +63,19 @@ const ConnectButtons: React.FC<{}> = ({}) => {
     fontFamily: "DynaPuff",
   };
 
+  const handleTelegramLogin = async (data: any) => {
+    const response = await axios.post(USERS_TELEGRAM_LOGIN, { data });
+    if (response.data.success) {
+      const { userId, secret } = response.data.data;
+      await telegramAuthenticated(userId, secret);
+      const user = await account!.get();
+      console.log(user);
+    }
+  };
+
   return (
     <div className="flex gap-3 justify-end items-center">
-      {tgSession ? (
+      {user ? (
         <>
           <Button
             style={buttonStyle}
@@ -85,8 +89,9 @@ const ConnectButtons: React.FC<{}> = ({}) => {
           <Button
             style={buttonStyle}
             className="!bg-transparent !border-none !shadow-none"
+            onClick={() => logoutSession()}
           >
-            {tgSession.user?.name}
+            {user.name}
           </Button>
         </>
       ) : (
@@ -96,7 +101,7 @@ const ConnectButtons: React.FC<{}> = ({}) => {
           cornerRadius={5}
           showAvatar={true}
           onAuthCallback={(data: any) => {
-            signIn("telegram-login", undefined, data as any);
+            handleTelegramLogin(data);
           }}
         />
       )}

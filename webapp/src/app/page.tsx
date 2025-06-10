@@ -3,32 +3,16 @@
 import React, { useEffect, useMemo, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import StatsGrid from "@/components/home/StatsGrid";
-import Card from "@/components/common/Card";
 import Button from "@/components/common/Button";
-import VIPRewardCard from "@/components/home/VIPRewardCard";
 import { VIPReward } from "@/types";
 import { useAuth } from "@futureverse/auth-react";
 import { useTrnApi } from "@futureverse/transact-react";
-import { useTransactQuery } from "@/hooks/useTransactQuery";
+import { useTransactQuery } from "@/core/hooks/useTransactQuery";
 import { useQuery } from "@tanstack/react-query";
-import { getBalance } from "@/utils/sdk";
+import { getBalance } from "@/utils/trn_sdk";
 import Image from "next/image";
-import { IMAGES } from "@/constants/images";
+import { IMAGES } from "@/utils/images";
 import ComingSoon from "@/components/common/ComingSoon";
-
-const mockStats = {
-  level: 0,
-  status: "",
-  fabBalance: 0,
-  rootBalance: 0,
-  treasureChests: 0,
-  auraKey: 0,
-  playedToday: "0 hrs played today",
-  yesterdayStats: "+0 yesterday",
-  usdValue: "~ $0 USD",
-  unlocksIn: "1 unlocks in 2h",
-  usedFor: "Used for rare quests",
-};
 
 const mockVIPRewards: VIPReward[] = [
   {
@@ -37,40 +21,6 @@ const mockVIPRewards: VIPReward[] = [
     isLocked: false,
     rewards: { game: 50, token: 50 },
     description: "Login for the first time",
-  },
-];
-
-const statsCards = [
-  {
-    label: "Level",
-    value: mockStats.level,
-    sub: null,
-    color: "text-[#E08B3A]",
-  },
-  {
-    label: "Status",
-    value: <span className="text-green-600 font-bold">● ACTIVE</span>,
-    sub: mockStats.playedToday,
-  },
-  {
-    label: "$FAB Balance",
-    value: mockStats.fabBalance,
-    sub: mockStats.yesterdayStats,
-  },
-  {
-    label: "$ROOT Balance",
-    value: <span className="text-green-600">{mockStats.rootBalance}</span>,
-    sub: mockStats.usdValue,
-  },
-  {
-    label: "Treasure Chests",
-    value: mockStats.treasureChests,
-    sub: mockStats.unlocksIn,
-  },
-  {
-    label: "Aura Key",
-    value: mockStats.auraKey,
-    sub: mockStats.usedFor,
   },
 ];
 
@@ -94,13 +44,7 @@ export default function Home() {
     (currentPage + 1) * itemsPerPage
   );
 
-  const { authClient, userSession } = useAuth();
-  useEffect(() => {
-    if (userSession) {
-      console.log(userSession);
-    }
-  }, [authClient, userSession]);
-
+  const { userSession } = useAuth();
   const { trnApi } = useTrnApi();
   const transactionQuery = useTransactQuery();
   const accountToCheck = useMemo(() => {
@@ -128,40 +72,7 @@ export default function Home() {
         <ComingSoon onClose={() => setShowComingSoon(false)} />
       )}
       <div className="space-y-6 sm:space-y-8">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4">
-          {statsCards.map((item, idx) => (
-            <div
-              key={idx}
-              className="flex flex-col items-center justify-center"
-            >
-              <div
-                className="relative w-full h-28 sm:h-36 flex flex-col items-center justify-center"
-                style={{
-                  backgroundImage: `url(${IMAGES.bgCard})`,
-                  backgroundSize: "100% 100%",
-                  backgroundRepeat: "no-repeat",
-                }}
-              >
-                <div className="text-2xl sm:text-sm font-bold text-[#585858]">
-                  {item.label}
-                </div>
-                <div
-                  className={`text-2xl sm:text-2xl font-bold ${
-                    item.color || ""
-                  } my-1`}
-                >
-                  {item.value}
-                </div>
-                {item.sub && (
-                  <div className="text-[10px] sm:text-xs text-[#585858]">
-                    {item.sub}
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+        <StatsGrid />
 
         {/* VIP Rewards */}
         <section className="px-2 sm:px-4">
