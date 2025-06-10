@@ -7,31 +7,28 @@ import Button from "@/components/common/Button";
 import { useAppwrite } from "@/components/providers/AppwriteProvider";
 import { ItemType } from "@/types/item_types";
 
-// Mock data for filters
 const filterTypes = [
-  { id: 1, name: "All" },
-  { id: 2, name: "Treasure Chests" },
-  { id: 3, name: "Aura Keys" },
-  { id: 4, name: "Gold Bags" },
+  { id: 0, name: "ALL" },
+  { id: 1, name: ItemType.CHEST as string },
+  { id: 2, name: ItemType.AURA_KEY as string },
+  { id: 3, name: ItemType.GOLD_BAG as string },
+  { id: 4, name: ItemType.FOOD_BAG as string },
+  { id: 5, name: ItemType.ENERGY_BAG as string },
 ];
-
-// Mock data for collection items
-const collectionItems = Array(12).fill({
-  id: Math.random().toString(),
-  type: "Common Chest",
-  owner: 3,
-  image: "/icons/microphone.svg", // You'll need to add this icon
-});
 
 export default function Collection() {
   const { user, fetchInventory } = useAppwrite();
-  const [activeFilter, setActiveFilter] = useState([ItemType.CHEST, ItemType.AURA_KEY, ItemType.GOLD_BAG, ItemType.FOOD_BAG, ItemType.ENERGY_BAG]);
+  const [activeFilter, setActiveFilter] = useState(0);
   const [itemCount, setItemCount] = useState(12); // State for item count
   const [inventory, setInventory] = useState<any[]>([]);
 
   useEffect(() => {
     if (user) {
-      fetchInventory({ used: false, itemTypes: activeFilter }).then((inventory) => {
+      const itemTypes = activeFilter === 0 ?
+        Object.values(ItemType) :
+        [filterTypes.find((filter) => filter.id === activeFilter)?.name as ItemType];
+
+      fetchInventory({ used: false, itemTypes: itemTypes }).then((inventory) => {
         setItemCount(inventory.total);
         const docs = inventory.documents.map((doc) => {
           return {
@@ -44,7 +41,7 @@ export default function Collection() {
         setInventory(docs);
       });
     }
-  }, [user]);
+  }, [user, activeFilter]);
 
   return (
     <MainLayout>
@@ -61,8 +58,8 @@ export default function Collection() {
               {filterTypes.map((filter) => (
                 <Button
                   key={filter.id}
-                  onClick={() => setActiveFilter(filter.name)}
-                  className={`${activeFilter === filter.name
+                  onClick={() => setActiveFilter(filter.id)}
+                  className={`${activeFilter === filter.id
                     ? "bg-[#ffe8c8] text-[#FF9F5A] border border-[#FF9F5A] hover:text-[#FF9F5A]"
                     : "border border-gray-200 hover:bg-[#ffe8c8] hover:text-[#FF9F5A]"
                     }`}
