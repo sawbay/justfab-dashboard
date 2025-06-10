@@ -1,10 +1,11 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { Account, Client, Databases, Models, Permission, Query, Role } from "appwrite";
+import { Account, Client, Databases, ExecutionMethod, Functions, Models, Permission, Query, Role } from "appwrite";
 import getClient from "@/utils/appwrite/client";
 import { DATABASE_ID, INVENTORY_COL_ID, USER_FUTUREPASS_COL_ID } from "@/utils/appwrite/const";
 import { ItemType } from "@/types/item_types";
+import { FUNCTION_ID } from "@/utils/env";
 
 interface AppwriteContextProps {
   client: Client | null;
@@ -96,19 +97,12 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
   }
 
   const linkFuturepass = async (futurepass: string) => {
-    const databases = new Databases(client!);
-    await databases.createDocument(
-      DATABASE_ID,
-      USER_FUTUREPASS_COL_ID,
-      user!.$id,
+    const { responseStatusCode, responseBody } = await proxiedApi(
+      "api/appwrite/users/link_futurepass",
+      ExecutionMethod.POST,
       {
-        userId: user!.$id,
         futurepass,
-      },
-      [
-        Permission.write(Role.user(user!.$id)),
-        Permission.update(Role.user(user!.$id)),
-      ]
+      }
     );
   }
 
@@ -145,4 +139,27 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
       {children}
     </AppwriteContext.Provider>
   )
+}
+
+const proxiedApi = async (path: string, method: ExecutionMethod, body: any): Promise<{ responseStatusCode: number, responseBody: any }> => {
+  const functions = new Functions(getClient());
+  const response = await functions.createExecution(
+    FUNCTION_ID,
+    JSON.stringify(body),
+    false,
+    path,
+    method,
+    {
+      "Content-Type": "application/json",
+    }
+  );
+
+  const responseStatusCode = response.responseStatusCode;
+  const responseBody = JSON.parse(response.responseBody);
+
+  console.log(`api: ${path} status: ${responseStatusCode} body: `, responseBody);
+  return {
+    responseStatusCode,
+    responseBody,
+  }
 }
