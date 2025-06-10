@@ -67,12 +67,6 @@ export class AppController {
     }
 
     try {
-      await this.populateUserFuturepass();
-    } catch (error) {
-      errs.push(error);
-    }
-
-    try {
       await this.populateInventory();
     } catch (error) {
       errs.push(error);
@@ -99,9 +93,18 @@ export class AppController {
     await this.databases.createStringAttribute(
       this.DATABASE_ID,
       this.USER_COL_ID,
-      "userId",
+      "futurepass",
       100,
-      true
+      false
+    );
+
+    await this.databases.createIntegerAttribute(
+      this.DATABASE_ID,
+      this.USER_COL_ID,
+      "level",
+      true,
+      0,
+      undefined,
     );
 
     await this.databases.createIntegerAttribute(
@@ -109,7 +112,8 @@ export class AppController {
       this.USER_COL_ID,
       "fabBalance",
       true,
-      0
+      0,
+      undefined,
     );
 
     await this.databases.createIntegerAttribute(
@@ -117,7 +121,8 @@ export class AppController {
       this.USER_COL_ID,
       "rootBalance",
       true,
-      0
+      0,
+      undefined,
     );
   }
 
@@ -160,38 +165,6 @@ export class AppController {
       {
         stateValue: "{}"
       }
-    );
-  }
-
-  private async populateUserFuturepass() {
-    const collection = await this.databases.createCollection(
-      this.DATABASE_ID,
-      this.USER_FUTUREPASS_COL_ID,
-      "user_futurepass",
-      [
-        Permission.read(Role.any()),
-        Permission.update(Role.any()),
-        Permission.write(Role.any()),
-        Permission.delete(Role.any()),
-      ],
-      true,
-      true
-    );
-
-    await this.databases.createStringAttribute(
-      this.DATABASE_ID,
-      this.USER_FUTUREPASS_COL_ID,
-      "userId",
-      100,
-      true
-    );
-
-    await this.databases.createStringAttribute(
-      this.DATABASE_ID,
-      this.USER_FUTUREPASS_COL_ID,
-      "futurepass",
-      100,
-      true
     );
   }
 
