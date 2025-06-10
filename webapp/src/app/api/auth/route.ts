@@ -41,7 +41,6 @@ export async function POST(req: NextRequest) {
         USER_COL_ID,
         userId,
         {
-          futurepass: "",
           level: 0,
           fabBalance: 0,
           rootBalance: 0,
