@@ -26,7 +26,7 @@ export async function POST(request: Request) {
         Permission.update(Role.user(userId)),
       ]
     );
-
+    return NextResponse.json({ success: true });
   } catch (e) {
     return NextResponse.json({ error: e }, { status: 400 });
   }
