@@ -9,6 +9,10 @@ export class Worker {
     this.workerUrl = workerUrl;
   }
 
+  async health() {
+    return await axios.get(`${this.workerUrl}/health`);
+  }
+
   async enqueueEvent(event: WorkerEvent) {
     return await axios.post(`${this.workerUrl}/queue/enqueue`, { event });
   }

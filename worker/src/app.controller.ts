@@ -1,4 +1,4 @@
-import { Controller, Inject, Logger, Post } from '@nestjs/common';
+import { Controller, Get, Inject, Logger, Post } from '@nestjs/common';
 import getClient from './queue/appwrite/server';
 import { ConfigService } from '@nestjs/config';
 import { Client, Databases, Permission, Role } from 'node-appwrite';
@@ -29,6 +29,13 @@ export class AppController {
     this.USER_FUTUREPASS_COL_ID = this.configService.get("USER_FUTUREPASS_COL_ID");
     this.INVENTORY_COL_ID = this.configService.get("INVENTORY_COL_ID");
     this.APP_STATE_COL_ID = this.configService.get("APP_STATE_COL_ID");
+  }
+
+  @Get('health')
+  async health() {
+    return {
+      isWorkerHealthy: true,
+    };
   }
 
   @Post()

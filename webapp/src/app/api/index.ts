@@ -2,8 +2,9 @@ import { WorkerEvent } from "@/utils/worker";
 import axios from "axios";
 
 export const USERS_TELEGRAM_LOGIN = "/api/auth";
+export const WORKER_EVENTS = "/api/appwrite/enqueue_event";
 export const USERS_FUTUREPASS_LINK = "/api/appwrite/users/futurepass/link";
-export const WORKER_EVENTS = "/api/appwrite/worker_events";
+export const INVENTORY_OPEN_CHEST = "/api/appwrite/inventory/open_chest";
 export const USERS_GET = "/api/users/get";
 
 export const fireEvent = async (event: WorkerEvent) => {
