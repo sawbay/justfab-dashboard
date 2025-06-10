@@ -66,7 +66,6 @@ export async function POST(req: NextRequest) {
       true,
       0,
       undefined,
-      0
     );
 
   } catch (error) {
