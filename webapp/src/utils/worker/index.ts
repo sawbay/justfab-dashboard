@@ -30,10 +30,14 @@ export class BackendService {
     );
 
     const responseStatusCode = response.responseStatusCode;
-    const responseBody = JSON.parse(response.responseBody);
-
+    const responseBody: ResponseBody = JSON.parse(response.responseBody);
     console.log(`api: ${path} status: ${responseStatusCode} body: `, responseBody);
-    return responseBody
+
+    if (!responseBody.success) {
+      throw new Error(responseBody.error!);
+    }
+
+    return responseBody.data;
   }
 
   health() {
