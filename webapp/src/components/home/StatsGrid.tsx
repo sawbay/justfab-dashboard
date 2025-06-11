@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { IMAGES } from "@/utils/images";
 import { useAppwrite } from "@/components/providers/AppwriteProvider";
-interface StatsGridProps { }
+interface StatsGridProps {
+  fabBalance: number;
+  fabBalanceInGame: number;
+  rootBalance: number;
+  rootBalanceOnChain: number;
+  treasureChests: number;
+  auraKeys: number;
+}
 
 const mockStats = {
   level: 0,
@@ -51,8 +58,7 @@ const mockStatsCards = [
   },
 ];
 
-const StatsGrid: React.FC<StatsGridProps> = ({ }) => {
-  const { userDetail, treasureChestTotal, auraKeyTotal } = useAppwrite();
+const StatsGrid: React.FC<StatsGridProps> = ({ fabBalance, fabBalanceInGame, rootBalance, rootBalanceOnChain, treasureChests, auraKeys }) => {
   const [statsCards, setStatsCards] = useState<any[]>(mockStatsCards);
 
   useEffect(() => {
@@ -70,26 +76,26 @@ const StatsGrid: React.FC<StatsGridProps> = ({ }) => {
       },
       {
         label: "$FAB Balance",
-        value: userDetail?.fabBalance || 0,
+        value: `${fabBalance} + ${fabBalanceInGame}`,
         sub: mockStats.yesterdayStats,
       },
       {
         label: "$ROOT Balance",
-        value: <span className="text-green-600">{userDetail?.rootBalance || 0}</span>,
+        value: <span className="text-green-600">{`${rootBalance} + ${rootBalanceOnChain}`}</span>,
         sub: mockStats.usdValue,
       },
       {
         label: "Treasure Chests",
-        value: treasureChestTotal,
+        value: treasureChests,
         sub: "",
       },
       {
         label: "Aura Key",
-        value: auraKeyTotal,
+        value: auraKeys,
         sub: "",
       },
     ]);
-  }, [userDetail, treasureChestTotal, auraKeyTotal]);
+  }, [fabBalance, fabBalanceInGame, rootBalance, rootBalanceOnChain, treasureChests, auraKeys]);
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4">

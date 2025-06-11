@@ -13,6 +13,7 @@ import { getBalance } from "@/utils/trn_sdk";
 import Image from "next/image";
 import { IMAGES } from "@/utils/images";
 import ComingSoon from "@/components/common/ComingSoon";
+import { useAppwrite } from "@/components/providers/AppwriteProvider";
 
 const mockVIPRewards: VIPReward[] = [
   {
@@ -66,13 +67,22 @@ export default function Home() {
       !!transactionQuery,
   });
 
+  const { userDetail, treasureChestTotal, auraKeyTotal } = useAppwrite();
+
   return (
     <MainLayout>
       {showComingSoon && (
         <ComingSoon onClose={() => setShowComingSoon(false)} />
       )}
       <div className="space-y-6 sm:space-y-8">
-        <StatsGrid />
+        <StatsGrid
+          fabBalance={userDetail?.fabBalance || 0}
+          fabBalanceInGame={0}
+          rootBalance={userDetail?.rootBalance || 0}
+          rootBalanceOnChain={Number(rootBalanceOnTrn.data ?? 0)}
+          treasureChests={treasureChestTotal}
+          auraKeys={auraKeyTotal}
+        />
 
         {/* VIP Rewards */}
         <section className="px-2 sm:px-4">
