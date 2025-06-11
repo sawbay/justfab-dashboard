@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import StatsGrid from "@/components/home/StatsGrid";
-import Button from "@/components/common/Button";
 import { VIPReward } from "@/types";
 import { useAuth } from "@futureverse/auth-react";
 import { useTrnApi } from "@futureverse/transact-react";
