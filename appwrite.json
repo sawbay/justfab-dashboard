@@ -1,6 +1,6 @@
 {
-    "projectId": "684912fd003c555980d1",
-    "projectName": "dashboard",
+    "projectId": "6849601d000e845ce32c",
+    "projectName": "justfab-dashboard",
     "settings": {
         "services": {
             "account": true,
@@ -11,6 +11,7 @@
             "storage": true,
             "teams": true,
             "users": true,
+            "sites": true,
             "functions": true,
             "graphql": true,
             "messaging": true
@@ -39,63 +40,21 @@
     },
     "functions": [
         {
-            "$id": "684947e5003503e42adf",
+            "$id": "6849647d001ddb796acf",
             "execute": [
-                "any"
+                "users"
             ],
-            "name": "Starter function",
-            "enabled": true,
-            "logging": true,
-            "runtime": "node-16.0",
-            "scopes": [
-                "users.read"
-            ],
-            "events": [],
-            "schedule": "",
-            "timeout": 15,
-            "entrypoint": "src/main.js",
-            "commands": "npm install",
-            "specification": "s-1vcpu-512mb",
-            "path": "functions/Starter function"
-        },
-        {
-            "$id": "684951cb003d5677bf40",
-            "execute": [
-                "any"
-            ],
-            "name": "Starter function",
-            "enabled": true,
-            "logging": true,
-            "runtime": "node-16.0",
-            "scopes": [
-                "users.read"
-            ],
-            "events": [],
-            "schedule": "",
-            "timeout": 15,
-            "entrypoint": "src/main.js",
-            "commands": "npm install",
-            "specification": "s-1vcpu-512mb",
-            "path": "functions/Starter function"
-        },
-        {
-            "$id": "6849563a0005664c8e72",
             "name": "worker-api",
-            "runtime": "node-16.0",
-            "specification": "s-0.5vcpu-512mb",
-            "execute": [
-                "any"
-            ],
-            "events": [],
-            "scopes": [
-                "users.read"
-            ],
-            "schedule": "",
-            "timeout": 15,
             "enabled": true,
             "logging": true,
+            "runtime": "node-22",
+            "scopes": [],
+            "events": [],
+            "schedule": "",
+            "timeout": 15,
             "entrypoint": "src/main.js",
             "commands": "npm install",
+            "specification": "s-1vcpu-512mb",
             "path": "functions/worker-api"
         }
     ]
