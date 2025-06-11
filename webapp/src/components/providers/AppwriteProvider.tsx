@@ -1,11 +1,11 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { Account, Client, Databases, ExecutionMethod, Functions, Models, Permission, Query, Role } from "appwrite";
+import { Account, Client, Databases, Models, Query } from "appwrite";
 import getClient from "@/utils/appwrite/client";
 import { ItemType } from "@/types/item_types";
-import { DATABASE_ID, FUNCTION_ID, INVENTORY_COL_ID, USER_COL_ID } from "@/utils/env";
-import { WorkerEvent } from "@/utils/worker";
+import { DATABASE_ID, INVENTORY_COL_ID, USER_COL_ID } from "@/utils/env";
+import { BackendService, WorkerEvent } from "@/utils/worker";
 
 export interface FetchInventoryOptions {
   used?: boolean;
@@ -14,6 +14,7 @@ export interface FetchInventoryOptions {
 
 interface AppwriteContextProps {
   client: Client | null;
+  backendService: BackendService | null;
   account: Account | null;
   user: Models.User<Models.Preferences> | null;
   userDetail: Models.Document | null;
@@ -42,6 +43,7 @@ export default AppwriteContext;
 
 export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [client, setClient] = useState<Client | null>(null);
+  const [backendService, setBackendService] = useState<BackendService | null>(null);
   const [account, setAccount] = useState<Account | null>(null);
   const [session, setSession] = useState<Models.Session | null>(null);
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
@@ -69,6 +71,9 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
   const initClient = async () => {
     const client = getClient();
     setClient(client);
+    const backendService = new BackendService(client);
+    setBackendService(backendService);
+
     const account = new Account(client);
     setAccount(account);
 
@@ -148,23 +153,11 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
   }
 
   const linkFuturepass = async (futurepass: string) => {
-    const { responseStatusCode, responseBody } = await proxiedApi(
-      "api/appwrite/users/link_futurepass",
-      ExecutionMethod.POST,
-      {
-        futurepass,
-      }
-    );
+    await backendService!.linkFuturepass(futurepass);
   }
 
   const fireEvent = async (event: WorkerEvent) => {
-    const { responseStatusCode, responseBody } = await proxiedApi(
-      "api/appwrite/worker_events",
-      ExecutionMethod.POST,
-      {
-        event,
-      }
-    );
+    await backendService!.enqueueEvent(event);
   }
 
   const fetchInventory = async (options: FetchInventoryOptions) => {
@@ -185,32 +178,10 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
     );
   }
 
-  const proxiedApi = async (path: string, method: ExecutionMethod, body: any): Promise<{ responseStatusCode: number, responseBody: any }> => {
-    const functions = new Functions(client!);
-    const response = await functions.createExecution(
-      FUNCTION_ID,
-      JSON.stringify(body),
-      false,
-      path,
-      method,
-      {
-        "Content-Type": "application/json",
-      }
-    );
-
-    const responseStatusCode = response.responseStatusCode;
-    const responseBody = JSON.parse(response.responseBody);
-
-    console.log(`api: ${path} status: ${responseStatusCode} body: `, responseBody);
-    return {
-      responseStatusCode,
-      responseBody,
-    }
-  }
-
   return (
     <AppwriteContext.Provider value={{
       client,
+      backendService,
       account,
       session,
       user,

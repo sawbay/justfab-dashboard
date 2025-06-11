@@ -1,28 +1,55 @@
 import axios from "axios";
-import { WORKER_URL } from "../env";
+import { FUNCTION_ID, WORKER_URL } from "../env";
 import { ItemType } from "@/types/item_types";
+import { Client, ExecutionMethod, Functions } from "appwrite";
 
-export class Worker {
-  private readonly workerUrl: string;
+export class BackendService {
+  private readonly client: Client;
+  private readonly functions: Functions;
 
-  constructor(workerUrl: string) {
-    this.workerUrl = workerUrl;
+  constructor(client: Client) {
+    this.client = client;
+    this.functions = new Functions(this.client);
   }
 
-  async health() {
-    return await axios.get(`${this.workerUrl}/health`);
+  async proxiedApi(path: string, method: ExecutionMethod, body?: any): Promise<{ responseStatusCode: number, responseBody: any }> {
+    const response = await this.functions.createExecution(
+      FUNCTION_ID,
+      body ? JSON.stringify(body) : undefined,
+      false,
+      path,
+      method,
+      {
+        "Content-Type": "application/json",
+      }
+    );
+
+    const responseStatusCode = response.responseStatusCode;
+    const responseBody = JSON.parse(response.responseBody);
+
+    console.log(`api: ${path} status: ${responseStatusCode} body: `, responseBody);
+    return {
+      responseStatusCode,
+      responseBody,
+    }
   }
 
-  async enqueueEvent(event: WorkerEvent) {
-    return await axios.post(`${this.workerUrl}/queue/enqueue`, { event });
+  health() {
+    return this.proxiedApi("/health", ExecutionMethod.GET);
   }
 
-  async openChest(userId: string, chestId: string) {
-    return await axios.post(`${this.workerUrl}/open-chest`, { userId, chestId });
+  linkFuturepass(futurepass: string) {
+    return this.proxiedApi("/users/link_futurepass", ExecutionMethod.POST, { futurepass });
+  }
+
+  openChest(userId: string, chestId: string) {
+    return this.proxiedApi("/open-chest", ExecutionMethod.POST, { userId, chestId });
+  }
+
+  enqueueEvent(event: WorkerEvent) {
+    return this.proxiedApi("/queue/enqueue", ExecutionMethod.POST, { event });
   }
 }
-
-export const worker = new Worker(WORKER_URL);
 
 export enum WorkerEventType {
   REWARD_WELCOME_CHEST,
