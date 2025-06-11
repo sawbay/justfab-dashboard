@@ -19,7 +19,8 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
     user,
     userDetail,
     telegramAuthenticated,
-    linkFuturepass } = useAppwrite();
+    backendService
+  } = useAppwrite();
 
   useEffect(() => {
     if (fpSession && userDetail) {
@@ -31,7 +32,7 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
 
   const linkFP = async (futurepass: string) => {
     try {
-      await linkFuturepass(futurepass);
+      await backendService!.linkFuturepass(futurepass);
     } catch (error) {
       console.error(error);
     }

@@ -26,7 +26,6 @@ interface AppwriteContextProps {
   telegramAuthenticated: (userId: string, secret: string) => Promise<void>;
   logoutSession: () => Promise<void>;
   linkFuturepass: (futurepass: string) => Promise<void>;
-  fireEvent: (event: WorkerEvent) => Promise<void>;
 }
 
 const AppwriteContext = createContext<AppwriteContextProps | undefined>(undefined);
@@ -156,10 +155,6 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
     await backendService!.linkFuturepass(futurepass);
   }
 
-  const fireEvent = async (event: WorkerEvent) => {
-    await backendService!.enqueueEvent(event);
-  }
-
   const fetchInventory = async (options: FetchInventoryOptions) => {
     const databases = new Databases(client!);
 
@@ -192,7 +187,6 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
       fetchInventory,
       logoutSession,
       linkFuturepass,
-      fireEvent,
     }}>
       {children}
     </AppwriteContext.Provider>
