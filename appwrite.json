@@ -56,6 +56,26 @@
             "commands": "npm install",
             "specification": "s-1vcpu-512mb",
             "path": "functions/worker-api"
+        },
+        {
+            "$id": "6849685800070b9b5b43",
+            "name": "auth",
+            "runtime": "deno-2.0",
+            "specification": "s-1vcpu-512mb",
+            "execute": [
+                "any"
+            ],
+            "events": [],
+            "scopes": [
+                "users.read"
+            ],
+            "schedule": "",
+            "timeout": 15,
+            "enabled": true,
+            "logging": true,
+            "entrypoint": "src/main.ts",
+            "commands": "deno cache src/main.ts",
+            "path": "functions/auth"
         }
     ]
 }
