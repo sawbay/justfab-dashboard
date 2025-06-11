@@ -1,16 +1,25 @@
 # Dashboard JustFAB
 
 # Prisma
+
 ```
 cd justfab-dashboard/prisma
 npx prisma generate
 ```
 
 ## FuturePass
+
+```
 https://login.passonline.cloud/manageclients
-- Environment
-- ClientID/Redirect URI
+- Client Name: any
+- Redirect URLs: https://1ea2-1-52-242-44.ngrok-free.app
+- Post logout redirect URLs: https://1ea2-1-52-242-44.ngrok-free.app
+```
 
 ## Telegram
-- Botname: justfab_dev_bot
-- /setdomain: https://1f0e-1-52-242-44.ngrok-free.app
+
+```
+/setdomain
+@dbjustfab_dev_bot
+https://1ea2-1-52-242-44.ngrok-free.app
+```
