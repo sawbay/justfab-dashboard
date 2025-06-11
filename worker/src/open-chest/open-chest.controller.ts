@@ -16,6 +16,7 @@ export class OpenChestController {
 
     try {
       const reward = await this.openChestService.openChest(userId, body.chestId);
+      this.logger.log(`User ${userId} opened chest ${body.chestId} and received reward ${reward}`);
       return { reward };
     } catch (error) {
       this.logger.error(error.toString());
