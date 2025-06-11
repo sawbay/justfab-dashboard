@@ -5,7 +5,7 @@ import { Account, Client, Databases, Models, Query } from "appwrite";
 import getClient from "@/utils/appwrite/client";
 import { ItemType } from "@/types/item_types";
 import { DATABASE_ID, INVENTORY_COL_ID, USER_COL_ID } from "@/utils/env";
-import { BackendService, WorkerEvent } from "@/utils/worker";
+import { BackendService } from "@/utils/worker";
 
 export interface FetchInventoryOptions {
   used?: boolean;
@@ -25,7 +25,6 @@ interface AppwriteContextProps {
   fetchInventory: (options: FetchInventoryOptions) => Promise<Models.DocumentList<Models.Document>>;
   telegramAuthenticated: (userId: string, secret: string) => Promise<void>;
   logoutSession: () => Promise<void>;
-  linkFuturepass: (futurepass: string) => Promise<void>;
 }
 
 const AppwriteContext = createContext<AppwriteContextProps | undefined>(undefined);
@@ -151,10 +150,6 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
     setAccount(null);
   }
 
-  const linkFuturepass = async (futurepass: string) => {
-    await backendService!.linkFuturepass(futurepass);
-  }
-
   const fetchInventory = async (options: FetchInventoryOptions) => {
     const databases = new Databases(client!);
 
@@ -186,7 +181,6 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
       telegramAuthenticated,
       fetchInventory,
       logoutSession,
-      linkFuturepass,
     }}>
       {children}
     </AppwriteContext.Provider>
