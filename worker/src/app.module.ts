@@ -7,6 +7,7 @@ import { QueueModule } from "./queue/queue.module";
 import { UseModule } from './use/use.module';
 import { OpenChestModule } from './open-chest/open-chest.module';
 import { AppController } from './app.controller';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AppController } from './app.controller';
     QueueModule,
     UseModule,
     OpenChestModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: []
