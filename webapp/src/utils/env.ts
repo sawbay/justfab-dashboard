@@ -17,5 +17,3 @@ export const FUNCTION_ID = process.env.NEXT_PUBLIC_FUNCTION_ID!;
 export const DATABASE_ID = process.env.NEXT_PUBLIC_DATABASE_ID!;
 export const USER_COL_ID = process.env.NEXT_PUBLIC_USER_COL_ID!;
 export const INVENTORY_COL_ID = process.env.NEXT_PUBLIC_INVENTORY_COL_ID!;
-
-export const WORKER_URL = process.env.NEXT_PUBLIC_WORKER_URL!;

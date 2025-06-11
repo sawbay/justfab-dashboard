@@ -1,5 +1,4 @@
-import axios from "axios";
-import { FUNCTION_ID, WORKER_URL } from "../env";
+import { FUNCTION_ID } from "../env";
 import { ItemType } from "@/types/item_types";
 import { Client, ExecutionMethod, Functions } from "appwrite";
 
