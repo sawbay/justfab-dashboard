@@ -84,6 +84,7 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
 
     try {
       const user = await account.get();
+      console.log(`user: `, user);
       setUser(user);
     } catch (error) {
       setUser(null);
@@ -97,6 +98,7 @@ export const AppwriteProvider: React.FC<{ children: ReactNode }> = ({ children }
       USER_COL_ID,
       user!.$id,
     );
+    console.log(`userDetail: `, userDetail);
     setUserDetail(userDetail);
   }
 
