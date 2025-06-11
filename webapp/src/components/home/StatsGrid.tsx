@@ -52,7 +52,7 @@ const mockStatsCards = [
 ];
 
 const StatsGrid: React.FC<StatsGridProps> = ({ }) => {
-  const { user, treasureChestTotal, auraKeyTotal } = useAppwrite();
+  const { userDetail, treasureChestTotal, auraKeyTotal } = useAppwrite();
   const [statsCards, setStatsCards] = useState<any[]>(mockStatsCards);
 
   useEffect(() => {
@@ -70,12 +70,12 @@ const StatsGrid: React.FC<StatsGridProps> = ({ }) => {
       },
       {
         label: "$FAB Balance",
-        value: mockStats.fabBalance,
+        value: userDetail?.fabBalance || 0,
         sub: mockStats.yesterdayStats,
       },
       {
         label: "$ROOT Balance",
-        value: <span className="text-green-600">{mockStats.rootBalance}</span>,
+        value: <span className="text-green-600">{userDetail?.rootBalance || 0}</span>,
         sub: mockStats.usdValue,
       },
       {
@@ -89,7 +89,7 @@ const StatsGrid: React.FC<StatsGridProps> = ({ }) => {
         sub: "",
       },
     ]);
-  }, [treasureChestTotal, auraKeyTotal]);
+  }, [userDetail, treasureChestTotal, auraKeyTotal]);
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4">
