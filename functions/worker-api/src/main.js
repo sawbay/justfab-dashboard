@@ -30,10 +30,10 @@ export default async ({ req, res, log, error }) => {
       });
     }
   } catch (e) {
-    error(`${e}`);
+    error(e);
     return res.json({
       success: false,
-      error: e.response?.data?.error || e.message,
+      error: e.response?.data || e.message,
     });
   }
 }
