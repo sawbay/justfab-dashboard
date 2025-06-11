@@ -17,7 +17,7 @@ const filterTypes = [
 ];
 
 export default function Collection() {
-  const { user, fetchInventory } = useAppwrite();
+  const { user, fetchInventory, backendService } = useAppwrite();
   const [activeFilter, setActiveFilter] = useState(0);
   const [itemCount, setItemCount] = useState(12); // State for item count
   const [inventory, setInventory] = useState<any[]>([]);
@@ -42,6 +42,18 @@ export default function Collection() {
       });
     }
   }, [user, activeFilter]);
+
+  const isOpenable = (item: any) => {
+    return item.type === ItemType.CHEST;
+  }
+
+  const openChest = (item: any) => {
+    backendService!.openChest(user!.$id, item.id).then((res) => {
+      console.log(res);
+      // example response:
+      // {responseStatusCode: 200, responseBody: {success: true, data: {success: true, reward: "10 $FAB"}}}
+    });
+  }
 
   return (
     <MainLayout>
@@ -94,9 +106,9 @@ export default function Collection() {
                 {item.type}
               </h3>
               <p className="text-gray-500 mb-4">Owner: {item.owner}</p>
-              <Button className="w-full py-2 px-4 rounded-lg border border-[#FF9F5A] text-[#FF9F5A] hover:bg-[#FF9F5A] hover:text-white transition-all">
+              {isOpenable(item) && <Button onClick={() => openChest(item)} className="w-full py-2 px-4 rounded-lg border border-[#FF9F5A] text-[#FF9F5A] hover:bg-[#FF9F5A] hover:text-white transition-all">
                 Open
-              </Button>
+              </Button>}
             </div>
           ))}
         </div>
