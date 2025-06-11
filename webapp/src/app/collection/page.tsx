@@ -47,12 +47,13 @@ export default function Collection() {
     return item.type === ItemType.CHEST;
   }
 
-  const openChest = (item: any) => {
-    backendService!.openChest(user!.$id, item.id).then((res) => {
-      console.log(res);
-      // example response:
-      // {responseStatusCode: 200, responseBody: {success: true, data: {success: true, reward: "10 $FAB"}}}
-    });
+  const openChest = async (item: any) => {
+    try {
+      const data = await backendService!.openChest(item.id);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
