@@ -31,6 +31,7 @@ export default async ({ req, res, log, error }) => {
     }
   } catch (e) {
     error(e);
+    log(e);
     return res.json({
       success: false,
       error: e.response?.data || e.message,
