@@ -1,48 +1,15 @@
-# ⚡ Node.js Starter Function
-
-A simple starter function. Edit `src/main.js` to get started and create something awesome! 🚀
-
-## 🧰 Usage
-
-### GET /ping
-
-- Returns a "Pong" message.
-
-**Response**
-
-Sample `200` Response:
-
-```text
-Pong
+# Appwrite Functions
+## Login using Appwrite CLI
+```
+appwrite login --email lnp279@gmail.com --password jiwsoK-pidqa8-jifnyk --endpoint https://appwrite.justfab.wtf/v1
 ```
 
-### GET, POST, PUT, PATCH, DELETE /
-
-- Returns a "Learn More" JSON response.
-
-**Response**
-
-Sample `200` Response:
-
-```json
-{
-  "motto": "Build like a team of hundreds_",
-  "learn": "https://appwrite.io/docs",
-  "connect": "https://appwrite.io/discord",
-  "getInspired": "https://builtwith.appwrite.io"
-}
+## Push code
 ```
-
-## ⚙️ Configuration
-
-| Setting           | Value         |
-| ----------------- | ------------- |
-| Runtime           | Node (18.0)   |
-| Entrypoint        | `src/main.js` |
-| Build Commands    | `npm install` |
-| Permissions       | `any`         |
-| Timeout (Seconds) | 15            |
-
-## 🔒 Environment Variables
-
-No environment variables required.
+cd worker-api
+appwrite functions create-deployment \
+    --function-id=684956bd00380cd0efb9 \
+    --entrypoint='src/main.js' \ 
+    --code="." \
+    --activate=true
+```
