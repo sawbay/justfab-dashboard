@@ -1,5 +1,5 @@
 import { Controller, Get, Inject, Post } from '@nestjs/common';
-import getClient from './queue/appwrite/server';
+import getClient from './utils/appwrite/server';
 import { ConfigService } from '@nestjs/config';
 import { Client, Databases, Permission, Role } from 'node-appwrite';
 import { ItemType, RatioRewardType, MilestoneRewardType } from './types';

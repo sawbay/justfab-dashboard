@@ -2,7 +2,7 @@ import { Body, Controller, Inject, InternalServerErrorException, Post, Unauthori
 import { ConfigService } from '@nestjs/config';
 import { objectToAuthDataMap, AuthDataValidator, TelegramUserData } from "@telegram-auth/server";
 import { Client, Databases, Users } from 'node-appwrite';
-import getClient from 'src/queue/appwrite/server';
+import getClient from 'src/utils/appwrite/server';
 
 @Controller('auth')
 export class AuthController {

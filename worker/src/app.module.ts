@@ -8,6 +8,7 @@ import { UseModule } from './use/use.module';
 import { OpenChestModule } from './open-chest/open-chest.module';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AuthModule } from './auth/auth.module';
     UseModule,
     OpenChestModule,
     AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: []

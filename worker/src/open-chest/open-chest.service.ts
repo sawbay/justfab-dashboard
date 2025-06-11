@@ -3,7 +3,7 @@ import { Inject, Injectable, Logger, OnApplicationBootstrap } from '@nestjs/comm
 import { ItemType, MilestoneRewardType, RatioRewardType, RewardType } from 'src/types';
 import { Client, Databases, ID, Query } from 'node-appwrite';
 import { ConfigService } from '@nestjs/config';
-import getClient from 'src/queue/appwrite/server';
+import getClient from 'src/utils/appwrite/server';
 
 const RATIO_REWARD_CONFIG = [
   { name: RatioRewardType.ROOT_1, rate: 0.05 }, // 10

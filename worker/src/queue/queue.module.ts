@@ -5,6 +5,7 @@ import { QueueController } from './queue.controller';
 import { BullBoardModule } from '@bull-board/nestjs';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
 import { UseWelcomeChestService } from './services/use-welcome-chest.service';
+import { QueueService } from './queue.service';
 
 @Module({
   imports: [
@@ -16,9 +17,11 @@ import { UseWelcomeChestService } from './services/use-welcome-chest.service';
   ],
   providers: [
     WelcomeChestProcessor,
-    UseWelcomeChestService
+    UseWelcomeChestService,
+    QueueService
   ],
-  exports: [],
+  exports: [QueueService],
   controllers: [QueueController],
 })
+
 export class QueueModule { } 
