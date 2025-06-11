@@ -18,10 +18,17 @@ export default async ({ req, res, log, error }) => {
       data: req.body,
     });
 
-    return res.json({
-      success: true,
-      data: axiosRes.data,
-    });
+    if (axiosRes.status == 200) {
+      return res.json({
+        success: true,
+        data: axiosRes.data,
+      });
+    } else {
+      return res.json({
+        success: false,
+        error: axiosRes.data,
+      });
+    }
   } catch (e) {
     error(`${e}`);
     return res.json({
