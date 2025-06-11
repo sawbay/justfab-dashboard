@@ -21,7 +21,7 @@ export default async ({ req, res, log, error }) => {
     });
 
     const data = await fetchRes.json().catch(() => null);
-    log(data);
+    log(await fetchRes.text());
 
     if (fetchRes.ok) {
       return res.json({
