@@ -1,32 +1,36 @@
-import axios from 'axios';
-
-
 export default async ({ req, res, log, error }) => {
   log(`path: ${req.path}`);
   log(`userid: ${req.headers['x-appwrite-user-id']}`);
-  
+
+  const url = new URL(req.path, process.env.BACKEND_URL);
+  if (req.query) {
+    Object.entries(req.query).forEach(([key, value]) => {
+      url.searchParams.append(key, value);
+    });
+  }
+
   try {
-    const axiosRes = await axios.request({
+    const fetchRes = await fetch(url.toString(), {
       method: req.method,
-      baseURL: process.env.BACKEND_URL,
-      url: req.path,
       headers: {
         'x-appwrite-key': req.headers['x-appwrite-key'],
         'x-appwrite-user-id': req.headers['x-appwrite-user-id'],
+        'Content-Type': 'application/json',
       },
-      params: req.query,
-      data: req.body,
+      body: req.body ? JSON.stringify(req.body) : undefined,
     });
 
-    if (axiosRes.status == 200) {
+    const data = await fetchRes.json().catch(() => null);
+
+    if (fetchRes.ok) {
       return res.json({
         success: true,
-        data: axiosRes.data,
+        data,
       });
     } else {
       return res.json({
         success: false,
-        error: axiosRes.data,
+        error: data,
       });
     }
   } catch (e) {
@@ -34,7 +38,7 @@ export default async ({ req, res, log, error }) => {
     log(e);
     return res.json({
       success: false,
-      error: e.response?.data || e.message,
+      error: e.message,
     });
   }
 }
