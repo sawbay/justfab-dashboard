@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IMAGES } from "@/utils/images";
-import { useAppwrite } from "@/components/providers/AppwriteProvider";
+
 interface StatsGridProps {
   fabBalance: number;
   fabBalanceInGame: number;
