@@ -21,7 +21,6 @@ export default async ({ req, res, log, error }) => {
     });
 
     const data = await fetchRes.json().catch(() => null);
-    log(await fetchRes.text());
 
     if (fetchRes.ok) {
       return res.json({
@@ -31,7 +30,7 @@ export default async ({ req, res, log, error }) => {
     } else {
       return res.json({
         success: false,
-        error: data,
+        error: data.message,
       });
     }
   } catch (e) {
@@ -39,7 +38,7 @@ export default async ({ req, res, log, error }) => {
     log(e);
     return res.json({
       success: false,
-      error: e.message,
+      error: `Failed to fetch: ${e}`,
     });
   }
 }
