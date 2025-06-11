@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Logger, Post } from '@nestjs/common';
+import { Controller, Get, Inject, Post } from '@nestjs/common';
 import getClient from './queue/appwrite/server';
 import { ConfigService } from '@nestjs/config';
 import { Client, Databases, Permission, Role } from 'node-appwrite';
@@ -6,12 +6,10 @@ import { ItemType, RatioRewardType, MilestoneRewardType } from './types';
 
 @Controller('')
 export class AppController {
-  private readonly logger = new Logger(AppController.name);
   private readonly client: Client;
   private readonly databases: Databases;
   private readonly DATABASE_ID: string;
   private readonly USER_COL_ID: string;
-  private readonly USER_FUTUREPASS_COL_ID: string;
   private readonly INVENTORY_COL_ID: string;
   private readonly APP_STATE_COL_ID: string;
 
@@ -26,7 +24,6 @@ export class AppController {
     this.databases = new Databases(this.client);
     this.DATABASE_ID = this.configService.get("DATABASE_ID");
     this.USER_COL_ID = this.configService.get("USER_COL_ID");
-    this.USER_FUTUREPASS_COL_ID = this.configService.get("USER_FUTUREPASS_COL_ID");
     this.INVENTORY_COL_ID = this.configService.get("INVENTORY_COL_ID");
     this.APP_STATE_COL_ID = this.configService.get("APP_STATE_COL_ID");
   }
@@ -76,7 +73,7 @@ export class AppController {
   }
 
   private async populateUser() {
-    const collection = await this.databases.createCollection(
+    await this.databases.createCollection(
       this.DATABASE_ID,
       this.USER_COL_ID,
       "user",
@@ -127,7 +124,7 @@ export class AppController {
   }
 
   private async populateAppState() {
-    const collection = await this.databases.createCollection(
+    await this.databases.createCollection(
       this.DATABASE_ID,
       this.APP_STATE_COL_ID,
       "app_state",
@@ -169,7 +166,7 @@ export class AppController {
   }
 
   private async populateInventory() {
-    const collection = await this.databases.createCollection(
+    await this.databases.createCollection(
       this.DATABASE_ID,
       this.INVENTORY_COL_ID,
       "inventory",
