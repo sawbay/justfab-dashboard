@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import StatsGrid from "@/components/home/StatsGrid";
 import { VIPReward } from "@/types";
@@ -65,6 +65,10 @@ export default function Home() {
       accountToCheck !== "" &&
       !!transactionQuery,
   });
+
+  useEffect(() => {
+    console.log(`rootBalanceOnTrn: `, rootBalanceOnTrn);
+  }, [rootBalanceOnTrn]);
 
   const { userDetail, treasureChestTotal, auraKeyTotal } = useAppwrite();
 
