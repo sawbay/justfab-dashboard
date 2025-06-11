@@ -1,17 +1,25 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, InternalServerErrorException, Logger, Post, UnauthorizedException } from '@nestjs/common';
 import { OpenChestService } from './open-chest.service';
 
 @Controller('open-chest')
 export class OpenChestController {
+  private readonly logger = new Logger(OpenChestController.name);
   constructor(private readonly openChestService: OpenChestService) { }
 
   @Post()
-  async openChest(@Body() body: { userId: string, chestId: string }) {
+  async openChest(
+    @Headers('x-appwrite-user-id') userId: string,
+    @Body() body: { userId: string, chestId: string }) {
+    if (!userId) {
+      throw new UnauthorizedException('User ID is required');
+    }
+
     try {
-      const reward = await this.openChestService.openChest(body.userId, body.chestId);
-      return { success: true, reward };
+      const reward = await this.openChestService.openChest(userId, body.chestId);
+      return { reward };
     } catch (error) {
-      return { success: false, error: `${error}` };
+      this.logger.error(error.toString());
+      throw new InternalServerErrorException(error.toString());
     }
   }
 
