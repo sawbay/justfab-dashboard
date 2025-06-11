@@ -1,4 +1,4 @@
-import { Body, Controller, Headers, InternalServerErrorException, Post, UnauthorizedException } from '@nestjs/common';
+import { Body, Controller, Headers, InternalServerErrorException, Logger, Post, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Client, Databases } from 'node-appwrite';
 import { QueueService } from 'src/queue/queue.service';
@@ -7,6 +7,8 @@ import getClient from 'src/utils/appwrite/server';
 
 @Controller('users')
 export class UsersController {
+  private readonly logger = new Logger(UsersController.name);
+
   private readonly client: Client;
   private readonly DATABASE_ID: string;
   private readonly USER_COL_ID: string;
@@ -54,9 +56,11 @@ export class UsersController {
         }
       });
 
+      this.logger.log(`User ${userId} linked futurepass ${futurepass}`);
       return { success: true };
     } catch (e) {
-      throw new InternalServerErrorException(e);
+      this.logger.error(`User ${userId} failed to link futurepass ${futurepass}: ${e}`);
+      throw new InternalServerErrorException(e.toString());
     }
   }
 }
