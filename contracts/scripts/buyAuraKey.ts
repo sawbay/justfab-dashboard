@@ -5,6 +5,11 @@ import { withEthersProvider } from "../utils/withEthersProvider";
 import { Contract, ContractReceipt, Wallet } from "ethers";
 
 import AuraKey from "../artifacts/contracts/AuraKey.sol/AuraKey.json";
+import IERC20 from "../artifacts/@openzeppelin/contracts/token/ERC20/IERC20.sol/IERC20.json";
+
+const getPaymentTokenContract = () => {
+  return new Contract("0xcCcCCccC00000001000000000000000000000000", IERC20.abi);
+};
 
 const getAuraKeyContract = () => {
   return new Contract("0x52d4508cdE88ad55ccAc4aF3E7Fc52A7C268181D", AuraKey.abi);
@@ -12,7 +17,11 @@ const getAuraKeyContract = () => {
 
 withEthersProvider("porcini", async (provider, wallet, logger) => {
   const owner = Wallet.createRandom();
+  const paymentToken = getPaymentTokenContract().connect(wallet);
   const auraKey = getAuraKeyContract().connect(wallet);
+
+  const approveTx = await paymentToken.approve(auraKey.address, 1000);
+  await approveTx.wait();
 
   logger.info(
     {

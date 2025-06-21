@@ -4,7 +4,8 @@
     "hardhat:verify": "hardhat sourcify --network porcini",
     "hardhat:clean": "hardhat clean && rm -rf cache/",
     "hardhat:test": "hardhat test",
-    "createAccount": "ts-node scripts/createAccount.ts"
+    "createAccount": "ts-node scripts/createAccount.ts",
+    "buyAuraKey": "ts-node scripts/buyAuraKey.ts"
   },
   "devDependencies": {
     "@ethersproject/hash": "^5.7.0",

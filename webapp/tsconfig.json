@@ -29,7 +29,7 @@
         "./public/*"
       ]
     },
-    "target": "ES2017"
+    "target": "ESNext"
   },
   "include": [
     "next-env.d.ts",
