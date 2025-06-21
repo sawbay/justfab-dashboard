@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { EvmModal } from "@/components/common/EvmModal";
 import { useDebounce } from "@/core/hooks/useDebounce";
