@@ -13,6 +13,7 @@ import Image from "next/image";
 import { IMAGES } from "@/utils/images";
 import ComingSoon from "@/components/common/ComingSoon";
 import { useAppwrite } from "@/core/providers/AppwriteProvider";
+import TransactionDetails from "@/components/home/TransactionDetails";
 
 const mockVIPRewards: VIPReward[] = [
   {
@@ -86,6 +87,7 @@ export default function Home() {
           treasureChests={treasureChestTotal}
           auraKeys={auraKeyTotal}
         />
+        <TransactionDetails />
 
         {/* VIP Rewards */}
         <section className="px-2 sm:px-4">

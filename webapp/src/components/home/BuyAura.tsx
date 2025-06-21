@@ -1,18 +1,14 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-import { EvmModal } from "@/components/common/EvmModal";
-import { useDebounce } from "@/core/hooks/useDebounce";
-import { AURA_KEY_ABI, AURA_KEY_ADDRESS } from "./contract";
-import { parseAbi, parseUnits } from "viem";
-import { ASSET_ID } from "@/utils/utils";
-import { SFT_PRECOMPILE_ABI } from "@therootnetwork/evm";
+import { parseUnits } from "viem";
 import { useAuth, useFutureverseSigner } from "@futureverse/auth-react";
 import { useRootStore } from "@/core/hooks/useRootStore";
 import { useShouldShowEoa } from "@/core/hooks/useShouldShowEoa";
 import { useTrnApi } from "@futureverse/transact-react";
 import { useGetExtrinsic } from "@/core/hooks/useGetExtrinsic";
 import { TransactionBuilder } from "@futureverse/transact";
+import { AURA_KEY_ABI, AURA_KEY_ADDRESS } from "@/core/contract";
 
 export default function BuyAura() {
   const { userSession } = useAuth();
@@ -35,12 +31,11 @@ export default function BuyAura() {
 
   const getExtrinsic = useGetExtrinsic();
 
-  const [showDialog, setShowDialog] = useState(true);
-  const [assetContract, setAssetContract] = useState<`0x${string}`>(
-    '0xcCcCCccC00000001000000000000000000000000'
-  );
-  const contractDebounced = useDebounce(assetContract ?? '', 500);
   const createBuilder = useCallback(async () => {
+    console.log('createBuilder');
+    console.log('trnApi', trnApi);
+    console.log('signer', signer);
+    console.log('userSession', userSession);
     if (!trnApi || !signer || !userSession) {
       console.log('Missing trnApi, signer or userSession');
       return;
@@ -62,13 +57,6 @@ export default function BuyAura() {
       fromFuturePass: fromWallet === 'eoa' ? false : true,
     });
 
-    if (feeAssetId !== 2) {
-      await builder.addFeeProxy({
-        assetId: feeAssetId,
-        slippage: Number(slippage),
-      });
-    }
-
     getExtrinsic(builder);
     setCurrentBuilder(builder);
   }, [
@@ -86,6 +74,7 @@ export default function BuyAura() {
     <button
       className="w-full builder-input green"
       onClick={() => {
+        console.log('clicked');
         resetState();
         createBuilder();
       }}

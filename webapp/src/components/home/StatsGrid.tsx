@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IMAGES } from "@/utils/images";
+import BuyAura from "./BuyAura";
+import TransactionDetails from "./TransactionDetails";
 
 interface StatsGridProps {
   fabBalance: number;
@@ -99,6 +101,7 @@ const StatsGrid: React.FC<StatsGridProps> = ({ fabBalance, fabBalanceInGame, roo
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4">
+      <BuyAura />
       {statsCards.map((item, idx) => (
         <div
           key={idx}
