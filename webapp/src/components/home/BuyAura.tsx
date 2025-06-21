@@ -8,7 +8,7 @@ import { useShouldShowEoa } from "@/core/hooks/useShouldShowEoa";
 import { useTrnApi } from "@futureverse/transact-react";
 import { useGetExtrinsic } from "@/core/hooks/useGetExtrinsic";
 import { TransactionBuilder } from "@futureverse/transact";
-import { AURA_KEY_ABI, AURA_KEY_ADDRESS } from "@/core/contract";
+import { AURA_KEY_ABI, AURA_KEY_ADDRESS, ERC20_ABI } from "@/core/contract";
 import { ASSET_ID } from "@/utils/utils";
 
 export default function BuyAura() {
@@ -32,6 +32,52 @@ export default function BuyAura() {
 
   const getExtrinsic = useGetExtrinsic();
 
+  const createBuilderApprove = useCallback(async () => {
+    console.log('createBuilder');
+    console.log('trnApi', trnApi);
+    console.log('signer', signer);
+    console.log('userSession', userSession);
+    if (!trnApi || !signer || !userSession) {
+      console.log('Missing trnApi, signer or userSession');
+      return;
+    }
+
+    const builder = await TransactionBuilder.evm(
+      trnApi,
+      signer as any,
+      userSession.eoa,
+      "0xcCcCCccC00000001000000000000000000000000", // root
+    );
+
+    await builder.writeContract({
+      abi: ERC20_ABI,
+      functionName: 'approve',
+      args: [
+        AURA_KEY_ADDRESS,
+        parseUnits("1", 18),
+      ],
+      fromFuturePass: fromWallet === 'eoa' ? false : true,
+    });
+
+    await builder.addFeeProxy({
+      assetId: ASSET_ID.ROOT,
+      slippage: Number(slippage),
+    });
+
+    getExtrinsic(builder);
+    setCurrentBuilder(builder);
+  }, [
+    trnApi,
+    signer,
+    userSession,
+    fromWallet,
+    getExtrinsic,
+    setCurrentBuilder,
+    feeAssetId,
+    slippage,
+  ]);
+
+
   const createBuilder = useCallback(async () => {
     console.log('createBuilder');
     console.log('trnApi', trnApi);
@@ -53,7 +99,7 @@ export default function BuyAura() {
       abi: AURA_KEY_ABI,
       functionName: 'buyAuraKey',
       args: [
-        parseUnits("1", 18),
+        parseUnits("10", 18),
       ],
       fromFuturePass: fromWallet === 'eoa' ? false : true,
     });
@@ -82,11 +128,22 @@ export default function BuyAura() {
       onClick={() => {
         console.log('clicked');
         resetState();
+        createBuilderApprove();
+      }}
+      disabled={disable}
+    >
+      Approve ROOT
+    </button>
+    <button
+      className="w-full builder-input green"
+      onClick={() => {
+        console.log('clicked');
+        resetState();
         createBuilder();
       }}
       disabled={disable}
     >
-      Increment Counter
+      Buy Aura Key
     </button>
   </div>;
 }
