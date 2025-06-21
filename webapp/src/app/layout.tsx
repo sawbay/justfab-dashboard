@@ -3,9 +3,9 @@ import "./globals.css";
 import type { PropsWithChildren } from "react";
 import { getLocale } from "next-intl/server";
 import { I18nProvider } from "@/core/i18n/provider";
-import Providers from "@/components/providers/FvProvider";
+import Providers from "@/core/providers/FvProvider";
 import { createMetadata } from "@/utils/metadata";
-import { AppwriteProvider } from "@/components/providers/AppwriteProvider";
+import { AppwriteProvider } from "@/core/providers/AppwriteProvider";
 
 export const metadata = createMetadata("Dashboard");
 

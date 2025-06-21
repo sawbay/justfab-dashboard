@@ -12,7 +12,7 @@ import { getBalance } from "@/utils/trn_sdk";
 import Image from "next/image";
 import { IMAGES } from "@/utils/images";
 import ComingSoon from "@/components/common/ComingSoon";
-import { useAppwrite } from "@/components/providers/AppwriteProvider";
+import { useAppwrite } from "@/core/providers/AppwriteProvider";
 
 const mockVIPRewards: VIPReward[] = [
   {

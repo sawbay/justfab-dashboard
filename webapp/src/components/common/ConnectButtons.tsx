@@ -8,7 +8,7 @@ import { useAuth } from "@futureverse/auth-react";
 import axios from "axios";
 import { USERS_TELEGRAM_LOGIN } from "@/app/api";
 import { IMAGES } from "@/utils/images";
-import { useAppwrite } from "../providers/AppwriteProvider";
+import { useAppwrite } from "../../core/providers/AppwriteProvider";
 
 const ConnectButtons: React.FC<{}> = ({ }) => {
   const { openLogin } = useAuthUi();
@@ -76,7 +76,16 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
 
   return (
     <div className="flex gap-3 justify-end items-center">
-      {user ? (
+      <Button
+        style={buttonStyle}
+        className="!bg-transparent !border-none !shadow-none"
+        onClick={() => handleWalletConnect()}
+      >
+        {fpSession?.futurepass
+          ? `${shortenAddress(fpSession?.futurepass)}`
+          : "Connect Wallet"}
+      </Button>
+      {/* {user ? (
         <>
           <Button
             style={buttonStyle}
@@ -105,7 +114,7 @@ const ConnectButtons: React.FC<{}> = ({ }) => {
             handleTelegramLogin(data);
           }}
         />
-      )}
+      )} */}
     </div>
   );
 };

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import Image from "next/image";
 import Button from "@/components/common/Button";
-import { useAppwrite } from "@/components/providers/AppwriteProvider";
+import { useAppwrite } from "@/core/providers/AppwriteProvider";
 import { ItemType } from "@/types/item_types";
 
 const filterTypes = [

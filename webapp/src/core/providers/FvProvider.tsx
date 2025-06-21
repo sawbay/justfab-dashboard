@@ -15,6 +15,7 @@ import {
 import { State } from 'wagmi';
 import type { NetworkName } from '@therootnetwork/api';
 import { FutureverseAuthProvider, FutureverseWagmiProvider } from '@futureverse/auth-react';
+import { RootStoreProvider } from './RootStoreProvider';
 
 const customThemeConfig: ThemeConfig = {
   ...DefaultTheme,
@@ -41,14 +42,16 @@ export default function Providers({
           getWagmiConfig={getWagmiConfig}
           initialState={initialWagmiState}
         >
-          <FutureverseAuthProvider authClient={authClient}>
-            <AuthUiProvider
-              themeConfig={customThemeConfig}
-              authClient={authClient}
-            >
-              {children}
-            </AuthUiProvider>
-          </FutureverseAuthProvider>
+          <RootStoreProvider>
+            <FutureverseAuthProvider authClient={authClient}>
+              <AuthUiProvider
+                themeConfig={customThemeConfig}
+                authClient={authClient}
+              >
+                {children}
+              </AuthUiProvider>
+            </FutureverseAuthProvider>
+          </RootStoreProvider>
         </FutureverseWagmiProvider>
       </TrnApiProvider>
     </QueryClientProvider>
