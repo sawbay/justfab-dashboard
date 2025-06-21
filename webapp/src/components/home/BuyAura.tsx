@@ -9,6 +9,7 @@ import { useTrnApi } from "@futureverse/transact-react";
 import { useGetExtrinsic } from "@/core/hooks/useGetExtrinsic";
 import { TransactionBuilder } from "@futureverse/transact";
 import { AURA_KEY_ABI, AURA_KEY_ADDRESS } from "@/core/contract";
+import { ASSET_ID } from "@/utils/utils";
 
 export default function BuyAura() {
   const { userSession } = useAuth();
@@ -55,6 +56,11 @@ export default function BuyAura() {
         parseUnits("1", 18),
       ],
       fromFuturePass: fromWallet === 'eoa' ? false : true,
+    });
+
+    await builder.addFeeProxy({
+      assetId: ASSET_ID.ROOT,
+      slippage: Number(slippage),
     });
 
     getExtrinsic(builder);
