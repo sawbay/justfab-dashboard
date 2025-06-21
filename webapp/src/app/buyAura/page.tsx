@@ -48,7 +48,7 @@ export default function BuyAura() {
 
     const builder = await TransactionBuilder.evm(
       trnApi,
-      signer as Signer,
+      signer as any,
       userSession.eoa,
       AURA_KEY_ADDRESS
     );
